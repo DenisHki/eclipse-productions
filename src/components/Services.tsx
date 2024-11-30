@@ -13,19 +13,20 @@ const Services = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-20">
           <Card
             title="Music Production"
-            des="Here is description"
+            des="Here is description1"
+
           />
           <Card
             title="Recording"
-            des="Here is description"
+            des="Here is description2"
           />
           <Card
             title="Mixing"
-            des="Here is description"
+            des="Here is description3"
           />
           <Card
             title="Mastering"
-            des="Here is description"
+            des="Here is description4"
           />
           <Card
             title="Studio rent"

@@ -25,12 +25,14 @@ export default {
       colors: {
         bodyColor: "#000000",
         lightText: "#c4cfde",
+        formInputText: "#000000",
         boxBg: "linear-gradient(145deg, #1e2024, #23272b)",
         designColor: "#e1bd8f",
       },
       boxShadow: {
-        shadowOne: "10px 10px 19px #030712, -10px -10px 19px #0f172a",
-      },
+        shadowOne: "10px 10px 19px rgba(0, 0, 0, 0.7), -10px -10px 19px rgba(0, 0, 0, 0.3), 0 4px 10px rgba(225, 189, 143, 0.6)",
+      }
+      
     },
   },
   plugins: [],

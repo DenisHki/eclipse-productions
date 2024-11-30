@@ -8,7 +8,7 @@ const LeftBanner = () => {
         <h1 className="text-6xl font-bold text-designColor">
           Hi, We are Eclipse Productions
         </h1>
-        <p className="text-base font-bodyFont leading-6 tracking-wider">
+        <p className="text-xl font-bodyFont leading-6 tracking-wider">
           We offer a range of expert services to help you create high-quality
           music and audio productions.
         </p>

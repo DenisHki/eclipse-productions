@@ -46,9 +46,8 @@ const Navbar = () => {
               <div>
                 <img className="w-32" src={logo} alt="logo" />
                 <p className="text-sm mt-2">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Earum soluta perspiciatis molestias enim cum repellat, magnam
-                  exercitationem distinctio aliquid nam.
+                  Here is the text for the small/mobile version. ECLIPSE
+                  PRODUCTIONS. Add some valuable info here.
                 </p>
               </div>
               <ul className="flex flex-col gap-4">
