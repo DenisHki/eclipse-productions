@@ -13,24 +13,33 @@ const Services = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-20">
           <Card
             title="Music Production"
-            des="Here is description1"
-
+            des="Transform your ideas into fully produced tracks with our professional music production services"
+            price="300 € per track (full production: composing, recording, mixing, mastering)"
+          />
+          <Card
+            title="Track Production"
+            des="Composing instrumental track with artist without recording, mixing and mastering"
+            price="100 € per track"
           />
           <Card
             title="Recording"
-            des="Here is description2"
+            des="Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts"
+            price="30 € per hour. Minimum 3 hours"
           />
           <Card
             title="Mixing"
-            des="Here is description3"
+            des="Elevate your tracks with professional mixing services designed to bring your music to life"
+            price="100 € per track"
           />
           <Card
             title="Mastering"
-            des="Here is description4"
+            des="Our professional mastering services ensure your music sounds polished, balanced, and ready for any platform, from streaming to radio"
+            price="40 € per track"
           />
           <Card
             title="Studio rent"
-            des="Here is description"
+            des="Modern and stylish music studio that features high-quality equipment, soundproofing, and a comfortable, creative atmosphere"
+            price="20 € per hour"
           />
         </div>
       </FadeIn>

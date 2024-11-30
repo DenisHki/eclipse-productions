@@ -6,14 +6,13 @@ const LeftBanner = () => {
       <div className="flex flex-col gap-5">
         <h4 className=" text-lg font-normal">WELCOME</h4>
         <h1 className="text-6xl font-bold text-designColor">
-          Hi, We are Eclipse Productions
+          We are Eclipse Productions
         </h1>
         <p className="text-xl font-bodyFont leading-6 tracking-wider">
-          We offer a range of expert services to help you create high-quality
-          music and audio productions.
+          Welcome to Eclipse Productions, where creativity meets professional
+          sound!
         </p>
       </div>
-     
     </FadeIn>
   );
 };

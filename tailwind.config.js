@@ -8,9 +8,9 @@ export default {
         titleFont: ["Libra", "serif-modern"],
       },
       fontSize: {
-        'nav-sm': '14px',  
-        'nav-base': '18px',
-        "nav-lg": "26px", 
+        'font-sm': '14px',  
+        'font-base': '18px',
+        "font-lg": "26px", 
       },
       screens: {
         xs: "320px",
