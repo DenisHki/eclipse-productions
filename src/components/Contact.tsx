@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Title from "./Title";
 import { FadeIn } from "./FadeIn";
+import emailjs from "emailjs-com";
 
 const Contact = () => {
   const [username, setUsername] = useState("");
@@ -26,13 +27,29 @@ const Contact = () => {
     } else if (message === "") {
       setErrMsg("Message is required!");
     } else {
-      setSuccessMsg(
-        `Thank ${username}, Your Message has been sent Successfully!`
-      );
-      setErrMsg("");
-      setUsername("");
-      setEmail("");
-      setMessage("");
+      emailjs
+        .send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+          { username, email, message },
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        )
+        .then(
+          (response) => {
+            console.log("SUCCESS!", response.status, response.text);
+            setSuccessMsg(
+              `Thank you, ${username}! Your message has been sent.`
+            );
+            setErrMsg("");
+            setUsername("");
+            setEmail("");
+            setMessage("");
+          },
+          (err) => {
+            console.error("FAILED...", err);
+            setErrMsg("Failed to send the message. Please try again later.");
+          }
+        );
     }
   };
 
