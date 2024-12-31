@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Music from "./components/Projects"
 
 
+
 function App() {
   return (
     <main className="font-bodyFont w-full h-auto bg-bodyColor text-lightText">
@@ -15,7 +16,7 @@ function App() {
           <Home />
           <Feature />
           <Music />
-          <Contact />
+          <Contact />        
           <Footer />
         </div>
       </div>
