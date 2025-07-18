@@ -7,7 +7,7 @@
   .bannerIcon {
     @apply w-16 h-16 bg-black bg-opacity-25 text-gray-200 text-xl inline-flex items-center justify-center rounded-md shadow-shadowOne hover:bg-opacity-40 hover:-translate-y-1 transition-all hover:text-designColor cursor-pointer duration-300;
   }
-  
+
   .bgOpacity {
     @apply bg-black bg-opacity-40;
   }
@@ -25,3 +25,13 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+.rm-audio-player-provider {
+  --rm-audio-player-interface-container: #000000; /* background container */
+  --rm-audio-player-progress-bar: #e1bd8f; /* progress bar color */
+  --rm-audio-player-track-current-time: #e1bd8f; /* current time */
+  --rm-audio-player-track-duration: #c4cfde; /* duration text */
+  --rm-audio-player-volume-thumb: #e1bd8f; /* volume thumb */
+--rm-audio-player-sortable-list-button-active:#e1bd8f; /* player list button */
+}
+
