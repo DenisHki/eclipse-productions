@@ -12,7 +12,7 @@ const Services = () => {
         <Title title="Services" des="What Do We Offer" />
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-20">
           <Card
-            title="Music Production"
+            title="Composition"
             des="Transform your ideas into fully produced tracks with our professional music production services"
             price="300 € per track (full production: composing, recording, mixing, mastering)"
           />
