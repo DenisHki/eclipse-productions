@@ -28,6 +28,41 @@ const Footer = () => {
           MEDIA
         </h3>
         <ul className="flex flex-col gap-4 font-titleFont font-medium py-6 overflow-hidden">
+        {/* 
+        <li>
+          <a
+            href="https://www.instagram.com/YOUR_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
+          >
+            Instagram
+            <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.tiktok.com/@YOUR_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
+          >
+            TikTok
+            <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.facebook.com/YOUR_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
+          >
+            Facebook
+            <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+          </a>
+        </li> 
+      */}
           <li>
             <span className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer">
               Instagram
