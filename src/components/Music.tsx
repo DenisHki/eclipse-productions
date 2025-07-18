@@ -5,13 +5,13 @@ import { FadeIn } from "./FadeIn";
 const Music = () => {
   return (
     <section
-      id="projects"
+      id="music"
       className="w-full py-20 border-b-[1px] border-b-gray-700"
     >
       <FadeIn>
         <div className="flex justify-center items-center text-center">
           <Title
-            title="Our Projects"
+            title="Music"
             des="Our Projects"
           />
         </div>
