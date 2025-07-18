@@ -12,8 +12,6 @@ const Home = () => {
         <LeftBanner />
         <RightBanner />
       </section>
-
-      {/* New Studio Image Section */}
       <section className="w-full flex justify-center py-10">
         <img
           src={hp1}
