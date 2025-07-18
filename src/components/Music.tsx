@@ -1,4 +1,5 @@
 import Title from "./Title";
+import Player from "./Player";
 
 import { FadeIn } from "./FadeIn";
 
@@ -10,14 +11,10 @@ const Music = () => {
     >
       <FadeIn>
         <div className="flex justify-center items-center text-center">
-          <Title
-            title="Music"
-            des="Our Projects"
-          />
+          <Title title="Music" des="Our Projects" />
         </div>
-        <p>The music player is comming here</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-14">
-        </div>
+        <Player />
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-14"></div>
       </FadeIn>
     </section>
   );
