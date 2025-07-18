@@ -1,5 +1,6 @@
 import Card from "./Card";
 import Title from "./Title";
+import Slideshow from "./Slideshow";
 import { FadeIn } from "./FadeIn";
 
 const Services = () => {
@@ -41,6 +42,9 @@ const Services = () => {
             des="Modern and stylish music studio that features high-quality equipment, soundproofing, and a comfortable, creative atmosphere"
             price="20 € per hour"
           />
+        </div>
+        <div className="mt-20">
+          <Slideshow />
         </div>
       </FadeIn>
     </section>
