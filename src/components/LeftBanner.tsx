@@ -8,9 +8,14 @@ const LeftBanner = () => {
         <h1 className="text-6xl font-bold text-designColor">
           We are Eclipse Productions
         </h1>
-        <p className="text-xl font-bodyFont leading-6 tracking-wider">
-          Welcome to Eclipse Productions, where creativity meets professional
-          sound!
+        <p className="text-xl font-bodyFont leading-10 tracking-wider">
+          Discover your creativity in our premium equipped music studio, now
+          available for rent. Equipped with pristine Genelec monitors and a
+          powerful subwoofer, every nuance of your mix will come through with
+          crystal clarity. A high performance audio interface and professional
+          microphone setup ensure your recordings capture every detail, while
+          our selection of MIDI controllers lets you bring your musical ideas to
+          life with ease.
         </p>
       </div>
     </FadeIn>
