@@ -1,6 +1,6 @@
 import Card from "./Card";
 import Title from "./Title";
-import Slideshow from "./Slideshow";
+import Slideshow from "./Slider";
 import { FadeIn } from "./FadeIn";
 
 const Services = () => {
