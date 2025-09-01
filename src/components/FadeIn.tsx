@@ -16,7 +16,11 @@ export function FadeIn({ className = "", ...props }: FadeInProps) {
   return (
     <motion.div
       className={`select-text ${className}`}
-      style={{ userSelect: "text", pointerEvents: "auto" }}
+      style={{
+        userSelect: "text",
+        pointerEvents: "auto",
+        position: "relative",
+      }}
       variants={{
         hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
         visible: { opacity: 1, y: 0 },
