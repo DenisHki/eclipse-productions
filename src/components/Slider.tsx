@@ -41,8 +41,6 @@ const Slider: React.FC = () => {
             }`}
           />
         ))}
-
-        {/* Navigation Buttons */}
         <button
           onClick={goToPrev}
           className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full text-2xl z-20 transition duration-300"
@@ -56,8 +54,6 @@ const Slider: React.FC = () => {
           &#10095;
         </button>
       </div>
-
-      {/* Image Name */}
       <p className="mt-4 text-lg font-semibold text-white">
         {images[currentIndex].name}
       </p>
