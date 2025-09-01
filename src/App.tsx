@@ -4,6 +4,7 @@ import Feature from "./components/Services";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Music from "./components/Music";
+import About from "./components/About";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Home />
           <Feature />
           <Music />
+          <About />
           <Contact />
           <Footer />
         </div>

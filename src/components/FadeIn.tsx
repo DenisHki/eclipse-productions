@@ -1,18 +1,22 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, MotionProps } from "framer-motion";
+import type { HTMLAttributes } from "react";
 
 const FadeInStaggerContext = createContext(false);
-
 const viewport = { once: true, margin: "0px 0px -200px" };
 
-export function FadeIn(props: any) {
-  let shouldReduceMotion = useReducedMotion();
-  let isInStaggerGroup = useContext(FadeInStaggerContext);
+type FadeInProps = MotionProps & HTMLAttributes<HTMLDivElement>;
+
+export function FadeIn({ className = "", ...props }: FadeInProps) {
+  const shouldReduceMotion = useReducedMotion();
+  const isInStaggerGroup = useContext(FadeInStaggerContext);
 
   return (
     <motion.div
+      className={`select-text ${className}`}
+      style={{ userSelect: "text", pointerEvents: "auto" }}
       variants={{
         hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
         visible: { opacity: 1, y: 0 },
