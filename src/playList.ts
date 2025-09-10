@@ -1,4 +1,4 @@
-export const playList = [
+/*export const playList = [
   {
     name: "music - 1",
     writer: "artist - 1",
@@ -37,4 +37,15 @@ export const playList = [
     src: "https://cdn.pixabay.com/audio/2022/08/02/audio_884fe92c21.mp3",
     id: 5
   }
+];
+*/
+
+export const playList = [
+  {
+    name: "Groundbreaker",
+    writer: "Reino Ray",
+    img: "https://denishki.github.io/eclipse-audio-host/groundbreaker_original.png",
+    src: "https://denishki.github.io/eclipse-audio-host/groundbreaker_release.wav",
+    id: 1,
+  },
 ];
