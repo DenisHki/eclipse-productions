@@ -13,15 +13,10 @@ const Services = () => {
     >
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-white">Our Services</h2>
-        <button
-          onClick={() => navigate("/booking")}
-          className="px-6 py-2 bg-green-500 rounded-lg text-white hover:bg-green-600"
-        >
-          Book Now
-        </button>
       </div>
       <FadeIn>
         <Title title="Services" des="What Do We Offer" />
+
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-20">
           <Card
             title="Composition"
@@ -53,6 +48,15 @@ const Services = () => {
             des="Modern and stylish music studio that features high-quality equipment, soundproofing, and a comfortable, creative atmosphere"
             price="20 € per hour"
           />
+        </div>
+
+        <div className="flex justify-center mt-28 mb-28">
+          <button
+            onClick={() => navigate("/booking")}
+            className="px-8 py-3 rounded-full border-2 border-designColor bg-black text-designColor font-bold text-xl shadow-md hover:shadow-lg hover:bg-designColor hover:text-black transition-all duration-300 transform hover:scale-105 ring-2 ring-designColor animate-pulse"
+          >
+            Book a Studio
+          </button>
         </div>
         <div className="mt-20">
           <Slideshow />

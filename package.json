@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "eclipse-productions": "file:",
     "emailjs-com": "^3.2.0",
     "firebase": "^12.2.1",
@@ -17,6 +18,7 @@
     "jspdf": "^3.0.2",
     "lucide-react": "^0.544.0",
     "react": "^18.2.0",
+    "react-big-calendar": "^1.19.4",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "react-modern-audio-player": "^1.4.0-rc.2",
@@ -31,6 +33,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/google.maps": "^3.58.1",
     "@types/react": "^18.2.15",
+    "@types/react-big-calendar": "^1.16.2",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-scroll": "^1.8.7",

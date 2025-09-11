@@ -8,7 +8,9 @@ const Slider: React.FC = () => {
 
   const images = Object.values(imagesModules).map((img) => {
     const src = img.default;
-    const name = src.split("/").pop()?.split(".")[0] || "Untitled";
+    const name = decodeURIComponent(
+      src.split("/").pop()?.split(".")[0] || "Untitled"
+    );
     return { src, name };
   });
 
