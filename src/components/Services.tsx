@@ -2,13 +2,24 @@ import Card from "./Card";
 import Title from "./Title";
 import Slideshow from "./Slider";
 import { FadeIn } from "./FadeIn";
+import { useNavigate } from "react-router-dom";
 
 const Services = () => {
+  const navigate = useNavigate();
   return (
     <section
       id="services"
       className="w-full py-20 border-b-[1px] border-b-gray-700"
     >
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-white">Our Services</h2>
+        <button
+          onClick={() => navigate("/booking")}
+          className="px-6 py-2 bg-green-500 rounded-lg text-white hover:bg-green-600"
+        >
+          Book Now
+        </button>
+      </div>
       <FadeIn>
         <Title title="Services" des="What Do We Offer" />
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-20">

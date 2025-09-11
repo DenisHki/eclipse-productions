@@ -1,24 +1,15 @@
-import Home from "./components/Home";
-import Contact from "./components/Contact";
-import Feature from "./components/Services";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import Music from "./components/Music";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainLayout from "./components/MainLayout";
+import BookingPage from "./components/BookingPage";
 
 function App() {
   return (
-    <main className="font-bodyFont w-full h-auto bg-bodyColor text-lightText">
-      <Navbar />
-      <div className="px-4">
-        <div className="max-w-screen-xl mx-auto">
-          <Home />
-          <Feature />
-          <Music />
-          <Contact />
-          <Footer />
-        </div>
-      </div>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/booking" element={<BookingPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
