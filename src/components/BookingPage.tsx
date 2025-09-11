@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { db } from "../firebaseConfig";
@@ -14,10 +14,11 @@ import {
 } from "firebase/firestore";
 import emailjs from "emailjs-com";
 import { jsPDF } from "jspdf";
+import BookingFormModal from "../components/BookingFormModal";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
-  format,
+  format: formatDate,
   parse,
   startOfWeek,
   getDay,
@@ -37,6 +38,7 @@ export default function BookingPage() {
     start: Date;
     end: Date;
   } | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -46,7 +48,7 @@ export default function BookingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  // Fetch booked slots from Firestore
+  // Fetch bookings
   useEffect(() => {
     async function fetchBooked() {
       const q = collection(db, "bookings");
@@ -54,6 +56,7 @@ export default function BookingPage() {
       const bookings: BookingEvent[] = [];
       snap.forEach((doc) => {
         const data = doc.data();
+        if (!data.date || !data.time) return;
         const [startStr, endStr] = data.time.split("-");
         const dateStr = data.date;
         bookings.push({
@@ -69,7 +72,24 @@ export default function BookingPage() {
   }, []);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
+    const newStart = slotInfo.start.getTime();
+    const newEnd = slotInfo.end.getTime();
+
+    const overlapping = events.some((event) => {
+      const existingStart = event.start.getTime();
+      const existingEnd = event.end.getTime();
+      return newStart < existingEnd && newEnd > existingStart;
+    });
+
+    if (overlapping) {
+      setMessage("⚠️ Selected time overlaps with an existing booking.");
+      setSelectedRange(null);
+      return;
+    }
+
+    setMessage(null);
     setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
+    setShowForm(false);
   };
 
   const calculateHours = () => {
@@ -81,8 +101,13 @@ export default function BookingPage() {
   const totalHours = calculateHours();
   const totalPrice = totalHours * 20;
 
-  const formatTime = (date: Date) =>
-    date.toLocaleTimeString("fi-FI", { hour: "2-digit", minute: "2-digit" });
+  const formatTime = (date: Date) => formatDate(date, "HH:mm");
+
+  const formats = {
+    timeGutterFormat: (date: Date) => formatTime(date),
+    eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+      `${formatTime(start)} - ${formatTime(end)}`,
+  };
 
   const handleBook = async () => {
     if (!selectedRange) return alert("Select a time range.");
@@ -99,6 +124,30 @@ export default function BookingPage() {
     const invoiceNumber = `INV-${Date.now()}`;
 
     try {
+      // Check overlap
+      const snap = await getDocs(collection(db, "bookings"));
+      const overlapping = snap.docs.some((d) => {
+        const data = d.data();
+        if (data.date !== dateStr) return false;
+
+        const [existingStartStr, existingEndStr] = data.time.split("-");
+        const existingStart = new Date(
+          `${dateStr}T${existingStartStr}:00`
+        ).getTime();
+        const existingEnd = new Date(
+          `${dateStr}T${existingEndStr}:00`
+        ).getTime();
+
+        const newStart = selectedRange.start.getTime();
+        const newEnd = selectedRange.end.getTime();
+
+        return newStart < existingEnd && newEnd > existingStart;
+      });
+
+      if (overlapping) {
+        throw new Error("Selected time overlaps with an existing booking.");
+      }
+
       // Save booking
       await runTransaction(db, async (tx) => {
         const ref = doc(db, "bookings", bookingId);
@@ -117,7 +166,7 @@ export default function BookingPage() {
         });
       });
 
-      // Generate PDF
+      // PDF invoice
       const pdf = new jsPDF();
       pdf.setFontSize(16);
       pdf.text("Invoice - Eclipse Productions Oy", 14, 20);
@@ -134,7 +183,6 @@ export default function BookingPage() {
       pdf.text("Thank you for booking with Eclipse Productions Oy!", 14, 130);
       const pdfDataUri = pdf.output("datauristring");
 
-      // Send email
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_BOOKING_TEMPLATE_ID,
@@ -161,8 +209,8 @@ export default function BookingPage() {
       setPhone("");
       setEmail("");
       setNotes("");
+      setShowForm(false);
 
-      // Update calendar
       const newEvent: BookingEvent = {
         id: bookingId,
         title: "Booked",
@@ -170,101 +218,107 @@ export default function BookingPage() {
         end: selectedRange.end,
       };
       setEvents((prev) => [...prev, newEvent]);
-    } catch (err: any) {
-      console.error("Booking or email error:", err);
-      setMessage("Booking failed. Please try again.");
-    } finally {
-      setSubmitting(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Booking error:", err);
+        setMessage(err.message);
+      } else {
+        console.error("Booking error (non-Error):", err);
+        setMessage("Booking failed. Please try again.");
+      }
     }
   };
 
   return (
-    <section className="w-full py-12">
-      <div className="max-w-3xl mx-auto">
-        <Calendar
-          localizer={localizer}
-          events={events}
-          defaultView="month"
-          views={["month", "week", "day", "agenda"]}
-          step={60}
-          timeslots={1}
-          selectable
-          onSelectSlot={handleSelectSlot}
-          style={{ height: 600 }}
-          eventPropGetter={() => ({
-            style: { backgroundColor: "#dc2626", color: "white" },
-          })}
-          formats={{
-            timeGutterFormat: (date) =>
-              date.toLocaleTimeString("fi-FI", {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-            eventTimeRangeFormat: ({ start, end }) =>
-              `${formatTime(start)} - ${formatTime(end)}`,
-          }}
-        />
-
-        {selectedRange && (
-          <div className="mt-6 p-4 border rounded bg-gray-900 text-white">
+    <section className="w-full py-12 bg-gray-50">
+      <div className="w-full">
+        {selectedRange && !showForm && (
+          <div className="mt-6 p-4 border rounded bg-white shadow-md">
             <p>
               Selected:{" "}
               <strong>
-                {formatTime(selectedRange.start)} -{" "}
+                {formatTime(selectedRange.start)} –{" "}
                 {formatTime(selectedRange.end)}
               </strong>
             </p>
             <p>
-              Duration: <strong>{totalHours} hour(s)</strong> – Total:{" "}
+              Duration: <strong>{totalHours}h</strong> – Total:{" "}
               <strong>€{totalPrice}</strong>
             </p>
-
-            <div className="grid grid-cols-2 gap-3 mt-4">
-              <input
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First name"
-                className="p-2 rounded bg-gray-800 col-span-1 text-white"
-              />
-              <input
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Last name"
-                className="p-2 rounded bg-gray-800 col-span-1 text-white"
-              />
-              <input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Phone"
-                className="p-2 rounded bg-gray-800 col-span-2 text-white"
-              />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                className="p-2 rounded bg-gray-800 col-span-2 text-white"
-              />
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Notes (optional)"
-                className="p-2 rounded bg-gray-800 col-span-2 text-white"
-                rows={3}
-              />
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setShowForm(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Book this slot
+              </button>
+              <button
+                onClick={() => setSelectedRange(null)}
+                className="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
             </div>
-
-            <button
-              onClick={handleBook}
-              disabled={submitting}
-              className="mt-4 px-6 py-2 bg-blue-600 rounded text-white hover:bg-blue-700 disabled:opacity-50"
-            >
-              {submitting ? "Booking…" : "Confirm Booking"}
-            </button>
           </div>
         )}
+        {selectedRange && showForm && (
+          <BookingFormModal
+            selectedRange={selectedRange}
+            totalHours={totalHours}
+            totalPrice={totalPrice}
+            submitting={submitting}
+            onSubmit={handleBook}
+            onClose={() => {
+              setShowForm(false);
+              setSelectedRange(null);
+            }}
+            firstName={firstName}
+            lastName={lastName}
+            phone={phone}
+            email={email}
+            notes={notes}
+            setFirstName={setFirstName}
+            setLastName={setLastName}
+            setPhone={setPhone}
+            setEmail={setEmail}
+            setNotes={setNotes}
+          />
+        )}
+        {message && <p className="mt-4 text-green-600">{message}</p>}
 
-        {message && <p className="mt-4 text-green-400">{message}</p>}
+        <Calendar
+          localizer={localizer}
+          events={events}
+          views={["day", "week", "month", "agenda"]}
+          defaultView="day"
+          step={60}
+          timeslots={1}
+          selectable
+          onSelectSlot={handleSelectSlot}
+          style={{ height: "90vh", width: "100%" }}
+          formats={formats}
+          eventPropGetter={() => ({
+            style: {
+              backgroundColor: "#f3f4f6",
+              color: "#111827",
+              borderRadius: "0.375rem",
+              border: "1px solid #d1d5db",
+            },
+          })}
+          slotPropGetter={(date: Date) => {
+            const isSelected =
+              selectedRange &&
+              date >= selectedRange.start &&
+              date < selectedRange.end;
+
+            return {
+              style: {
+                transition: "background-color 0.2s",
+                backgroundColor: isSelected ? "#cbd5e1" : undefined,
+              },
+            };
+          }}
+        />
       </div>
     </section>
   );
