@@ -4,6 +4,7 @@ import { FiMenu } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
 import { logo } from "../assets";
 import { navLinksdata } from "../constants";
+import { useNavigate } from "react-router-dom";
 import { FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
 
 const useIsMobile = () => {
@@ -22,6 +23,7 @@ const useIsMobile = () => {
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isMobile) {
@@ -86,6 +88,15 @@ const Navbar = () => {
                     </Link>
                   </li>
                 ))}
+                <li
+                  className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
+                  onClick={() => {
+                    setShowMenu(false);
+                    navigate("/booking");
+                  }}
+                >
+                  Book Now
+                </li>
               </ul>
               <div className="flex justify-center gap-6 mt-6">
                 <a
