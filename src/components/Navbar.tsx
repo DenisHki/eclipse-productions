@@ -30,8 +30,9 @@ const Navbar = () => {
       setShowMenu(true);
     }
   }, [isMobile]);
+
   return (
-    <div className="w-full h-24 sticky top-0 z-50 backdrop-blur-2xl transition-colors bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4">
+    <div className="w-full h-24 fixed top-0 z-50 backdrop-blur-2xl transition-colors bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4">
       <div>
         <img src={logo} alt="logo" />
       </div>
@@ -47,7 +48,7 @@ const Navbar = () => {
                 to={link}
                 spy={true}
                 smooth={true}
-                offset={-70}
+                offset={-96}
                 duration={500}
                 className="relative group-hover:text-designColor"
               >
@@ -64,8 +65,8 @@ const Navbar = () => {
           <FiMenu />
         </span>
         {showMenu && (
-          <div className="w-full h-screen mdl:hidden overflow-scroll fixed top-0 left-0 bg-bodyColor p-4 scrollbar-hide z-50">
-            <div className="flex flex-col gap-8 py-2 relative">
+          <div className="w-full h-screen mdl:hidden overflow-y-auto fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50">
+            <div className="flex flex-col items-center justify-center gap-8 h-full text-center">
               <div className="flex flex-col items-center text-center">
                 <img className="w-32" src={logo} alt="logo" />
               </div>

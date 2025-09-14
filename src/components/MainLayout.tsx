@@ -9,7 +9,7 @@ function MainLayout() {
   return (
     <main className="font-bodyFont w-full h-auto bg-bodyColor text-lightText">
       <Navbar />
-      <div className="px-4">
+      <div className="px-4 pt-24">
         <div className="max-w-screen-xl mx-auto">
           <Home />
           <Services />
