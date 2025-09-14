@@ -4,6 +4,7 @@ interface MapProps {
   lat: number;
   lng: number;
   zoom?: number;
+  className?: string;
 }
 
 const loadGoogleMapsScript = (apiKey: string): Promise<void> => {
@@ -24,7 +25,7 @@ const loadGoogleMapsScript = (apiKey: string): Promise<void> => {
   });
 };
 
-const Map: React.FC<MapProps> = ({ lat, lng, zoom = 15 }) => {
+const Map: React.FC<MapProps> = ({ lat, lng, zoom = 15, className }) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -146,7 +147,13 @@ const Map: React.FC<MapProps> = ({ lat, lng, zoom = 15 }) => {
       .catch((error) => console.error(error));
   }, [lat, lng, zoom]);
 
-  return <div ref={mapRef} style={{ width: "100%", height: "500px" }} />;
+  return (
+    <div
+      ref={mapRef}
+      className={className}
+      style={{ width: "100%", height: "500px" }}
+    />
+  );
 };
 
 export default Map;

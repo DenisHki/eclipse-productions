@@ -3,6 +3,7 @@ import Title from "./Title";
 import { FadeIn } from "./FadeIn";
 import emailjs from "emailjs-com";
 import Map from "./Map";
+import PrimaryButton from "./PrimaryButton";
 
 const Contact = () => {
   const [username, setUsername] = useState("");
@@ -134,9 +135,7 @@ const Contact = () => {
                 ></textarea>
               </div>
               <div className="w-full">
-                <button className="w-40 h-12 bg-[#141518] rounded-lg text-base text-gray-400 tracking-wider uppercase hover:text-white duration-300 hover:border-[1px] hover:border-designColor border-gray-600 border">
-                  Send Message
-                </button>
+                <PrimaryButton type="submit">Send Message</PrimaryButton>
               </div>
               {errMsg && (
                 <p className="py-3 bg-gradient-to-r from-[#141518] to-[#141518] shadow-shadowOne text-center text-orange-500 text-base tracking-wide animate-bounce">
@@ -151,7 +150,7 @@ const Contact = () => {
             </form>
           </div>
         </div>
-        <Map lat={60.18514501686832} lng={24.966133354712397} zoom={15} />
+        <Map lat={60.18514501686832} lng={24.966133354712397} zoom={15} className="mt-20 mb-20"/>
       </FadeIn>
     </section>
   );

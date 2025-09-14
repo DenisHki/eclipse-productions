@@ -3,6 +3,7 @@ import Title from "./Title";
 import Slideshow from "./Slider";
 import { FadeIn } from "./FadeIn";
 import { useNavigate } from "react-router-dom";
+import PrimaryButton from "./PrimaryButton";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -48,12 +49,9 @@ const Services = () => {
         </div>
 
         <div className="flex justify-center mt-28 mb-28">
-          <button
-            onClick={() => navigate("/booking")}
-            className="px-8 py-3 rounded-full border-2 border-designColor bg-black text-designColor font-bold text-xl shadow-md hover:shadow-lg hover:bg-designColor hover:text-black transition-all duration-300 transform hover:scale-105 ring-2 ring-designColor animate-pulse"
-          >
+          <PrimaryButton onClick={() => navigate("/booking")}>
             Book a Studio
-          </button>
+          </PrimaryButton>
         </div>
         <div className="mt-20">
           <Slideshow />
