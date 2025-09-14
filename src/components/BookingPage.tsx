@@ -99,7 +99,7 @@ export default function BookingPage() {
   };
 
   const totalHours = calculateHours();
-  const totalPrice = totalHours * 20;
+  const totalPrice = totalHours * 27;
 
   const formatTime = (date: Date) => formatDate(date, "HH:mm");
 
@@ -178,7 +178,7 @@ export default function BookingPage() {
       pdf.text(`Email: ${email}`, 14, 64);
       pdf.text(`Booking: ${dateStr} ${startStr} - ${endStr}`, 14, 80);
       pdf.text(`Duration: ${totalHours} hour(s)`, 14, 90);
-      pdf.text(`Rate: €20/hour`, 14, 100);
+      pdf.text(`Rate: €27/hour`, 14, 100);
       pdf.text(`Total: €${totalPrice}`, 14, 110);
       pdf.text("Thank you for booking with Eclipse Productions Oy!", 14, 130);
       const pdfDataUri = pdf.output("datauristring");
