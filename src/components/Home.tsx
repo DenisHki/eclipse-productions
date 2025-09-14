@@ -29,7 +29,6 @@ const Home = () => {
           src={hp1}
           alt="Our Studio"
           className="w-full max-w-7xl h-80 object-cover rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(225,189,143,0.5)]"
-          //transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(225,189,143,0.5)]
         />
       </section>
     </>

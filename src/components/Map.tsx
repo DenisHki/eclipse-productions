@@ -9,7 +9,7 @@ interface MapProps {
 const loadGoogleMapsScript = (apiKey: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (document.getElementById("google-maps-script")) {
-      resolve(); // If script is already loaded, resolve immediately
+      resolve();
       return;
     }
 
