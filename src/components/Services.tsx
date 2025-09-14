@@ -11,9 +11,6 @@ const Services = () => {
       id="services"
       className="w-full py-20 border-b-[1px] border-b-gray-700"
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-white">Our Services</h2>
-      </div>
       <FadeIn>
         <Title title="Services" des="What Do We Offer" />
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Title from "./Title";
 import { FadeIn } from "./FadeIn";
 import emailjs from "emailjs-com";
@@ -16,6 +16,16 @@ const Contact = () => {
       .toLocaleLowerCase()
       .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
   };
+
+  useEffect(() => {
+    if (successMsg || errMsg) {
+      const timer = setTimeout(() => {
+        setSuccessMsg("");
+        setErrMsg("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMsg, errMsg]);
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,7 +75,10 @@ const Contact = () => {
         </div>
         <div className="flex justify-center items-center w-full">
           <div className="w-full max-w-4xl py-10 bg-black flex flex-col gap-8 p-4 lgl:p-8 rounded-lg">
-            <form onSubmit={handleSend} className="w-full flex flex-col gap-4 lgl:gap-6 py-2 lgl:py-5">
+            <form
+              onSubmit={handleSend}
+              className="w-full flex flex-col gap-4 lgl:gap-6 py-2 lgl:py-5"
+            >
               {errMsg && (
                 <p className="py-3 bg-gradient-to-r from-[#1e2024] to-[#23272b] shadow-shadowOne text-center text-orange-500 text-base tracking-wide animate-bounce">
                   {errMsg}
@@ -121,9 +134,7 @@ const Contact = () => {
                 ></textarea>
               </div>
               <div className="w-full">
-                <button
-                  className="w-40 h-12 bg-[#141518] rounded-lg text-base text-gray-400 tracking-wider uppercase hover:text-white duration-300 hover:border-[1px] hover:border-designColor border-gray-600 border"
-                >
+                <button className="w-40 h-12 bg-[#141518] rounded-lg text-base text-gray-400 tracking-wider uppercase hover:text-white duration-300 hover:border-[1px] hover:border-designColor border-gray-600 border">
                   Send Message
                 </button>
               </div>
