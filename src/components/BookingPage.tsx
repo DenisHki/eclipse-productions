@@ -1,7 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
-import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
+import {
+  format as formatDate,
+  parse,
+  startOfWeek,
+  getDay,
+} from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -55,18 +60,31 @@ export default function BookingPage() {
       const q = collection(db, "bookings");
       const snap = await getDocs(q);
       const bookings: BookingEvent[] = [];
-      snap.forEach((doc) => {
-        const data = doc.data();
+
+      snap.forEach((docSnap) => {
+        const data = docSnap.data();
         if (!data.date || !data.time) return;
+
         const [startStr, endStr] = data.time.split("-");
-        const dateStr = data.date;
+        const start = parse(
+          `${data.date} ${startStr}`,
+          "yyyy-MM-dd HH:mm",
+          new Date()
+        );
+        const end = parse(
+          `${data.date} ${endStr}`,
+          "yyyy-MM-dd HH:mm",
+          new Date()
+        );
+
         bookings.push({
-          id: doc.id,
+          id: docSnap.id,
           title: "Booked",
-          start: new Date(`${dateStr}T${startStr}:00`),
-          end: new Date(`${dateStr}T${endStr}:00`),
+          start,
+          end,
         });
       });
+
       setEvents(bookings);
     }
     fetchBooked();
@@ -136,8 +154,11 @@ export default function BookingPage() {
 
     const startStr = formatTime(selectedRange.start);
     const endStr = formatTime(selectedRange.end);
-    const dateStr = selectedRange.start.toISOString().split("T")[0];
-    const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(":", "-")}`;
+    const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd"); // ✅ local date
+    const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(
+      ":",
+      "-"
+    )}`;
     const invoiceNumber = `INV-${Date.now()}`;
 
     try {
@@ -148,11 +169,15 @@ export default function BookingPage() {
         if (data.date !== dateStr) return false;
 
         const [existingStartStr, existingEndStr] = data.time.split("-");
-        const existingStart = new Date(
-          `${dateStr}T${existingStartStr}:00`
+        const existingStart = parse(
+          `${dateStr} ${existingStartStr}`,
+          "yyyy-MM-dd HH:mm",
+          new Date()
         ).getTime();
-        const existingEnd = new Date(
-          `${dateStr}T${existingEndStr}:00`
+        const existingEnd = parse(
+          `${dateStr} ${existingEndStr}`,
+          "yyyy-MM-dd HH:mm",
+          new Date()
         ).getTime();
 
         const newStart = selectedRange.start.getTime();
