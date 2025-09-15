@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
 import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
+import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { db } from "../firebaseConfig";
@@ -12,10 +13,9 @@ import {
   runTransaction,
   serverTimestamp,
 } from "firebase/firestore";
-import emailjs from "emailjs-com";
 import { jsPDF } from "jspdf";
 import BookingFormModal from "../components/BookingFormModal";
-import { logo } from "../assets";
+import Header from "./Header";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -248,9 +248,7 @@ export default function BookingPage() {
 
   return (
     <section className="w-full pb-12 bg-gray-50">
-      <header className="w-full h-24 flex items-center justify-start px-8 bg-black mb-8">
-        <img src={logo} alt="Eclipse Productions Oy" className="h-24 w-auto" />
-      </header>
+      <Header />
       <div className="w-full lg:w-4/5 mx-auto">
         {selectedRange && !showForm && (
           <div className="mt-6 p-4 border rounded bg-white shadow-md">
