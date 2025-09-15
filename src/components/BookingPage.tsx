@@ -103,7 +103,14 @@ export default function BookingPage() {
 
   const calculateHours = () => {
     if (!selectedRange) return 0;
-    const diff = selectedRange.end.getTime() - selectedRange.start.getTime();
+    let diff = selectedRange.end.getTime() - selectedRange.start.getTime();
+
+    const end = new Date(selectedRange.end);
+    if (end.getMinutes() === 59 && end.getSeconds() === 59) {
+      end.setHours(end.getHours() + 1, 0, 0, 0);
+      diff = end.getTime() - selectedRange.start.getTime();
+    }
+
     return diff / 1000 / 60 / 60;
   };
 
@@ -323,7 +330,7 @@ export default function BookingPage() {
                 style: {
                   backgroundColor: "#f9fafb",
                   color: "#9ca3af",
-                  pointerEvents: "none", // stops clicks
+                  pointerEvents: "none",
                 },
               };
             }
