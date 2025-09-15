@@ -15,6 +15,7 @@ import {
 import emailjs from "emailjs-com";
 import { jsPDF } from "jspdf";
 import BookingFormModal from "../components/BookingFormModal";
+import { logo } from "../assets";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -246,8 +247,11 @@ export default function BookingPage() {
   };
 
   return (
-    <section className="w-full py-12 bg-gray-50">
-      <div className="w-full">
+    <section className="w-full pb-12 bg-gray-50">
+      <header className="w-full h-24 flex items-center justify-start px-8 bg-black mb-8">
+        <img src={logo} alt="Eclipse Productions Oy" className="h-24 w-auto" />
+      </header>
+      <div className="w-full lg:w-4/5 mx-auto">
         {selectedRange && !showForm && (
           <div className="mt-6 p-4 border rounded bg-white shadow-md">
             <p>
@@ -311,7 +315,7 @@ export default function BookingPage() {
           timeslots={1}
           selectable
           onSelectSlot={handleSelectSlot}
-          style={{ height: "90vh", width: "100%" }}
+          style={{ height: "90vh" }}
           formats={formats}
           eventPropGetter={() => ({
             style: {
