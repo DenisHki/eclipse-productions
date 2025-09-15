@@ -72,6 +72,15 @@ export default function BookingPage() {
   }, []);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
+    const now = new Date();
+
+    // Prevent booking past slots
+    if (slotInfo.start < now) {
+      setMessage("⚠️ You cannot book past time slots.");
+      setSelectedRange(null);
+      return;
+    }
+
     const newStart = slotInfo.start.getTime();
     const newEnd = slotInfo.end.getTime();
 
@@ -306,6 +315,19 @@ export default function BookingPage() {
             },
           })}
           slotPropGetter={(date: Date) => {
+            const now = new Date();
+
+            // Disable past slots visually + functionally
+            if (date < now) {
+              return {
+                style: {
+                  backgroundColor: "#f9fafb",
+                  color: "#9ca3af",
+                  pointerEvents: "none", // stops clicks
+                },
+              };
+            }
+
             const isSelected =
               selectedRange &&
               date >= selectedRange.start &&
