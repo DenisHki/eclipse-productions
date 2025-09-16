@@ -27,13 +27,13 @@ const Services = () => {
           <Card
             title="Composition"
             des="Transform your ideas into fully produced tracks with our expert music production services — including composing, recording, mixing, and mastering."
-            price="€300 / track"
+            price="€500 / track"
             icon={FaMusic}
           />
           <Card
             title="Track Production"
             des="Compose instrumental tracks collaboratively — excluding recording, mixing, and mastering."
-            price="€100 / track"
+            price="€300 / track"
             icon={FaHeadphones}
           />
           <Card
@@ -45,7 +45,7 @@ const Services = () => {
           <Card
             title="Mixing"
             des="Elevate your tracks with professional mixing services designed to bring your music to life."
-            price="€100 / track"
+            price="€250 / track"
             icon={FaSlidersH}
           />
           <Card
