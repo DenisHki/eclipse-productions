@@ -56,7 +56,7 @@ const Slider: React.FC = () => {
           &#10095;
         </button>
       </div>
-      <p className="mt-4 text-lg font-semibold text-white">
+      <p className="mt-4 text-font-base font-bodyFont text-lightText text-center">
         {images[currentIndex].name}
       </p>
     </div>
