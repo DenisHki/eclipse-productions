@@ -43,7 +43,7 @@ const Contact = () => {
         .send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
           import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-          { username, email, message },
+          { username, to_email: email, message },
           import.meta.env.VITE_EMAILJS_PUBLIC_KEY
         )
         .then(
