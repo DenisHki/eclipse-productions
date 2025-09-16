@@ -3,8 +3,9 @@ import { FadeIn } from "./FadeIn";
 
 const Footer = () => {
   return (
-    <FadeIn className="w-full py-20 h-auto border-b-[1px] border-b-black grid grid-cols-1 md:grid-cols-2 lgl:grid-cols-4 gap-8">
-      <div className="w-full h-full flex flex-col gap-8">
+    <FadeIn className="w-full py-20 h-auto border-b-[1px] border-b-black flex flex-col items-center text-center gap-12 md:grid md:grid-cols-2 lgl:grid-cols-4 md:text-left md:items-start md:gap-8">
+      {" "}
+      <div className="w-full h-full flex flex-col items-center md:items-start text-center md:text-left gap-8">
         <img className="w-32" src={logo} alt="Company Logo" />
       </div>
       <div className="w-full h-full">
@@ -18,7 +19,7 @@ const Footer = () => {
               className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
             >
               info@eclipseproductions.fi
-              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 opacity-0 group-hover:opacity-100 translate-x-0 transition-all duration-300"></span>
             </a>
           </li>
         </ul>
@@ -36,7 +37,7 @@ const Footer = () => {
               className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
             >
               Instagram
-              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 opacity-0 group-hover:opacity-100 translate-x-0 transition-all duration-300"></span>
             </a>
           </li>
           <li>
@@ -47,7 +48,7 @@ const Footer = () => {
               className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
             >
               TikTok
-              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 opacity-0 group-hover:opacity-100 translate-x-0 transition-all duration-300"></span>
             </a>
           </li>
           <li>
@@ -58,7 +59,7 @@ const Footer = () => {
               className="w-full text-lg relative hover:text-designColor duration-300 group cursor-pointer"
             >
               Youtube
-              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 opacity-0 group-hover:opacity-100 translate-x-0 transition-all duration-300"></span>
             </a>
           </li>
         </ul>
@@ -71,7 +72,7 @@ const Footer = () => {
           <li>
             <span className="w-full text-lg relative">
               Sörnäisten rantatie 25 <br /> 00520 <br /> Helsinki
-              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 -translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+              <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 opacity-0 group-hover:opacity-100 translate-x-0 transition-all duration-300"></span>
             </span>
           </li>
         </ul>
