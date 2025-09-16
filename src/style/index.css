@@ -32,6 +32,7 @@ body {
   display: none;
 }
 
+/* Player */
 .rm-audio-player-provider {
   --rm-audio-player-interface-container: #000000; /* background container */
   --rm-audio-player-progress-bar: #e1bd8f; /* progress bar color */
@@ -40,32 +41,49 @@ body {
   --rm-audio-player-volume-thumb: #e1bd8f; /* volume thumb */
   --rm-audio-player-sortable-list-button-active: #e1bd8f; /* player list button */
 }
-
-* {
-  -webkit-user-select: text !important;
-  -moz-user-select: text !important;
-  -ms-user-select: text !important;
-  user-select: text !important;
+.mobile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.mobile-track-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+.track-details {
+  flex: 1;
+}
+.track-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+.track-artist {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
+/* Calendar */
 .rbc-toolbar {
   color: black;
   font-weight: 500;
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
-
 .rbc-toolbar-label {
-  font-size: 1.5rem; /* adjust size as you like */
-  font-weight: 700;  /* optional: make it bold */
+  font-size: 1.5rem;
+  font-weight: 700;
 }
-
 .rbc-event {
-  background-color: #e1bd8f !important; /* blue-600 */
+  background-color: #e1bd8f !important;
   border-radius: 0.5rem;
   font-weight: 500;
 }
-
 .rbc-today {
-  background-color: #dbeafe !important; /* blue-100 */
+  background-color: #dbeafe !important;
 }
