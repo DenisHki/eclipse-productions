@@ -1,12 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
-import {
-  format as formatDate,
-  parse,
-  startOfWeek,
-  getDay,
-} from "date-fns";
+import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -54,6 +49,13 @@ export default function BookingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+  
   // Fetch bookings
   useEffect(() => {
     async function fetchBooked() {
@@ -145,16 +147,28 @@ export default function BookingPage() {
   };
 
   const handleBook = async () => {
+    /*
     if (!selectedRange) return alert("Select a time range.");
     if (!firstName || !lastName || !phone || !email)
       return alert("Fill all required fields.");
+
+    setSubmitting(true);
+    setMessage(null);*/
+    if (!selectedRange) {
+      setMessage("⚠️ Please select a time range before booking.");
+      return;
+    }
+    if (!firstName || !lastName || !phone || !email) {
+      setMessage("⚠️ Please fill in all required fields.");
+      return;
+    }
 
     setSubmitting(true);
     setMessage(null);
 
     const startStr = formatTime(selectedRange.start);
     const endStr = formatTime(selectedRange.end);
-    const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd"); // ✅ local date
+    const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd");
     const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(
       ":",
       "-"
@@ -325,9 +339,24 @@ export default function BookingPage() {
             setPhone={setPhone}
             setEmail={setEmail}
             setNotes={setNotes}
+            message={message}
           />
         )}
-        {message && <p className="mt-4 text-green-600">{message}</p>}
+        {message && (
+          <div
+            className={`mt-4 p-4 rounded-lg border shadow-sm ${
+              message.includes("⚠️") ||
+              message.toLowerCase().includes("overlap")
+                ? "bg-yellow-50 border-yellow-200 text-yellow-800"
+                : message.toLowerCase().includes("failed") ||
+                    message.toLowerCase().includes("error")
+                  ? "bg-red-50 border-red-200 text-red-800"
+                  : "bg-green-50 border-green-200 text-green-800"
+            }`}
+          >
+            {message}
+          </div>
+        )}
 
         <Calendar
           localizer={localizer}

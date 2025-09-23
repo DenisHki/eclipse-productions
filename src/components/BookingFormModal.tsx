@@ -17,6 +17,7 @@ interface BookingFormModalProps {
   setPhone: (val: string) => void;
   setEmail: (val: string) => void;
   setNotes: (val: string) => void;
+  message: string | null;
 }
 
 export default function BookingFormModal({
@@ -36,6 +37,7 @@ export default function BookingFormModal({
   setPhone,
   setEmail,
   setNotes,
+  message
 }: BookingFormModalProps) {
   const formatTime = (date: Date) => format(date, "HH:mm");
 
@@ -86,7 +88,23 @@ export default function BookingFormModal({
             rows={3}
           />
         </div>
+{message && (
+  <div
+    className={`mt-4 p-3 rounded-lg border shadow-sm text-sm ${
+      message.includes("⚠️") ||
+      message.toLowerCase().includes("overlap")
+        ? "bg-yellow-50 border-yellow-200 text-yellow-800"
+        : message.toLowerCase().includes("failed") ||
+          message.toLowerCase().includes("error")
+        ? "bg-red-50 border-red-200 text-red-800"
+        : "bg-green-50 border-green-200 text-green-800"
+    }`}
+  >
+    {message}
+  </div>
+)}
 
+<div className="flex justify-end gap-2 mt-6"></div>
         <div className="flex justify-end gap-2 mt-6">
           <button
             onClick={onClose}
