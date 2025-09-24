@@ -1,4 +1,12 @@
+/// <reference types="@types/google.maps" />
+
 import { useEffect, useRef } from "react";
+
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
 
 interface MapProps {
   lat: number;
@@ -10,15 +18,21 @@ interface MapProps {
 const loadGoogleMapsScript = (apiKey: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (document.getElementById("google-maps-script")) {
-      resolve();
+      if (window.google && window.google.maps) {
+        resolve();
+      } else {
+        window.initMap = () => resolve();
+      }
       return;
     }
 
+    window.initMap = () => resolve();
+
     const script = document.createElement("script");
     script.id = "google-maps-script";
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&v=weekly&loading=async`;
     script.async = true;
-    script.onload = () => resolve();
+    script.defer = true;
     script.onerror = () =>
       reject(new Error("Failed to load Google Maps script"));
     document.head.appendChild(script);
@@ -38,7 +52,7 @@ const Map: React.FC<MapProps> = ({ lat, lng, zoom = 15, className }) => {
 
     loadGoogleMapsScript(apiKey)
       .then(() => {
-        if (mapRef.current) {
+        if (mapRef.current && window.google && window.google.maps) {
           const mapStyles = [
             {
               featureType: "all",
@@ -132,13 +146,13 @@ const Map: React.FC<MapProps> = ({ lat, lng, zoom = 15, className }) => {
             },
           ];
 
-          const map = new google.maps.Map(mapRef.current, {
+          const map = new window.google.maps.Map(mapRef.current, {
             center: { lat, lng },
             zoom,
             styles: mapStyles,
           });
 
-          new google.maps.Marker({
+          new window.google.maps.Marker({
             position: { lat, lng },
             map,
           });
