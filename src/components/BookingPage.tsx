@@ -16,6 +16,7 @@ import {
 import { jsPDF } from "jspdf";
 import BookingFormModal from "../components/BookingFormModal";
 import Header from "./Header";
+import { Helmet } from "react-helmet-async";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -55,7 +56,7 @@ export default function BookingPage() {
       return () => clearTimeout(timer);
     }
   }, [message]);
-  
+
   // Fetch bookings
   useEffect(() => {
     async function fetchBooked() {
@@ -287,6 +288,47 @@ export default function BookingPage() {
 
   return (
     <section className="w-full pb-12 bg-gray-50">
+      <Helmet>
+        <title>Book a Music Studio in Helsinki | Eclipse Productions Oy</title>
+        <meta
+          name="description"
+          content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates (€27/hour), professional equipment, and modern facilities in Helsinki."
+        />
+        <link rel="canonical" href="https://eclipseproductions.fi/booking" />
+        {/* Open Graph (Facebook, LinkedIn, WhatsApp, etc.) */}
+        <meta
+          property="og:title"
+          content="Book a Music Studio in Helsinki | Eclipse Productions Oy"
+        />
+        <meta
+          property="og:description"
+          content="Reserve your studio session online at Eclipse Productions Oy. Affordable rates, professional equipment, and modern facilities in Helsinki."
+        />
+        <meta
+          property="og:url"
+          content="https://eclipseproductions.fi/booking"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://eclipseproductions.fi/og-image.jpg"
+        />
+
+        {/* Twitter Card (also used by Slack, Telegram, etc.) */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Book a Music Studio in Helsinki | Eclipse Productions Oy"
+        />
+        <meta
+          name="twitter:description"
+          content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates and modern facilities in Helsinki."
+        />
+        <meta
+          name="twitter:image"
+          content="https://eclipseproductions.fi/og-image.jpg"
+        />
+      </Helmet>
       <Header />
       <div className="w-full lg:w-4/5 mx-auto">
         {selectedRange && !showForm && (
