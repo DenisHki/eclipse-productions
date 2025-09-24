@@ -30,7 +30,7 @@ const steps: Step[] = [
   {
     title: "Confirmation & Access",
     description:
-      "You’ll receive a confirmation email. After payment, we’ll send your invoice and open the studio with a mobile key for you.",
+      "You’ll receive a confirmation email and your invoice. After payment, we’ll open the studio with a mobile key for you.",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function BookingInstructions() {
   return (
     <section className="mt-12 w-full py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-center text-black text-font-lg font-titleFont font-bold mb-12">
+        <h2 className="text-center text-black text-3xl font-titleFont font-bold mb-12">
           How to Book Your Studio
         </h2>
         <div className="grid grid-cols-1 sml:grid-cols-2 lg:grid-cols-4 gap-12">
