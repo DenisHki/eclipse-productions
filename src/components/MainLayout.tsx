@@ -33,8 +33,31 @@ function MainLayout() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://eclipseproductions.fi/" />
+        <meta
+          property="og:image"
+          content="https://eclipseproductions.fi/eclipse_studio.jpeg"
+        />
 
-        <html lang="en" />
+        <script type="application/ld+json">
+          {`
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Eclipse Productions Oy",
+        "image": "https://eclipseproductions.fi/eclipse_studio.jpeg",
+        "url": "https://eclipseproductions.fi",
+        "telephone": "+358-XX-XXX-XXXX",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Helsinki",
+          "addressCountry": "FI"
+        },
+        "priceRange": "€€",
+        "description": "Professional music studio offering recording, mixing, mastering, and studio rental in Helsinki.",
+        "openingHours": "Mo-Su 10:00-22:00"
+      }
+    `}
+        </script>
       </Helmet>
       <Navbar />
       <div className="px-4 pt-24">

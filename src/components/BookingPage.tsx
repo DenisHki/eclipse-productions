@@ -311,7 +311,7 @@ export default function BookingPage() {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://eclipseproductions.fi/og-image.jpg"
+          content="https://eclipseproductions.fi/eclipse_studio.jpeg"
         />
 
         {/* Twitter Card (also used by Slack, Telegram, etc.) */}
@@ -326,7 +326,7 @@ export default function BookingPage() {
         />
         <meta
           name="twitter:image"
-          content="https://eclipseproductions.fi/og-image.jpg"
+          content="https://eclipseproductions.fi/eclipse_studio.jpeg"
         />
       </Helmet>
       <Header />

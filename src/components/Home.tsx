@@ -4,7 +4,7 @@ import LeftBar from "./LeftBar";
 import RightBar from "./RightBar";
 import { homepage } from "../assets";
 import hp1 from "../assets/images/hp1.jpeg";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
   return (
