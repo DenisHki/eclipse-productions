@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
 import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
 import emailjs from "emailjs-com";
@@ -15,6 +15,7 @@ import {
 import BookingFormModal from "../components/BookingFormModal";
 import Header from "./Header";
 import { Helmet } from "react-helmet-async";
+import BookingInstructions from "./BookingInstructions";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -39,7 +40,6 @@ export default function BookingPage() {
     end: Date;
   } | null>(null);
   const [showForm, setShowForm] = useState(false);
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -47,6 +47,7 @@ export default function BookingPage() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const topRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (message) {
@@ -57,42 +58,59 @@ export default function BookingPage() {
 
   useEffect(() => {
     async function fetchBooked() {
-      const q = collection(db, "bookings");
-      const snap = await getDocs(q);
-      const bookings: BookingEvent[] = [];
+      try {
+        const q = collection(db, "bookings");
+        const snap = await getDocs(q);
+        const bookings: BookingEvent[] = [];
 
-      snap.forEach((docSnap) => {
-        const data = docSnap.data();
-        if (!data.date || !data.time) return;
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          if (!data.date || !data.time) return;
 
-        const [startStr, endStr] = data.time.split("-");
-        const start = parse(
-          `${data.date} ${startStr}`,
-          "yyyy-MM-dd HH:mm",
-          new Date()
-        );
-        const end = parse(
-          `${data.date} ${endStr}`,
-          "yyyy-MM-dd HH:mm",
-          new Date()
-        );
+          const [startStr, endStr] = data.time.split("-");
+          const start = parse(
+            `${data.date} ${startStr}`,
+            "yyyy-MM-dd HH:mm",
+            new Date()
+          );
+          const end = parse(
+            `${data.date} ${endStr}`,
+            "yyyy-MM-dd HH:mm",
+            new Date()
+          );
 
-        bookings.push({
-          id: docSnap.id,
-          title: "Booked",
-          start,
-          end,
+          bookings.push({
+            id: docSnap.id,
+            title: "Booked",
+            start,
+            end,
+          });
         });
-      });
 
-      setEvents(bookings);
+        setEvents(bookings);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        setMessage(
+          "❌ Error loading existing bookings. Please refresh the page."
+        );
+      }
     }
+
     fetchBooked();
+  }, []);
+
+  useEffect(() => {
+    if (message || selectedRange) {
+      topRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [message, selectedRange]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     const now = new Date();
-
     if (slotInfo.start < now) {
       setMessage("⚠️ You cannot book past time slots.");
       setSelectedRange(null);
@@ -122,13 +140,11 @@ export default function BookingPage() {
   const calculateHours = () => {
     if (!selectedRange) return 0;
     let diff = selectedRange.end.getTime() - selectedRange.start.getTime();
-
     const end = new Date(selectedRange.end);
     if (end.getMinutes() === 59 && end.getSeconds() === 59) {
       end.setHours(end.getHours() + 1, 0, 0, 0);
       diff = end.getTime() - selectedRange.start.getTime();
     }
-
     return diff / 1000 / 60 / 60;
   };
 
@@ -148,6 +164,7 @@ export default function BookingPage() {
       setMessage("⚠️ Please select a time range before booking.");
       return;
     }
+
     if (!firstName || !lastName || !phone || !email) {
       setMessage("⚠️ Please fill in all required fields.");
       return;
@@ -192,10 +209,14 @@ export default function BookingPage() {
         throw new Error("Selected time overlaps with an existing booking.");
       }
 
-      // Save booking
       await runTransaction(db, async (tx) => {
         const ref = doc(db, "bookings", bookingId);
-        if ((await tx.get(ref)).exists()) throw new Error("Slot taken");
+        const docSnapshot = await tx.get(ref);
+
+        if (docSnapshot.exists()) {
+          throw new Error("This time slot has already been taken.");
+        }
+
         tx.set(ref, {
           date: dateStr,
           time: `${startStr}-${endStr}`,
@@ -227,7 +248,10 @@ export default function BookingPage() {
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
-      setMessage("Booking confirmed! Invoice sent to your email.");
+      setMessage("✅ Booking confirmed! Confirmation email sent.");
+
+      const currentSelectedRange = selectedRange;
+
       setSelectedRange(null);
       setFirstName("");
       setLastName("");
@@ -239,23 +263,26 @@ export default function BookingPage() {
       const newEvent: BookingEvent = {
         id: bookingId,
         title: "Booked",
-        start: selectedRange.start,
-        end: selectedRange.end,
+        start: currentSelectedRange.start,
+        end: currentSelectedRange.end,
       };
       setEvents((prev) => [...prev, newEvent]);
     } catch (err: unknown) {
+      console.error("Booking error:", err);
+
       if (err instanceof Error) {
-        console.error("Booking error:", err);
-        setMessage(err.message);
+        setMessage(`❌ ${err.message}`);
       } else {
-        console.error("Booking error (non-Error):", err);
-        setMessage("Booking failed. Please try again.");
+        setMessage("❌ Booking failed. Please try again.");
       }
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <section className="w-full pb-12 bg-gray-50">
+      <div ref={topRef}></div>
       <Helmet>
         <title>Book a Music Studio in Helsinki | Eclipse Productions Oy</title>
         <meta
@@ -263,7 +290,6 @@ export default function BookingPage() {
           content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates (€27/hour), professional equipment, and modern facilities in Helsinki."
         />
         <link rel="canonical" href="https://eclipseproductions.fi/booking" />
-
         <meta
           property="og:title"
           content="Book a Music Studio in Helsinki | Eclipse Productions Oy"
@@ -281,7 +307,6 @@ export default function BookingPage() {
           property="og:image"
           content="https://eclipseproductions.fi/eclipse_studio.jpeg"
         />
-
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -303,12 +328,12 @@ export default function BookingPage() {
             <p>
               Selected:{" "}
               <strong>
-                {formatTime(selectedRange.start)} –{" "}
+                {formatTime(selectedRange.start)} -{" "}
                 {formatTime(selectedRange.end)}
               </strong>
             </p>
             <p>
-              Duration: <strong>{totalHours}h</strong> – Total:{" "}
+              Duration: <strong>{totalHours}h</strong> - Total:{" "}
               <strong>€{totalPrice}</strong>
             </p>
             <div className="mt-4 flex gap-2">
@@ -327,6 +352,7 @@ export default function BookingPage() {
             </div>
           </div>
         )}
+
         {selectedRange && showForm && (
           <BookingFormModal
             selectedRange={selectedRange}
@@ -351,6 +377,7 @@ export default function BookingPage() {
             message={message}
           />
         )}
+
         {message && (
           <div
             className={`mt-4 p-4 rounded-lg border shadow-sm ${
@@ -358,7 +385,8 @@ export default function BookingPage() {
               message.toLowerCase().includes("overlap")
                 ? "bg-yellow-50 border-yellow-200 text-yellow-800"
                 : message.toLowerCase().includes("failed") ||
-                    message.toLowerCase().includes("error")
+                    message.toLowerCase().includes("error") ||
+                    message.includes("❌")
                   ? "bg-red-50 border-red-200 text-red-800"
                   : "bg-green-50 border-green-200 text-green-800"
             }`}
@@ -407,11 +435,12 @@ export default function BookingPage() {
             return {
               style: {
                 transition: "background-color 0.2s",
-                backgroundColor: isSelected ? "#cbd5e1" : undefined,
+                backgroundColor: isSelected ? "#cbd5e1" : "#ecfdf5",
               },
             };
           }}
         />
+        <BookingInstructions />
       </div>
     </section>
   );
