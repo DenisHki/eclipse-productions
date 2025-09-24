@@ -12,7 +12,6 @@ import {
   runTransaction,
   serverTimestamp,
 } from "firebase/firestore";
-import { jsPDF } from "jspdf";
 import BookingFormModal from "../components/BookingFormModal";
 import Header from "./Header";
 import { Helmet } from "react-helmet-async";
@@ -56,7 +55,6 @@ export default function BookingPage() {
     }
   }, [message]);
 
-  // Fetch bookings
   useEffect(() => {
     async function fetchBooked() {
       const q = collection(db, "bookings");
@@ -95,7 +93,6 @@ export default function BookingPage() {
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     const now = new Date();
 
-    // Prevent booking past slots
     if (slotInfo.start < now) {
       setMessage("⚠️ You cannot book past time slots.");
       setSelectedRange(null);
@@ -147,13 +144,6 @@ export default function BookingPage() {
   };
 
   const handleBook = async () => {
-    /*
-    if (!selectedRange) return alert("Select a time range.");
-    if (!firstName || !lastName || !phone || !email)
-      return alert("Fill all required fields.");
-
-    setSubmitting(true);
-    setMessage(null);*/
     if (!selectedRange) {
       setMessage("⚠️ Please select a time range before booking.");
       return;
@@ -173,10 +163,8 @@ export default function BookingPage() {
       ":",
       "-"
     )}`;
-    const invoiceNumber = `INV-${Date.now()}`;
 
     try {
-      // Check overlap
       const snap = await getDocs(collection(db, "bookings"));
       const overlapping = snap.docs.some((d) => {
         const data = d.data();
@@ -222,23 +210,6 @@ export default function BookingPage() {
         });
       });
 
-      // PDF invoice
-      const pdf = new jsPDF();
-      pdf.setFontSize(16);
-      pdf.text("Invoice - Eclipse Productions Oy", 14, 20);
-      pdf.setFontSize(11);
-      pdf.text(`Invoice #: ${invoiceNumber}`, 14, 30);
-      pdf.text(`Date: ${new Date().toLocaleDateString("fi-FI")}`, 14, 38);
-      pdf.text(`Customer: ${firstName} ${lastName}`, 14, 48);
-      pdf.text(`Phone: ${phone}`, 14, 56);
-      pdf.text(`Email: ${email}`, 14, 64);
-      pdf.text(`Booking: ${dateStr} ${startStr} - ${endStr}`, 14, 80);
-      pdf.text(`Duration: ${totalHours} hour(s)`, 14, 90);
-      pdf.text(`Rate: €27/hour`, 14, 100);
-      pdf.text(`Total: €${totalPrice}`, 14, 110);
-      pdf.text("Thank you for booking with Eclipse Productions Oy!", 14, 130);
-      const pdfDataUri = pdf.output("datauristring");
-
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_BOOKING_TEMPLATE_ID,
@@ -251,8 +222,6 @@ export default function BookingPage() {
           price: totalPrice,
           phone,
           notes,
-          invoice: pdfDataUri,
-          invoice_number: invoiceNumber,
           current_year: new Date().getFullYear(),
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
@@ -294,7 +263,7 @@ export default function BookingPage() {
           content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates (€27/hour), professional equipment, and modern facilities in Helsinki."
         />
         <link rel="canonical" href="https://eclipseproductions.fi/booking" />
-        {/* Open Graph (Facebook, LinkedIn, WhatsApp, etc.) */}
+
         <meta
           property="og:title"
           content="Book a Music Studio in Helsinki | Eclipse Productions Oy"
@@ -313,7 +282,6 @@ export default function BookingPage() {
           content="https://eclipseproductions.fi/eclipse_studio.jpeg"
         />
 
-        {/* Twitter Card (also used by Slack, Telegram, etc.) */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -421,7 +389,6 @@ export default function BookingPage() {
           slotPropGetter={(date: Date) => {
             const now = new Date();
 
-            // Disable past slots visually + functionally
             if (date < now) {
               return {
                 style: {

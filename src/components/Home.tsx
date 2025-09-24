@@ -29,7 +29,7 @@ const Home = () => {
       >
         <LeftBar
           subtitle="WELCOME"
-          title="We are Eclipse Productions"
+          title="The Home of Your Music"
           description="Discover your creativity in our premium equipped music studio. Equipped with pristine Genelec monitors and a powerful subwoofer, every nuance of your mix will come through with crystal clarity. A high performance audio interface and professional microphone setup ensure your recordings capture every detail, while our selection of MIDI controllers lets you bring your musical ideas to life."
         />
         <RightBar
