@@ -1,5 +1,3 @@
-"use client";
-
 import LeftBar from "./LeftBar";
 import RightBar from "./RightBar";
 import { homepage } from "../assets";

@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
 import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";

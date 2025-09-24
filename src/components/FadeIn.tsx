@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useContext } from "react";
 import { motion, useReducedMotion, MotionProps } from "framer-motion";
 import type { HTMLAttributes } from "react";
