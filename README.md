@@ -1,27 +1,64 @@
-# React + TypeScript + Vite
+# 🎧 Eclipse Productions Oy Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive website for **Eclipse Productions Oy** — a professional music studio and production company located in Helsinki, Finland. The site features an integrated booking system, audio player, and comprehensive service showcase.
 
-Currently, two official plugins are available:
+## 🎵 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Core Functionality
+- Online Studio Booking System
+- Integrated Audio Player
+- Interactive Equipment Gallery
+- Contact Form
+- Google Maps Integration
 
-## Expanding the ESLint configuration
+### Services Offered
+- Studio Rental – €27/hour
+- Music Production – €300–500/track
+- Recording Services – €30/hour (min 3 hours)
+- Mixing & Mastering – €100–250/track
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Technical Features
+- Responsive Design (Tailwind CSS)
+- Real-time Booking (Firebase Firestore)
+- Email Notifications (EmailJS)
+- SEO Optimized
+- Performance Focused
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠 Tech Stack
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+### Frontend
+- React 18.2
+- TypeScript
+- Tailwind CSS
+- Vite
+- Framer Motion
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Libraries & Integrations
+- React Big Calendar
+- EmailJS
+- Firebase Firestore
+- Google Maps API
+- React Modern Audio Player
+- React Helmet
+
+### Development Tools
+- ESLint
+- TypeScript ESLint
+- Autoprefixer
+- PostCSS
+
+## 📈 SEO & Performance
+- Structured Data (JSON-LD)
+- Meta Tags (OpenGraph & Twitter)
+- Canonical URLs
+- Sitemap
+- Schema Markup
+
+## 📝 License
+This project is proprietary and confidential. All rights reserved by Eclipse Productions Oy.
+
+## 📞 Support
+- 🌐 [eclipseproductions.fi](https://eclipseproductions.fi)
+- 📧 info@eclipseproductions.fi
+- 📸 Instagram: [@eclipse_productions_oy](https://instagram.com/eclipse_productions_oy)
+- 📍 Sörnäisten rantatie 25, 00520 Helsinki, Finland
