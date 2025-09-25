@@ -13,24 +13,24 @@ const steps: Step[] = [
     img: step1,
     title: "Pick Your Time",
     description:
-      "Choose an available slot in the calendar by dragging over the time you want to book.",
+      "Choose available time slot in the calendar by dragging over the time you want to book.",
   },
   {
     img: step2,
     title: "Preview & Book",
     description:
-      'A pop-up will show your selected time range — click "Book this slot" to continue.',
+      'A pop-up window will show your selected time range — click "Book this slot" to continue.',
   },
   {
     img: step3,
     title: "Enter Your Details",
     description:
-      'Fill in your name, contact info, and any notes, then click "Confirm Booking".',
+      'Fill in your name, contact info, and add notes if you have any wishes, then click "Confirm Booking".',
   },
   {
     title: "Confirmation & Access",
     description:
-      "You’ll receive a confirmation email and your invoice. After payment, we’ll open the studio with a mobile key for you.",
+      "You’ll receive a confirmation email along with your invoice. Once payment is completed, we’ll open the studio with a mobile key for you.",
   },
 ];
 
