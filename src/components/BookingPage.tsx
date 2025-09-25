@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
 import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
 import emailjs from "emailjs-com";
@@ -49,6 +49,65 @@ export default function BookingPage() {
   const [message, setMessage] = useState<string | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
 
+  // Memoized expensive calculations
+  const totalHours = useMemo(() => {
+    if (!selectedRange) return 0;
+    let diff = selectedRange.end.getTime() - selectedRange.start.getTime();
+    const end = new Date(selectedRange.end);
+    if (end.getMinutes() === 59 && end.getSeconds() === 59) {
+      end.setHours(end.getHours() + 1, 0, 0, 0);
+      diff = end.getTime() - selectedRange.start.getTime();
+    }
+    return diff / 1000 / 60 / 60;
+  }, [selectedRange]);
+
+  const totalPrice = useMemo(() => totalHours * 27, [totalHours]);
+
+  // Memoized calendar formats
+  const formats = useMemo(() => ({
+    timeGutterFormat: (date: Date) => formatDate(date, "HH:mm"),
+    eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+      `${formatDate(start, "HH:mm")} - ${formatDate(end, "HH:mm")}`,
+  }), []);
+
+  // Memoized event prop getter
+  const eventPropGetter = useMemo(() => () => ({
+    style: {
+      backgroundColor: "#f3f4f6",
+      color: "#111827",
+      borderRadius: "0.375rem",
+      border: "1px solid #d1d5db",
+    },
+  }), []);
+
+  // Memoized slot prop getter
+  const slotPropGetter = useCallback((date: Date) => {
+    const now = new Date();
+
+    if (date < now) {
+      return {
+        style: {
+          backgroundColor: "#f9fafb",
+          color: "#9ca3af",
+          pointerEvents: "none" as const,
+        },
+      };
+    }
+
+    const isSelected =
+      selectedRange &&
+      date >= selectedRange.start &&
+      date < selectedRange.end;
+
+    return {
+      style: {
+        transition: "background-color 0.2s",
+        backgroundColor: isSelected ? "#cbd5e1" : "#ecfdf5",
+      },
+    };
+  }, [selectedRange]);
+
+  // Consolidated useEffect for message cleanup
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(null), 5000);
@@ -56,8 +115,21 @@ export default function BookingPage() {
     }
   }, [message]);
 
+  // Consolidated useEffect for scrolling
   useEffect(() => {
-    async function fetchBooked() {
+    if (message || selectedRange) {
+      topRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [message, selectedRange]);
+
+  // Initial scroll to top
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Fetch bookings with error handling
+  useEffect(() => {
+    const fetchBooked = async () => {
       try {
         const q = collection(db, "bookings");
         const snap = await getDocs(q);
@@ -94,22 +166,12 @@ export default function BookingPage() {
           "❌ Error loading existing bookings. Please refresh the page."
         );
       }
-    }
+    };
 
     fetchBooked();
   }, []);
 
-  useEffect(() => {
-    if (message || selectedRange) {
-      topRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [message, selectedRange]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  const handleSelectSlot = (slotInfo: SlotInfo) => {
+  const handleSelectSlot = useCallback((slotInfo: SlotInfo) => {
     const now = new Date();
     if (slotInfo.start < now) {
       setMessage("⚠️ You cannot book past time slots.");
@@ -135,31 +197,9 @@ export default function BookingPage() {
     setMessage(null);
     setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
     setShowForm(false);
-  };
+  }, [events]);
 
-  const calculateHours = () => {
-    if (!selectedRange) return 0;
-    let diff = selectedRange.end.getTime() - selectedRange.start.getTime();
-    const end = new Date(selectedRange.end);
-    if (end.getMinutes() === 59 && end.getSeconds() === 59) {
-      end.setHours(end.getHours() + 1, 0, 0, 0);
-      diff = end.getTime() - selectedRange.start.getTime();
-    }
-    return diff / 1000 / 60 / 60;
-  };
-
-  const totalHours = calculateHours();
-  const totalPrice = totalHours * 27;
-
-  const formatTime = (date: Date) => formatDate(date, "HH:mm");
-
-  const formats = {
-    timeGutterFormat: (date: Date) => formatTime(date),
-    eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
-      `${formatTime(start)} - ${formatTime(end)}`,
-  };
-
-  const handleBook = async () => {
+  const handleBook = useCallback(async () => {
     if (!selectedRange) {
       setMessage("⚠️ Please select a time range before booking.");
       return;
@@ -173,8 +213,8 @@ export default function BookingPage() {
     setSubmitting(true);
     setMessage(null);
 
-    const startStr = formatTime(selectedRange.start);
-    const endStr = formatTime(selectedRange.end);
+    const startStr = formatDate(selectedRange.start, "HH:mm");
+    const endStr = formatDate(selectedRange.end, "HH:mm");
     const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd");
     const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(
       ":",
@@ -278,7 +318,7 @@ export default function BookingPage() {
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [selectedRange, firstName, lastName, phone, email, notes, totalHours, totalPrice]);
 
   return (
     <section className="w-full pb-12 bg-gray-50">
@@ -328,8 +368,8 @@ export default function BookingPage() {
             <p>
               Selected:{" "}
               <strong>
-                {formatTime(selectedRange.start)} -{" "}
-                {formatTime(selectedRange.end)}
+                {formatDate(selectedRange.start, "HH:mm")} -{" "}
+                {formatDate(selectedRange.end, "HH:mm")}
               </strong>
             </p>
             <p>
@@ -406,39 +446,8 @@ export default function BookingPage() {
           onSelectSlot={handleSelectSlot}
           style={{ height: "90vh" }}
           formats={formats}
-          eventPropGetter={() => ({
-            style: {
-              backgroundColor: "#f3f4f6",
-              color: "#111827",
-              borderRadius: "0.375rem",
-              border: "1px solid #d1d5db",
-            },
-          })}
-          slotPropGetter={(date: Date) => {
-            const now = new Date();
-
-            if (date < now) {
-              return {
-                style: {
-                  backgroundColor: "#f9fafb",
-                  color: "#9ca3af",
-                  pointerEvents: "none",
-                },
-              };
-            }
-
-            const isSelected =
-              selectedRange &&
-              date >= selectedRange.start &&
-              date < selectedRange.end;
-
-            return {
-              style: {
-                transition: "background-color 0.2s",
-                backgroundColor: isSelected ? "#cbd5e1" : "#ecfdf5",
-              },
-            };
-          }}
+          eventPropGetter={eventPropGetter}
+          slotPropGetter={slotPropGetter}
         />
         <BookingInstructions />
       </div>
