@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { Calendar, dateFnsLocalizer, SlotInfo } from "react-big-calendar";
+import { Calendar, dateFnsLocalizer, SlotInfo, View } from "react-big-calendar";
 import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
@@ -47,6 +47,8 @@ export default function BookingPage() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [currentView, setCurrentView] = useState<View>('day');
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const topRef = useRef<HTMLDivElement | null>(null);
 
   // Memoized expensive calculations
@@ -172,6 +174,13 @@ export default function BookingPage() {
   }, []);
 
   const handleSelectSlot = useCallback((slotInfo: SlotInfo) => {
+    // Auto-switch to day view from month view
+    if (currentView === 'month') {
+      setCurrentView('day');
+      setCurrentDate(slotInfo.start);
+      return;
+    }
+
     const now = new Date();
     if (slotInfo.start < now) {
       setMessage("⚠️ You cannot book past time slots.");
@@ -197,7 +206,7 @@ export default function BookingPage() {
     setMessage(null);
     setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
     setShowForm(false);
-  }, [events]);
+  }, [events, currentView]);
 
   const handleBook = useCallback(async () => {
     if (!selectedRange) {
@@ -438,8 +447,12 @@ export default function BookingPage() {
         <Calendar
           localizer={localizer}
           events={events}
-          views={["day", "week", "month", "agenda"]}
+          views={["day", "week", "month"]}
           defaultView="day"
+          view={currentView}
+          date={currentDate}
+          onView={setCurrentView}
+          onNavigate={setCurrentDate}
           step={60}
           timeslots={1}
           selectable
