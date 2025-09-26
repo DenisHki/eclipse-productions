@@ -1,19 +1,34 @@
 import { useState } from "react";
 
+import apollo from "../assets/images/slider/Apollo Twin X Duo Gen2 Audio Interface.jpg";
+import behringer from "../assets/images/slider/Behringer model D Analog Synthesizer.jpg";
+import genelec from "../assets/images/slider/Genelec Subwoofer 7360A .jpg";
+import headphones from "../assets/images/slider/Headphones Beyerdynamic DT 770 PRO 80 ohm.jpg";
+import macMini from "../assets/images/slider/Mac mini M4 24 GB RAM 512 Gt, Magic Keyboard and Mouse.jpg";
+import akg from "../assets/images/slider/Microphone Akg c414 CLII.jpg";
+import rode from "../assets/images/slider/Microphone Rode NT1.jpg";
+import midi from "../assets/images/slider/MIDI Controllers Maschine MK3, Komplete Kontrol S61 MK2.jpg";
+import traktor from "../assets/images/slider/Traktor Kontrol S2 MK2 DJ Controller.jpg";
+
+const images = [
+  { src: apollo, title: "Apollo Twin X Duo Gen2 Audio Interface" },
+  { src: behringer, title: "Behringer model D Analog Synthesizer" },
+  { src: genelec, title: "Genelec Subwoofer 7360A" },
+  { src: headphones, title: "Headphones Beyerdynamic DT 770 PRO 80 ohm" },
+  {
+    src: macMini,
+    title: "Mac mini M4 24 GB RAM 512 Gt + Magic Keyboard and Mouse",
+  },
+  { src: akg, title: "Microphone Akg c414 CLII" },
+  { src: rode, title: "Microphone Rode NT1" },
+  {
+    src: midi,
+    title: "MIDI Controllers Maschine MK3 + Komplete Kontrol S61 MK2",
+  },
+  { src: traktor, title: "Traktor Kontrol S2 MK2 DJ Controller" },
+];
+
 const Slider: React.FC = () => {
-  const imagesModules = import.meta.glob<{ default: string }>(
-    "../assets/images/slider/*.{jpg,jpeg,png}",
-    { eager: true }
-  );
-
-  const images = Object.values(imagesModules).map((img) => {
-    const src = img.default;
-    const name = decodeURIComponent(
-      src.split("/").pop()?.split(".")[0] || "Untitled"
-    );
-    return { src, name };
-  });
-
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   if (images.length === 0) {
@@ -35,7 +50,7 @@ const Slider: React.FC = () => {
           <img
             key={index}
             src={image.src}
-            alt={image.name}
+            alt={image.title}
             className={`absolute top-0 left-0 w-full h-full object-cover rounded-lg transition-all duration-700 ease-in-out ${
               index === currentIndex
                 ? "opacity-100 scale-100 blur-0 z-10 pointer-events-auto"
@@ -57,7 +72,7 @@ const Slider: React.FC = () => {
         </button>
       </div>
       <p className="mt-4 text-font-base font-bodyFont text-lightText text-center">
-        {images[currentIndex].name}
+        {images[currentIndex].title}
       </p>
     </div>
   );
