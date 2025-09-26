@@ -1,6 +1,4 @@
-import step1 from "../assets/images/booking_instruction/step1.png";
-import step2 from "../assets/images/booking_instruction/step2.png";
-import step3 from "../assets/images/booking_instruction/step3.png";
+import { step1, step2, step3 } from "../assets/index.ts";
 
 interface Step {
   img?: string;

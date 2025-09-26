@@ -1,14 +1,16 @@
 import { useState } from "react";
+import {
+  apollo,
+  behringer,
+  genelec,
+  headphones,
+  macMini,
+  akg,
+  rode,
+  midi,
+  traktor,
+} from "../assets/index.ts";
 
-import apollo from "../assets/images/slider/Apollo Twin X Duo Gen2 Audio Interface.jpg";
-import behringer from "../assets/images/slider/Behringer model D Analog Synthesizer.jpg";
-import genelec from "../assets/images/slider/Genelec Subwoofer 7360A .jpg";
-import headphones from "../assets/images/slider/Headphones Beyerdynamic DT 770 PRO 80 ohm.jpg";
-import macMini from "../assets/images/slider/Mac mini M4 24 GB RAM 512 Gt, Magic Keyboard and Mouse.jpg";
-import akg from "../assets/images/slider/Microphone Akg c414 CLII.jpg";
-import rode from "../assets/images/slider/Microphone Rode NT1.jpg";
-import midi from "../assets/images/slider/MIDI Controllers Maschine MK3, Komplete Kontrol S61 MK2.jpg";
-import traktor from "../assets/images/slider/Traktor Kontrol S2 MK2 DJ Controller.jpg";
 
 const images = [
   { src: apollo, title: "Apollo Twin X Duo Gen2 Audio Interface" },
