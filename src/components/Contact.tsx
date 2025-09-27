@@ -75,7 +75,7 @@ const Contact = () => {
           <Title title="" des="Contact Us" />
         </div>
         <div className="flex justify-center items-center w-full">
-          <div className="w-full max-w-4xl py-10 bg-black flex flex-col gap-8 p-4 lgl:p-8 rounded-lg">
+          <div className="w-full max-w-2xl py-10 bg-black flex flex-col gap-8 p-4 lgl:p-8 rounded-lg">
             <form
               onSubmit={handleSend}
               className="w-full flex flex-col gap-4 lgl:gap-6 py-2 lgl:py-5"
@@ -150,7 +150,12 @@ const Contact = () => {
             </form>
           </div>
         </div>
-        <Map lat={60.18514501686832} lng={24.966133354712397} zoom={15} className="mt-20 mb-20"/>
+        <Map
+          lat={60.18514501686832}
+          lng={24.966133354712397}
+          zoom={15}
+          className="mt-20 mb-20"
+        />
       </FadeIn>
     </section>
   );

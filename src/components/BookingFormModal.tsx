@@ -44,12 +44,15 @@ export default function BookingFormModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-lg sm:max-w-md mx-4 p-4 sm:p-6">
-        <h3 className="text-xl font-bold mb-4 text-gray-900">
-          Booking for {formatTime(selectedRange.start)} –{" "}
-          {formatTime(selectedRange.end)}
+        <h3 className="text-xl font-bold mb-2 text-gray-900">
+          Booking on {format(selectedRange.start, "dd.MM.yyyy")}
         </h3>
-
         <p className="text-gray-700 mb-4">
+          Time:{" "}
+          <strong>
+            {formatTime(selectedRange.start)} – {formatTime(selectedRange.end)}
+          </strong>
+          <br />
           Duration: <strong>{totalHours}h</strong> – Total:{" "}
           <strong>€{totalPrice}</strong>
         </p>
@@ -138,14 +141,14 @@ export default function BookingFormModal({
         <div className="flex justify-end gap-2 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-300 text-gray-900 rounded-full hover:bg-gray-400"
           >
             Cancel
           </button>
           <button
             onClick={onSubmit}
             disabled={submitting}
-            className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+            className="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 disabled:opacity-50"
           >
             {submitting ? "Booking…" : "Confirm Booking"}
           </button>

@@ -47,8 +47,9 @@ export default function BookingPage() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<View>('day');
+  const [currentView, setCurrentView] = useState<View>("day");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [calendarKey, setCalendarKey] = useState(0);
   const topRef = useRef<HTMLDivElement | null>(null);
 
   // Memoized expensive calculations
@@ -66,48 +67,68 @@ export default function BookingPage() {
   const totalPrice = useMemo(() => totalHours * 27, [totalHours]);
 
   // Memoized calendar formats
-  const formats = useMemo(() => ({
-    timeGutterFormat: (date: Date) => formatDate(date, "HH:mm"),
-    eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
-      `${formatDate(start, "HH:mm")} - ${formatDate(end, "HH:mm")}`,
-  }), []);
+  const formats = useMemo(
+    () => ({
+      timeGutterFormat: (date: Date) => formatDate(date, "HH:mm"),
+      eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+        `${formatDate(start, "HH:mm")} - ${formatDate(end, "HH:mm")}`,
+    }),
+    []
+  );
 
   // Memoized event prop getter
-  const eventPropGetter = useMemo(() => () => ({
-    style: {
-      backgroundColor: "#f3f4f6",
-      color: "#111827",
-      borderRadius: "0.375rem",
-      border: "1px solid #d1d5db",
-    },
-  }), []);
+  const eventPropGetter = useMemo(
+    () => () => ({
+      style: {
+        backgroundColor: "#f3f4f6",
+        color: "#111827",
+        borderRadius: "0.375rem",
+        border: "1px solid #d1d5db",
+      },
+    }),
+    []
+  );
 
   // Memoized slot prop getter
-  const slotPropGetter = useCallback((date: Date) => {
-    const now = new Date();
+  const slotPropGetter = useCallback(
+    (date: Date) => {
+      const now = new Date();
 
-    if (date < now) {
+      if (date < now) {
+        return {
+          style: {
+            backgroundColor: "#f9fafb",
+            color: "#9ca3af",
+            pointerEvents: "none" as const,
+          },
+        };
+      }
+
+      const isSelected =
+        selectedRange &&
+        date >= selectedRange.start &&
+        date < selectedRange.end;
+
       return {
         style: {
-          backgroundColor: "#f9fafb",
-          color: "#9ca3af",
-          pointerEvents: "none" as const,
+          transition: "background-color 0.2s",
+          backgroundColor: isSelected ? "#cbd5e1" : "#ecfdf5",
         },
       };
-    }
+    },
+    [selectedRange]
+  );
 
-    const isSelected =
-      selectedRange &&
-      date >= selectedRange.start &&
-      date < selectedRange.end;
-
-    return {
-      style: {
-        transition: "background-color 0.2s",
-        backgroundColor: isSelected ? "#cbd5e1" : "#ecfdf5",
-      },
+  // Force calendar rerender when viewport changes
+  useEffect(() => {
+    const handleResize = () => {
+      // Force calendar to rerender by changing its key
+      setCalendarKey((prev) => prev + 1);
     };
-  }, [selectedRange]);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Consolidated useEffect for message cleanup
   useEffect(() => {
@@ -173,40 +194,43 @@ export default function BookingPage() {
     fetchBooked();
   }, []);
 
-  const handleSelectSlot = useCallback((slotInfo: SlotInfo) => {
-    // Auto-switch to day view from month view
-    if (currentView === 'month') {
-      setCurrentView('day');
-      setCurrentDate(slotInfo.start);
-      return;
-    }
+  const handleSelectSlot = useCallback(
+    (slotInfo: SlotInfo) => {
+      // Auto-switch to day view from month view
+      if (currentView === "month") {
+        setCurrentView("day");
+        setCurrentDate(slotInfo.start);
+        return;
+      }
 
-    const now = new Date();
-    if (slotInfo.start < now) {
-      setMessage("⚠️ You cannot book past time slots.");
-      setSelectedRange(null);
-      return;
-    }
+      const now = new Date();
+      if (slotInfo.start < now) {
+        setMessage("⚠️ You cannot book past time slots.");
+        setSelectedRange(null);
+        return;
+      }
 
-    const newStart = slotInfo.start.getTime();
-    const newEnd = slotInfo.end.getTime();
+      const newStart = slotInfo.start.getTime();
+      const newEnd = slotInfo.end.getTime();
 
-    const overlapping = events.some((event) => {
-      const existingStart = event.start.getTime();
-      const existingEnd = event.end.getTime();
-      return newStart < existingEnd && newEnd > existingStart;
-    });
+      const overlapping = events.some((event) => {
+        const existingStart = event.start.getTime();
+        const existingEnd = event.end.getTime();
+        return newStart < existingEnd && newEnd > existingStart;
+      });
 
-    if (overlapping) {
-      setMessage("⚠️ Selected time overlaps with an existing booking.");
-      setSelectedRange(null);
-      return;
-    }
+      if (overlapping) {
+        setMessage("⚠️ Selected time overlaps with an existing booking.");
+        setSelectedRange(null);
+        return;
+      }
 
-    setMessage(null);
-    setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
-    setShowForm(false);
-  }, [events, currentView]);
+      setMessage(null);
+      setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
+      setShowForm(false);
+    },
+    [events, currentView]
+  );
 
   const handleBook = useCallback(async () => {
     if (!selectedRange) {
@@ -327,7 +351,16 @@ export default function BookingPage() {
     } finally {
       setSubmitting(false);
     }
-  }, [selectedRange, firstName, lastName, phone, email, notes, totalHours, totalPrice]);
+  }, [
+    selectedRange,
+    firstName,
+    lastName,
+    phone,
+    email,
+    notes,
+    totalHours,
+    totalPrice,
+  ]);
 
   return (
     <section className="w-full pb-12 bg-gray-50">
@@ -371,33 +404,39 @@ export default function BookingPage() {
         />
       </Helmet>
       <Header />
-      <div className="w-full lg:w-4/5 mx-auto">
+      <div className="w-full sm:w-full md:w-11/12 lg:w-4/5 mx-auto">
         {selectedRange && !showForm && (
-          <div className="mt-6 p-4 border rounded bg-white shadow-md">
-            <p>
-              Selected:{" "}
-              <strong>
-                {formatDate(selectedRange.start, "HH:mm")} -{" "}
-                {formatDate(selectedRange.end, "HH:mm")}
-              </strong>
-            </p>
-            <p>
-              Duration: <strong>{totalHours}h</strong> - Total:{" "}
-              <strong>€{totalPrice}</strong>
-            </p>
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => setShowForm(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Book this slot
-              </button>
-              <button
-                onClick={() => setSelectedRange(null)}
-                className="px-4 py-2 bg-gray-300 text-gray-900 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
+          <div className="mt-6 mx-auto max-w-md lg:max-w-none p-4 border rounded-2xl bg-white shadow-md">
+            <div className="text-center lg:text-left">
+              <p className="mb-1 text-lg lg:text-xl">
+                Selected Date:{" "}
+                <strong>{formatDate(selectedRange.start, "dd.MM.yyyy")}</strong>
+              </p>
+              <p className="mb-1 text-lg lg:text-xl">
+                Selected Time:{" "}
+                <strong>
+                  {formatDate(selectedRange.start, "HH:mm")} -{" "}
+                  {formatDate(selectedRange.end, "HH:mm")}
+                </strong>
+              </p>
+              <p className="mb-3 text-lg lg:text-xl">
+                Duration: <strong>{totalHours}h</strong> - Total:{" "}
+                <strong>€{totalPrice}</strong>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
+                >
+                  Book
+                </button>
+                <button
+                  onClick={() => setSelectedRange(null)}
+                  className="px-4 py-2 bg-gray-300 text-gray-900 rounded-full hover:bg-gray-400 transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -429,15 +468,15 @@ export default function BookingPage() {
 
         {message && (
           <div
-            className={`mt-4 p-4 rounded-lg border shadow-sm ${
+            className={`mt-6 mx-auto max-w-md lg:max-w-none p-6 rounded-2xl border shadow-md text-center lg:text-left text-base lg:text-xl font-semibold ${
               message.includes("⚠️") ||
               message.toLowerCase().includes("overlap")
-                ? "bg-yellow-50 border-yellow-200 text-yellow-800"
+                ? "bg-yellow-100 border-yellow-300 text-yellow-900"
                 : message.toLowerCase().includes("failed") ||
                     message.toLowerCase().includes("error") ||
                     message.includes("❌")
-                  ? "bg-red-50 border-red-200 text-red-800"
-                  : "bg-green-50 border-green-200 text-green-800"
+                  ? "bg-red-100 border-red-300 text-red-900"
+                  : "bg-green-100 border-green-300 text-green-900"
             }`}
           >
             {message}
@@ -445,6 +484,7 @@ export default function BookingPage() {
         )}
 
         <Calendar
+          key={calendarKey}
           localizer={localizer}
           events={events}
           views={["day", "week", "month"]}
@@ -462,8 +502,8 @@ export default function BookingPage() {
           eventPropGetter={eventPropGetter}
           slotPropGetter={slotPropGetter}
         />
-        <BookingInstructions />
       </div>
+      <BookingInstructions />
     </section>
   );
 }

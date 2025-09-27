@@ -5,7 +5,7 @@ interface Props {
 
 const Title = ({ title, des }: Props) => {
   return (
-    <div className="flex flex-col gap-4 font-titleFont mb-14">
+    <div className="flex flex-col gap-4 font-titleFont mb-4">
       <h3 className="text-sm uppercase font-light text-designColor tracking-wide">
         {title}
       </h3>
