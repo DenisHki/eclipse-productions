@@ -7,32 +7,90 @@ import { navLinksdata } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
 
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  return isMobile;
-};
-
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const isMobile = useIsMobile();
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
 
+  // Handle navbar visibility on scroll (desktop only)
   useEffect(() => {
-    if (isMobile) {
-      setShowMenu(true);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const isMobile = window.innerWidth < 768; // mdl breakpoint
+      
+      // Don't hide navbar on mobile
+      if (isMobile) {
+        setShowNavbar(true);
+        return;
+      }
+      
+      // Show navbar when at top of page
+      if (currentScrollY < 10) {
+        setShowNavbar(true);
+      }
+      // Hide navbar when scrolling down, show when scrolling up
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowNavbar(false);
+      } else if (currentScrollY < lastScrollY) {
+        setShowNavbar(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    const handleResize = () => {
+      // Ensure navbar is visible on mobile
+      if (window.innerWidth < 768) {
+        setShowNavbar(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [lastScrollY]);
+
+  // Disable body scroll when menu is open
+  useEffect(() => {
+    if (showMenu) {
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+    } else {
+      document.body.style.overflow = "unset";
+      document.body.style.position = "unset";
+      document.body.style.width = "unset";
     }
-  }, [isMobile]);
+
+    return () => {
+      document.body.style.overflow = "unset";
+      document.body.style.position = "unset";
+      document.body.style.width = "unset";
+    };
+  }, [showMenu]);
+
+  const handleMenuToggle = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const handleMenuClose = () => {
+    setShowMenu(false);
+  };
+
+  const handleBookNowClick = () => {
+    setShowMenu(false);
+    navigate("/booking");
+  };
 
   return (
-    <div className="w-full h-24 fixed top-0 z-50 backdrop-blur-2xl transition-colors bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4">
+    <div className={`w-full h-24 fixed top-0 z-50 backdrop-blur-2xl transition-all duration-300 bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4 ${
+      showNavbar ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       <div>
         <img src={logo} alt="logo" />
       </div>
@@ -59,46 +117,49 @@ const Navbar = () => {
           ))}
         </ul>
         <span
-          onClick={() => setShowMenu(!showMenu)}
+          onClick={handleMenuToggle}
           className="text-3xl mdl:hidden bg-black w-14 h-14 inline-flex items-center justify-center rounded-full text-designColor cursor-pointer"
         >
           <FiMenu />
         </span>
         {showMenu && (
-          <div className="w-full h-screen mdl:hidden overflow-y-auto fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50">
-            <div className="flex flex-col items-center justify-center gap-8 h-full text-center">
+          <div
+            className="w-full h-[100dvh] mdl:hidden fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50 overflow-hidden"
+            onTouchMove={(e) => e.preventDefault()}
+            onWheel={(e) => e.preventDefault()}
+          >
+            <div className="flex flex-col items-center justify-center gap-8 h-full text-center relative">
               <div className="flex flex-col items-center text-center">
                 <img className="w-32" src={logo} alt="logo" />
               </div>
-              <ul className="flex flex-col gap-6 text-center">
-                {navLinksdata.map((item) => (
-                  <li
-                    key={item._id}
-                    className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
-                  >
-                    <Link
-                      onClick={() => setShowMenu(false)}
-                      activeClass="active"
-                      to={item.link}
-                      spy={true}
-                      smooth={true}
-                      offset={-70}
-                      duration={500}
+              <div className="flex flex-col gap-6 text-center max-h-[60vh] overflow-y-auto">
+                <ul className="flex flex-col gap-6 text-center">
+                  {navLinksdata.map((item) => (
+                    <li
+                      key={item._id}
+                      className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
                     >
-                      {item.title}
-                    </Link>
+                      <Link
+                        onClick={handleMenuClose}
+                        activeClass="active"
+                        to={item.link}
+                        spy={true}
+                        smooth={true}
+                        offset={-70}
+                        duration={500}
+                      >
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                  <li
+                    className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
+                    onClick={handleBookNowClick}
+                  >
+                    Book Now
                   </li>
-                ))}
-                <li
-                  className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
-                  onClick={() => {
-                    setShowMenu(false);
-                    navigate("/booking");
-                  }}
-                >
-                  Book Now
-                </li>
-              </ul>
+                </ul>
+              </div>
               <div className="flex justify-center gap-6 mt-6">
                 <a
                   href="https://www.tiktok.com/@eclipse_productions_oy"
@@ -126,8 +187,8 @@ const Navbar = () => {
                 </a>
               </div>
               <span
-                onClick={() => setShowMenu(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-designColor duration-300 text-4xl cursor-pointer"
+                onClick={handleMenuClose}
+                className="absolute top-4 right-4 text-designColor duration-300 text-4xl cursor-pointer"
               >
                 <MdClose />
               </span>
