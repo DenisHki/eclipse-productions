@@ -13,49 +13,42 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
 
-  // Handle navbar visibility on scroll (desktop only)
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const isMobile = window.innerWidth < 768; // mdl breakpoint
-      
-      // Don't hide navbar on mobile
+      const isMobile = window.innerWidth < 768;
+
       if (isMobile) {
         setShowNavbar(true);
         return;
       }
-      
-      // Show navbar when at top of page
+
       if (currentScrollY < 10) {
         setShowNavbar(true);
-      }
-      // Hide navbar when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setShowNavbar(false);
       } else if (currentScrollY < lastScrollY) {
         setShowNavbar(true);
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
     const handleResize = () => {
-      // Ensure navbar is visible on mobile
       if (window.innerWidth < 768) {
         setShowNavbar(true);
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleResize);
-    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
     };
   }, [lastScrollY]);
 
-  // Disable body scroll when menu is open
   useEffect(() => {
     if (showMenu) {
       document.body.style.overflow = "hidden";
@@ -74,6 +67,22 @@ const Navbar = () => {
     };
   }, [showMenu]);
 
+  useEffect(() => {
+    const preventScroll = (e: TouchEvent | WheelEvent) => {
+      e.preventDefault();
+    };
+
+    if (showMenu) {
+      document.addEventListener("touchmove", preventScroll, { passive: false });
+      document.addEventListener("wheel", preventScroll, { passive: false });
+    }
+
+    return () => {
+      document.removeEventListener("touchmove", preventScroll);
+      document.removeEventListener("wheel", preventScroll);
+    };
+  }, [showMenu]);
+
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
   };
@@ -88,9 +97,11 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`w-full h-24 fixed top-0 z-50 backdrop-blur-2xl transition-all duration-300 bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4 ${
-      showNavbar ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <div
+      className={`w-full h-24 fixed top-0 z-50 backdrop-blur-2xl transition-all duration-300 bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4 ${
+        showNavbar ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div>
         <img src={logo} alt="logo" />
       </div>
@@ -123,11 +134,7 @@ const Navbar = () => {
           <FiMenu />
         </span>
         {showMenu && (
-          <div
-            className="w-full h-[100dvh] mdl:hidden fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50 overflow-hidden"
-            onTouchMove={(e) => e.preventDefault()}
-            onWheel={(e) => e.preventDefault()}
-          >
+          <div className="w-full h-[100dvh] mdl:hidden fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50 overflow-hidden">
             <div className="flex flex-col items-center justify-center gap-8 h-full text-center relative">
               <div className="flex flex-col items-center text-center">
                 <img className="w-32" src={logo} alt="logo" />

@@ -52,7 +52,6 @@ export default function BookingPage() {
   const [calendarKey, setCalendarKey] = useState(0);
   const topRef = useRef<HTMLDivElement | null>(null);
 
-  // Memoized expensive calculations
   const totalHours = useMemo(() => {
     if (!selectedRange) return 0;
     let diff = selectedRange.end.getTime() - selectedRange.start.getTime();
@@ -66,7 +65,6 @@ export default function BookingPage() {
 
   const totalPrice = useMemo(() => totalHours * 27, [totalHours]);
 
-  // Memoized calendar formats
   const formats = useMemo(
     () => ({
       timeGutterFormat: (date: Date) => formatDate(date, "HH:mm"),
@@ -76,7 +74,6 @@ export default function BookingPage() {
     []
   );
 
-  // Memoized event prop getter
   const eventPropGetter = useMemo(
     () => () => ({
       style: {
@@ -89,7 +86,6 @@ export default function BookingPage() {
     []
   );
 
-  // Memoized slot prop getter
   const slotPropGetter = useCallback(
     (date: Date) => {
       const now = new Date();
@@ -119,10 +115,8 @@ export default function BookingPage() {
     [selectedRange]
   );
 
-  // Force calendar rerender when viewport changes
   useEffect(() => {
     const handleResize = () => {
-      // Force calendar to rerender by changing its key
       setCalendarKey((prev) => prev + 1);
     };
 
@@ -130,7 +124,6 @@ export default function BookingPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Consolidated useEffect for message cleanup
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(null), 5000);
@@ -138,19 +131,16 @@ export default function BookingPage() {
     }
   }, [message]);
 
-  // Consolidated useEffect for scrolling
   useEffect(() => {
     if (message || selectedRange) {
       topRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [message, selectedRange]);
 
-  // Initial scroll to top
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  // Fetch bookings with error handling
   useEffect(() => {
     const fetchBooked = async () => {
       try {
@@ -196,7 +186,6 @@ export default function BookingPage() {
 
   const handleSelectSlot = useCallback(
     (slotInfo: SlotInfo) => {
-      // Auto-switch to day view from month view
       if (currentView === "month") {
         setCurrentView("day");
         setCurrentDate(slotInfo.start);
@@ -497,7 +486,7 @@ export default function BookingPage() {
           timeslots={1}
           selectable
           onSelectSlot={handleSelectSlot}
-          style={{ height: "90vh" }}
+          style={{ height: "auto", minHeight: "90vh" }}
           formats={formats}
           eventPropGetter={eventPropGetter}
           slotPropGetter={slotPropGetter}
