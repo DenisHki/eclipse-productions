@@ -18,13 +18,13 @@
     @apply w-full rounded-lg border-b-[1px] border-b-gray-600 bg-[#00000] text-formInputText px-4 py-2 active:outline-none focus-visible:outline-designColor outline-none focus-visible:border-b-transparent duration-300 resize-none;
   }
 }
-
+/*
 html,
 body {
   overflow-x: hidden;
   width: 100%;
 }
-
+*/
 .active {
   color: white;
 }
