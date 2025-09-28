@@ -398,20 +398,20 @@ export default function BookingPage() {
           <div className="mt-6 mx-auto max-w-md lg:max-w-2xl p-6 border border-gray-200 rounded-2xl bg-white shadow-lg">
             <div className="text-center lg:text-left space-y-2 sm:space-y-2 lg:space-y-4">
               <div>
-                <p className="text-sm text-gray-500">Selected Date</p>
-                <p className="text-base sm:text-base lg:text-xl font-semibold text-gray-900">
+                <p className="text-base text-gray-500">Selected Date</p>
+                <p className="text-base lg:text-xl font-semibold text-gray-900">
                   {formatDate(selectedRange.start, "dd.MM.yyyy")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Selected Time</p>
-                <p className="text-base sm:text-base lg:text-xl font-semibold text-gray-900">
+                <p className="text-base text-gray-500">Selected Time</p>
+                <p className="text-base lg:text-xl font-semibold text-gray-900">
                   {formatDate(selectedRange.start, "HH:mm")} –{" "}
                   {formatDate(selectedRange.end, "HH:mm")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Duration &amp; Total</p>
+                <p className="text-base text-gray-500">Duration &amp; Total</p>
                 <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">
                   {totalHours}h<span className="mx-1 text-gray-400">·</span>
                   <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">
