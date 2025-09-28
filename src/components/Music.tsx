@@ -14,9 +14,6 @@ const Music = () => {
           <Title title="Music" des="Our Projects" />
         </div>
         <Player />
-        <div className="coming-soon text-center mt-10 font-bold text-designColor tracking-widest uppercase text-sm md:text-lg">
-          COMING SOON — NEXT TRACKS LOADING…
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-14"></div>
       </FadeIn>
     </section>

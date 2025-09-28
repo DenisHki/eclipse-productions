@@ -138,32 +138,6 @@ body {
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Title */
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-1px, 1px);
-  }
-  40% {
-    transform: translate(1px, -1px);
-  }
-  60% {
-    transform: translate(-1px, -1px);
-  }
-  80% {
-    transform: translate(1px, 1px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-.coming-soon {
-  animation: glitch 1.5s infinite;
-}
-
 /* Calendar */
 .rbc-toolbar {
   color: black;
