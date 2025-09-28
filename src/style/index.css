@@ -18,13 +18,83 @@
     @apply w-full rounded-lg border-b-[1px] border-b-gray-600 bg-[#00000] text-formInputText px-4 py-2 active:outline-none focus-visible:outline-designColor outline-none focus-visible:border-b-transparent duration-300 resize-none;
   }
 }
+
+@media screen and (max-width: 374px) {
+  .rbc-calendar {
+    font-size: 12px;
+  }
+
+  .rbc-header {
+    padding: 2px 4px;
+    font-size: 11px;
+  }
+
+  .rbc-time-content {
+    overflow-x: auto;
+  }
+
+  .rbc-time-header {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .text-4xl {
+    font-size: 1.875rem !important;
+  }
+
+  .text-5xl {
+    font-size: 2.25rem !important;
+  }
+
+  .text-6xl {
+    font-size: 2.5rem !important;
+  }
+
+  .py-20 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  .gap-20 {
+    gap: 1.5rem !important;
+  }
+}
+
 /*
 html,
 body {
   overflow-x: hidden;
-  width: 100%;
+  max-width: 100vw;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 */
+
+/* Calendar mobile fixes */
+.rbc-calendar {
+  min-width: 100%;
+  width: 100% !important;
+}
+
+@media screen and (max-width: 640px) {
+  .rbc-time-view {
+    min-width: 100%;
+  }
+
+  .rbc-time-content {
+    min-width: 100%;
+    overflow-x: auto;
+  }
+
+  .rbc-allday-cell {
+    display: none;
+  }
+}
+
 .active {
   color: white;
 }
@@ -70,12 +140,24 @@ body {
 
 /* Title */
 @keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-1px, 1px); }
-  40% { transform: translate(1px, -1px); }
-  60% { transform: translate(-1px, -1px); }
-  80% { transform: translate(1px, 1px); }
-  100% { transform: translate(0); }
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(1px, 1px);
+  }
+  100% {
+    transform: translate(0);
+  }
 }
 
 .coming-soon {

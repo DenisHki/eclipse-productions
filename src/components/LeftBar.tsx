@@ -18,7 +18,7 @@ const LeftBar = ({
       <div className="flex flex-col gap-5">
         <h4 className="text-lg font-normal text-designColor">{subtitle}</h4>
         <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white">{title}</h1>
-        <p className="text-xl font-bodyFont leading-10 tracking-wider text-gray-300">
+        <p className="text-xl font-bodyFont leading-relaxed tracking-wider text-gray-300">
           {description}
         </p>
       </div>

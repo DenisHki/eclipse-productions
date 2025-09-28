@@ -23,7 +23,7 @@ const Services = () => {
     >
       <FadeIn>
         <Title title="Services" des="What Do We Offer" />
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-20">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xs:gap-5 sm:gap-6 xl:gap-20">
           <Card
             title="Composition"
             des="Transform your ideas into fully produced tracks with our expert music production services — including composing, recording, mixing, and mastering."

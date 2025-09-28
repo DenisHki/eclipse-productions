@@ -393,39 +393,46 @@ export default function BookingPage() {
         />
       </Helmet>
       <Header />
-      <div className="w-full sm:w-full md:w-11/12 lg:w-4/5 mx-auto">
+      <div className="w-full md:w-11/12 lg:w-4/5 mx-auto">
         {selectedRange && !showForm && (
-          <div className="mt-6 mx-auto max-w-md lg:max-w-none p-4 border rounded-2xl bg-white shadow-md">
-            <div className="text-center lg:text-left">
-              <p className="mb-1 text-lg lg:text-xl">
-                Selected Date:{" "}
-                <strong>{formatDate(selectedRange.start, "dd.MM.yyyy")}</strong>
-              </p>
-              <p className="mb-1 text-lg lg:text-xl">
-                Selected Time:{" "}
-                <strong>
-                  {formatDate(selectedRange.start, "HH:mm")} -{" "}
-                  {formatDate(selectedRange.end, "HH:mm")}
-                </strong>
-              </p>
-              <p className="mb-3 text-lg lg:text-xl">
-                Duration: <strong>{totalHours}h</strong> - Total:{" "}
-                <strong>€{totalPrice}</strong>
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
-                >
-                  Book
-                </button>
-                <button
-                  onClick={() => setSelectedRange(null)}
-                  className="px-4 py-2 bg-gray-300 text-gray-900 rounded-full hover:bg-gray-400 transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
-                >
-                  Cancel
-                </button>
+          <div className="mt-6 mx-auto max-w-md lg:max-w-2xl p-6 border border-gray-200 rounded-2xl bg-white shadow-lg">
+            <div className="text-center lg:text-left space-y-2 sm:space-y-2 lg:space-y-4">
+              <div>
+                <p className="text-sm text-gray-500">Selected Date</p>
+                <p className="text-base sm:text-base lg:text-xl font-semibold text-gray-900">
+                  {formatDate(selectedRange.start, "dd.MM.yyyy")}
+                </p>
               </div>
+              <div>
+                <p className="text-sm text-gray-500">Selected Time</p>
+                <p className="text-base sm:text-base lg:text-xl font-semibold text-gray-900">
+                  {formatDate(selectedRange.start, "HH:mm")} –{" "}
+                  {formatDate(selectedRange.end, "HH:mm")}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Duration &amp; Total</p>
+                <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">
+                  {totalHours}h<span className="mx-1 text-gray-400">·</span>
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">
+                    €{totalPrice}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <button
+                onClick={() => setShowForm(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+              >
+                Book This Slot
+              </button>
+              <button
+                onClick={() => setSelectedRange(null)}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         )}
