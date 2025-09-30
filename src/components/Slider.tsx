@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   apollo,
   behringer,
+  genc,
   genelec,
   headphones,
   macMini,
@@ -15,6 +16,7 @@ import {
 const images = [
   { src: apollo, title: "Apollo Twin X Duo Gen2 Audio Interface" },
   { src: behringer, title: "Behringer model D Analog Synthesizer" },
+  { src: genc, title: "Genelec Speakers 8351B" },
   { src: genelec, title: "Genelec Subwoofer 7360A" },
   { src: headphones, title: "Headphones Beyerdynamic DT 770 PRO 80 ohm" },
   {

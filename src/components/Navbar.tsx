@@ -135,12 +135,6 @@ const Navbar = () => {
               </div>
               <div className="flex flex-col gap-6 text-center max-h-[60vh] overflow-y-auto">
                 <ul className="flex flex-col gap-6 text-center">
-                  <li
-                    className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
-                    onClick={handleBookNowClick}
-                  >
-                    Book Now
-                  </li>
                   {navLinksdata.map((item) => (
                     <li
                       key={item._id}
@@ -159,6 +153,12 @@ const Navbar = () => {
                       </Link>
                     </li>
                   ))}
+                  <li
+                    className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
+                    onClick={handleBookNowClick}
+                  >
+                    Book Now
+                  </li>
                 </ul>
               </div>
               <div className="flex justify-center gap-6 mt-6">

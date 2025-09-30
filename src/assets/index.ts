@@ -2,6 +2,7 @@ import logo from "./images/logo.svg";
 import homepage from "./images/homepage.svg";
 import apollo from "./images/slider/Apollo Twin X Duo Gen2 Audio Interface.jpg";
 import behringer from "./images/slider/Behringer model D Analog Synthesizer.jpg";
+import genc from "./images/slider/Genelec Speakers 8351B.jpg";
 import genelec from "./images/slider/Genelec Subwoofer 7360A .jpg";
 import headphones from "./images/slider/Headphones Beyerdynamic DT 770 PRO 80 ohm.jpg";
 import macMini from "./images/slider/Mac mini M4 24 GB RAM 512 Gt, Magic Keyboard and Mouse.jpg";
@@ -18,6 +19,7 @@ export {
   homepage,
   apollo,
   behringer,
+  genc,
   genelec,
   headphones,
   macMini,
