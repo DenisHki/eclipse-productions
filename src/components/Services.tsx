@@ -57,7 +57,7 @@ const Services = () => {
           <Card
             title="Studio rent"
             des="Modern and stylish music studio that features high-quality equipment, soundproofing, and a comfortable, creative atmosphere."
-            price="€27 / hour"
+            price="€40 / 2h | €100 / 8h | €160 / 16h"
             icon={FaBuilding}
           />
         </div>

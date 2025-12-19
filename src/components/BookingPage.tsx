@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo, View } from "react-big-calendar";
-import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
+import {
+  format as formatDate,
+  parse,
+  startOfWeek,
+  getDay,
+  addDays,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -31,7 +39,49 @@ interface BookingEvent {
   start: Date;
   end: Date;
   id: string;
+  isBlocked?: boolean; // New property to identify blocked slots
 }
+
+// NEW FUNCTION: Calculate price based on tiered pricing
+const calculatePrice = (hours: number): number => {
+  let total = 0;
+
+  if (hours <= 3) {
+    total = hours * 20;
+  } else if (hours >= 4 && hours <= 7) {
+    total = hours * 15;
+  } else if (hours >= 8 && hours <= 15) {
+    total = hours * 12.50;
+  } else {
+    total = hours * 10;
+  }
+
+  return total;
+};
+
+// NEW FUNCTION: Generate blocked Wednesday slots
+const generateBlockedWednesdays = (
+  startDate: Date,
+  endDate: Date
+): BookingEvent[] => {
+  const blockedSlots: BookingEvent[] = [];
+  const current = new Date(startDate);
+
+  while (current <= endDate) {
+    if (current.getDay() === 3) {
+      blockedSlots.push({
+        id: `blocked-wednesday-${formatDate(current, "yyyy-MM-dd")}`,
+        title: "Booked",
+        start: startOfDay(current),
+        end: endOfDay(current),
+        isBlocked: true,
+      });
+    }
+    current.setDate(current.getDate() + 1);
+  }
+
+  return blockedSlots;
+};
 
 export default function BookingPage() {
   const [events, setEvents] = useState<BookingEvent[]>([]);
@@ -63,7 +113,7 @@ export default function BookingPage() {
     return diff / 1000 / 60 / 60;
   }, [selectedRange]);
 
-  const totalPrice = useMemo(() => totalHours * 27, [totalHours]);
+  const totalPrice = useMemo(() => calculatePrice(totalHours), [totalHours]);
 
   const formats = useMemo(
     () => ({
@@ -75,12 +125,12 @@ export default function BookingPage() {
   );
 
   const eventPropGetter = useMemo(
-    () => () => ({
+    () => (event: BookingEvent) => ({
       style: {
-        backgroundColor: "#f3f4f6",
-        color: "#111827",
+        backgroundColor: event.isBlocked ? "#ef4444" : "#f3f4f6",
+        color: event.isBlocked ? "#ffffff" : "#111827",
         borderRadius: "0.375rem",
-        border: "1px solid #d1d5db",
+        border: event.isBlocked ? "1px solid #dc2626" : "1px solid #d1d5db",
       },
     }),
     []
@@ -90,10 +140,12 @@ export default function BookingPage() {
     (date: Date) => {
       const now = new Date();
 
-      if (date < now) {
+      const isWednesday = date.getDay() === 3;
+
+      if (date < now || isWednesday) {
         return {
           style: {
-            backgroundColor: "#f9fafb",
+            backgroundColor: isWednesday ? "#fee2e2" : "#f9fafb",
             color: "#9ca3af",
             pointerEvents: "none" as const,
           },
@@ -172,7 +224,14 @@ export default function BookingPage() {
           });
         });
 
-        setEvents(bookings);
+        const today = new Date();
+        const sixMonthsLater = addDays(today, 180);
+        const blockedWednesdays = generateBlockedWednesdays(
+          today,
+          sixMonthsLater
+        );
+
+        setEvents([...bookings, ...blockedWednesdays]);
       } catch (error) {
         console.error("Error fetching bookings:", error);
         setMessage(
@@ -193,6 +252,13 @@ export default function BookingPage() {
       }
 
       const now = new Date();
+
+      if (slotInfo.start.getDay() === 3) {
+        setMessage("⚠️ This time slot has already been taken.");
+        setSelectedRange(null);
+        return;
+      }
+
       if (slotInfo.start < now) {
         setMessage("⚠️ You cannot book past time slots.");
         setSelectedRange(null);
