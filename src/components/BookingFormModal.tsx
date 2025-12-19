@@ -1,9 +1,11 @@
 import { format } from "date-fns";
+import { PriceBreakdown } from "../utils/priceUtils";
 
 interface BookingFormModalProps {
   selectedRange: { start: Date; end: Date };
   totalHours: number;
   totalPrice: number;
+  priceBreakdown: PriceBreakdown;
   submitting: boolean;
   onSubmit: () => void;
   onClose: () => void;
@@ -12,11 +14,13 @@ interface BookingFormModalProps {
   phone: string;
   email: string;
   notes: string;
+  needsEngineer: boolean;
   setFirstName: (val: string) => void;
   setLastName: (val: string) => void;
   setPhone: (val: string) => void;
   setEmail: (val: string) => void;
   setNotes: (val: string) => void;
+  setNeedsEngineer: (val: boolean) => void;
   message: string | null;
 }
 
@@ -24,6 +28,7 @@ export default function BookingFormModal({
   selectedRange,
   totalHours,
   totalPrice,
+  priceBreakdown,
   submitting,
   onSubmit,
   onClose,
@@ -32,30 +37,51 @@ export default function BookingFormModal({
   phone,
   email,
   notes,
+  needsEngineer,
   setFirstName,
   setLastName,
   setPhone,
   setEmail,
   setNotes,
+  setNeedsEngineer,
   message,
 }: BookingFormModalProps) {
   const formatTime = (date: Date) => format(date, "HH:mm");
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-lg sm:max-w-md mx-4 p-4 sm:p-6">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-lg sm:max-w-md mx-4 my-8 p-4 sm:p-6">
         <h3 className="text-xl font-bold mb-2 text-gray-900">
           Booking on {format(selectedRange.start, "dd.MM.yyyy")}
         </h3>
-        <p className="text-gray-700 mb-4">
-          Time:{" "}
-          <strong>
-            {formatTime(selectedRange.start)} – {formatTime(selectedRange.end)}
-          </strong>
-          <br />
-          Duration: <strong>{totalHours}h</strong> – Total:{" "}
-          <strong>€{totalPrice}</strong>
-        </p>
+
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <p className="text-gray-700 mb-2">
+            Time:{" "}
+            <strong>
+              {formatTime(selectedRange.start)} –{" "}
+              {formatTime(selectedRange.end)}
+            </strong>
+          </p>
+          <p className="text-gray-700 mb-2">
+            Duration: <strong>{totalHours}h</strong>
+          </p>
+
+          <div className="border-t border-gray-200 pt-2 mt-2">
+            <p className="text-gray-700 text-sm mb-1">
+              Studio rental: <strong>{priceBreakdown.basePrice} €</strong>
+            </p>
+            {needsEngineer && (
+              <p className="text-gray-700 text-sm mb-1">
+                Recording engineer:{" "}
+                <strong>{priceBreakdown.engineerFee} €</strong>
+              </p>
+            )}
+            <p className="text-gray-900 font-semibold text-base mt-2">
+              Total: <strong className="text-green-600">{totalPrice} €</strong>
+            </p>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="col-span-1">
@@ -66,7 +92,7 @@ export default function BookingFormModal({
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="First name"
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -78,7 +104,7 @@ export default function BookingFormModal({
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last name"
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -90,7 +116,7 @@ export default function BookingFormModal({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone number"
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -103,7 +129,7 @@ export default function BookingFormModal({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email address"
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -115,9 +141,28 @@ export default function BookingFormModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Notes"
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows={3}
             />
+          </div>
+
+          <div className="col-span-2">
+            <label className="flex items-start gap-3 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-colors">
+              <input
+                type="checkbox"
+                checked={needsEngineer}
+                onChange={(e) => setNeedsEngineer(e.target.checked)}
+                className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              />
+              <div className="flex-1">
+                <span className="block text-sm font-medium text-gray-900">
+                  I need a recording engineer
+                </span>
+                <span className="block text-xs text-gray-500 mt-1">
+                  + 10 € per hour · Professional recording assistance
+                </span>
+              </div>
+            </label>
           </div>
         </div>
 
@@ -137,18 +182,17 @@ export default function BookingFormModal({
           </div>
         )}
 
-        <div className="flex justify-end gap-2 mt-6"></div>
         <div className="flex justify-end gap-2 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 font-semibold text-gray-900 rounded-full hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-300 font-semibold text-gray-900 rounded-full hover:bg-gray-400 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={onSubmit}
             disabled={submitting}
-            className="px-6 py-2 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700 disabled:opacity-50"
+            className="px-6 py-2 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {submitting ? "Booking…" : "Confirm Booking"}
           </button>

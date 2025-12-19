@@ -1,14 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo, View } from "react-big-calendar";
-import {
-  format as formatDate,
-  parse,
-  startOfWeek,
-  getDay,
-  addDays,
-  startOfDay,
-  endOfDay,
-} from "date-fns";
+import { format as formatDate, parse, startOfWeek, getDay, addDays, startOfDay, endOfDay } from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,6 +16,7 @@ import BookingFormModal from "../components/BookingFormModal";
 import Header from "./Header";
 import { Helmet } from "react-helmet-async";
 import BookingInstructions from "./BookingInstructions";
+import { calculateTotalPrice, getPriceBreakdown } from "../utils/priceUtils";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -39,39 +32,18 @@ interface BookingEvent {
   start: Date;
   end: Date;
   id: string;
-  isBlocked?: boolean; // New property to identify blocked slots
+  isBlocked?: boolean;
 }
 
-// NEW FUNCTION: Calculate price based on tiered pricing
-const calculatePrice = (hours: number): number => {
-  let total = 0;
-
-  if (hours <= 3) {
-    total = hours * 20;
-  } else if (hours >= 4 && hours <= 7) {
-    total = hours * 15;
-  } else if (hours >= 8 && hours <= 15) {
-    total = hours * 12.50;
-  } else {
-    total = hours * 10;
-  }
-
-  return total;
-};
-
-// NEW FUNCTION: Generate blocked Wednesday slots
-const generateBlockedWednesdays = (
-  startDate: Date,
-  endDate: Date
-): BookingEvent[] => {
+const generateBlockedWednesdays = (startDate: Date, endDate: Date): BookingEvent[] => {
   const blockedSlots: BookingEvent[] = [];
   const current = new Date(startDate);
-
+  
   while (current <= endDate) {
     if (current.getDay() === 3) {
       blockedSlots.push({
         id: `blocked-wednesday-${formatDate(current, "yyyy-MM-dd")}`,
-        title: "Booked",
+        title: "Unavailable",
         start: startOfDay(current),
         end: endOfDay(current),
         isBlocked: true,
@@ -79,7 +51,7 @@ const generateBlockedWednesdays = (
     }
     current.setDate(current.getDate() + 1);
   }
-
+  
   return blockedSlots;
 };
 
@@ -95,6 +67,7 @@ export default function BookingPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
+  const [needsEngineer, setNeedsEngineer] = useState(false); 
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<View>("day");
@@ -113,7 +86,15 @@ export default function BookingPage() {
     return diff / 1000 / 60 / 60;
   }, [selectedRange]);
 
-  const totalPrice = useMemo(() => calculatePrice(totalHours), [totalHours]);
+  const priceBreakdown = useMemo(() => 
+    getPriceBreakdown(totalHours, needsEngineer), 
+    [totalHours, needsEngineer]
+  );
+
+  const totalPrice = useMemo(() => 
+    calculateTotalPrice(totalHours, needsEngineer), 
+    [totalHours, needsEngineer]
+  );
 
   const formats = useMemo(
     () => ({
@@ -139,7 +120,6 @@ export default function BookingPage() {
   const slotPropGetter = useCallback(
     (date: Date) => {
       const now = new Date();
-
       const isWednesday = date.getDay() === 3;
 
       if (date < now || isWednesday) {
@@ -226,10 +206,7 @@ export default function BookingPage() {
 
         const today = new Date();
         const sixMonthsLater = addDays(today, 180);
-        const blockedWednesdays = generateBlockedWednesdays(
-          today,
-          sixMonthsLater
-        );
+        const blockedWednesdays = generateBlockedWednesdays(today, sixMonthsLater);
 
         setEvents([...bookings, ...blockedWednesdays]);
       } catch (error) {
@@ -252,9 +229,9 @@ export default function BookingPage() {
       }
 
       const now = new Date();
-
+      
       if (slotInfo.start.getDay() === 3) {
-        setMessage("⚠️ This time slot has already been taken.");
+        setMessage("⚠️ Wednesdays are not available for booking.");
         setSelectedRange(null);
         return;
       }
@@ -350,6 +327,9 @@ export default function BookingPage() {
           time: `${startStr}-${endStr}`,
           hours: totalHours,
           price: totalPrice,
+          needsEngineer,
+          engineerFee: needsEngineer ? priceBreakdown.engineerFee : 0,
+          basePrice: priceBreakdown.basePrice,
           firstName,
           lastName,
           phone,
@@ -369,6 +349,9 @@ export default function BookingPage() {
           booking_time: `${startStr} - ${endStr}`,
           hours: totalHours,
           price: totalPrice,
+          base_price: priceBreakdown.basePrice,
+          engineer_fee: needsEngineer ? priceBreakdown.engineerFee : 0,
+          needs_engineer: needsEngineer ? "Yes" : "No",
           phone,
           notes,
           current_year: new Date().getFullYear(),
@@ -386,6 +369,7 @@ export default function BookingPage() {
       setPhone("");
       setEmail("");
       setNotes("");
+      setNeedsEngineer(false); 
       setShowForm(false);
 
       const newEvent: BookingEvent = {
@@ -415,6 +399,8 @@ export default function BookingPage() {
     notes,
     totalHours,
     totalPrice,
+    needsEngineer,
+    priceBreakdown,
   ]);
 
   return (
@@ -424,7 +410,7 @@ export default function BookingPage() {
         <title>Book a Music Studio in Helsinki | Eclipse Productions Oy</title>
         <meta
           name="description"
-          content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates (€27/hour), professional equipment, and modern facilities in Helsinki."
+          content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates, professional equipment, and modern facilities in Helsinki."
         />
         <link rel="canonical" href="https://eclipseproductions.fi/booking" />
         <meta
@@ -481,7 +467,7 @@ export default function BookingPage() {
                 <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">
                   {totalHours}h<span className="mx-1 text-gray-400">·</span>
                   <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">
-                    €{totalPrice}
+                    {totalPrice} €
                   </span>
                 </p>
               </div>
@@ -508,6 +494,7 @@ export default function BookingPage() {
             selectedRange={selectedRange}
             totalHours={totalHours}
             totalPrice={totalPrice}
+            priceBreakdown={priceBreakdown}
             submitting={submitting}
             onSubmit={handleBook}
             onClose={() => {
@@ -519,11 +506,13 @@ export default function BookingPage() {
             phone={phone}
             email={email}
             notes={notes}
+            needsEngineer={needsEngineer}
             setFirstName={setFirstName}
             setLastName={setLastName}
             setPhone={setPhone}
             setEmail={setEmail}
             setNotes={setNotes}
+            setNeedsEngineer={setNeedsEngineer}
             message={message}
           />
         )}
