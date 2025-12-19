@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo, View } from "react-big-calendar";
-import { format as formatDate, parse, startOfWeek, getDay, addDays, startOfDay, endOfDay } from "date-fns";
+import {
+  format as formatDate,
+  parse,
+  startOfWeek,
+  getDay,
+  addDays,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -35,10 +43,13 @@ interface BookingEvent {
   isBlocked?: boolean;
 }
 
-const generateBlockedWednesdays = (startDate: Date, endDate: Date): BookingEvent[] => {
+const generateBlockedWednesdays = (
+  startDate: Date,
+  endDate: Date
+): BookingEvent[] => {
   const blockedSlots: BookingEvent[] = [];
   const current = new Date(startDate);
-  
+
   while (current <= endDate) {
     if (current.getDay() === 3) {
       blockedSlots.push({
@@ -51,7 +62,7 @@ const generateBlockedWednesdays = (startDate: Date, endDate: Date): BookingEvent
     }
     current.setDate(current.getDate() + 1);
   }
-  
+
   return blockedSlots;
 };
 
@@ -67,7 +78,7 @@ export default function BookingPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
-  const [needsEngineer, setNeedsEngineer] = useState(false); 
+  const [needsEngineer, setNeedsEngineer] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<View>("day");
@@ -86,13 +97,13 @@ export default function BookingPage() {
     return diff / 1000 / 60 / 60;
   }, [selectedRange]);
 
-  const priceBreakdown = useMemo(() => 
-    getPriceBreakdown(totalHours, needsEngineer), 
+  const priceBreakdown = useMemo(
+    () => getPriceBreakdown(totalHours, needsEngineer),
     [totalHours, needsEngineer]
   );
 
-  const totalPrice = useMemo(() => 
-    calculateTotalPrice(totalHours, needsEngineer), 
+  const totalPrice = useMemo(
+    () => calculateTotalPrice(totalHours, needsEngineer),
     [totalHours, needsEngineer]
   );
 
@@ -146,6 +157,15 @@ export default function BookingPage() {
     },
     [selectedRange]
   );
+
+  const resetUserForm = () => {
+    setFirstName("");
+    setLastName("");
+    setPhone("");
+    setEmail("");
+    setNotes("");
+    setNeedsEngineer(false);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -206,7 +226,10 @@ export default function BookingPage() {
 
         const today = new Date();
         const sixMonthsLater = addDays(today, 180);
-        const blockedWednesdays = generateBlockedWednesdays(today, sixMonthsLater);
+        const blockedWednesdays = generateBlockedWednesdays(
+          today,
+          sixMonthsLater
+        );
 
         setEvents([...bookings, ...blockedWednesdays]);
       } catch (error) {
@@ -220,6 +243,12 @@ export default function BookingPage() {
     fetchBooked();
   }, []);
 
+  useEffect(() => {
+    if (showForm) {
+      resetUserForm();
+    }
+  }, [showForm]);
+
   const handleSelectSlot = useCallback(
     (slotInfo: SlotInfo) => {
       if (currentView === "month") {
@@ -229,7 +258,7 @@ export default function BookingPage() {
       }
 
       const now = new Date();
-      
+
       if (slotInfo.start.getDay() === 3) {
         setMessage("⚠️ Wednesdays are not available for booking.");
         setSelectedRange(null);
@@ -256,6 +285,8 @@ export default function BookingPage() {
         setSelectedRange(null);
         return;
       }
+      
+      setNeedsEngineer(false);
 
       setMessage(null);
       setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
@@ -369,7 +400,7 @@ export default function BookingPage() {
       setPhone("");
       setEmail("");
       setNotes("");
-      setNeedsEngineer(false); 
+      setNeedsEngineer(false);
       setShowForm(false);
 
       const newEvent: BookingEvent = {
@@ -500,6 +531,7 @@ export default function BookingPage() {
             onClose={() => {
               setShowForm(false);
               setSelectedRange(null);
+              setNeedsEngineer(false);
             }}
             firstName={firstName}
             lastName={lastName}
