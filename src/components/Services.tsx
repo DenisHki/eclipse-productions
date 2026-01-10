@@ -55,11 +55,17 @@ const Services = () => {
             icon={FaCompactDisc}
           />
           <Card
-            title="Studio rent"
-            des="Modern and stylish music studio that features high-quality equipment, soundproofing, and a comfortable, creative atmosphere."
-            price="€40 / 2h | €100 / 8h | €160 / 16h"
-            icon={FaBuilding}
-          />
+  title="Studio rent"
+  des={
+    <>
+      Modern and stylish music studio with high-quality equipment and creative atmosphere. For monthly studio{" "}
+      <span className="text-designColor font-semibold">memberships</span> please
+      contact us by email.
+    </>
+  }
+  price="€40 / 2h | €60 / 4h | €100 / 8h"
+  icon={FaBuilding}
+/>
         </div>
         <div className="flex justify-center mt-28 mb-28">
           <PrimaryButton onClick={() => navigate("/booking")}>

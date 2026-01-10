@@ -1,8 +1,10 @@
 import { IconType } from "react-icons";
+import { ReactNode } from "react";
+
 
 interface Props {
   title: string;
-  des: string;
+  des: ReactNode;
   price: string;
   icon: IconType;
 }

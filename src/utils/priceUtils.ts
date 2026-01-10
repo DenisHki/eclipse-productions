@@ -5,20 +5,16 @@ export const calculateBasePrice = (hours: number): number => {
     total = hours * 20;
   } else if (3 < hours && hours <= 7) {
     total = hours * 15;
-  } else if (7 < hours && hours <= 15) {
-    total = hours * 12.5;
   } else {
-    total = hours * 10;
+    total = hours * 12.5;
   }
 
   return total;
 };
 
-
 export const calculateEngineerFee = (hours: number): number => {
   return hours * 10;
 };
-
 
 export const calculateTotalPrice = (
   hours: number,
