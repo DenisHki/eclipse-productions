@@ -5,9 +5,6 @@ import {
   parse,
   startOfWeek,
   getDay,
-  addDays,
-  startOfDay,
-  endOfDay,
 } from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
@@ -42,29 +39,6 @@ interface BookingEvent {
   id: string;
   isBlocked?: boolean;
 }
-
-const generateBlockedWednesdays = (
-  startDate: Date,
-  endDate: Date
-): BookingEvent[] => {
-  const blockedSlots: BookingEvent[] = [];
-  const current = new Date(startDate);
-
-  while (current <= endDate) {
-    if (current.getDay() === 3) {
-      blockedSlots.push({
-        id: `blocked-wednesday-${formatDate(current, "yyyy-MM-dd")}`,
-        title: "Unavailable",
-        start: startOfDay(current),
-        end: endOfDay(current),
-        isBlocked: true,
-      });
-    }
-    current.setDate(current.getDate() + 1);
-  }
-
-  return blockedSlots;
-};
 
 export default function BookingPage() {
   const [events, setEvents] = useState<BookingEvent[]>([]);
@@ -131,12 +105,11 @@ export default function BookingPage() {
   const slotPropGetter = useCallback(
     (date: Date) => {
       const now = new Date();
-      const isWednesday = date.getDay() === 3;
 
-      if (date < now || isWednesday) {
+      if (date < now) {
         return {
           style: {
-            backgroundColor: isWednesday ? "#fee2e2" : "#f9fafb",
+            backgroundColor: "#f9fafb",
             color: "#9ca3af",
             pointerEvents: "none" as const,
           },
@@ -224,14 +197,7 @@ export default function BookingPage() {
           });
         });
 
-        const today = new Date();
-        const sixMonthsLater = addDays(today, 180);
-        const blockedWednesdays = generateBlockedWednesdays(
-          today,
-          sixMonthsLater
-        );
-
-        setEvents([...bookings, ...blockedWednesdays]);
+        setEvents(bookings);
       } catch (error) {
         console.error("Error fetching bookings:", error);
         setMessage(
@@ -258,12 +224,6 @@ export default function BookingPage() {
       }
 
       const now = new Date();
-
-      if (slotInfo.start.getDay() === 3) {
-        setMessage("⚠️ Wednesdays are not available for booking.");
-        setSelectedRange(null);
-        return;
-      }
 
       if (slotInfo.start < now) {
         setMessage("⚠️ You cannot book past time slots.");
