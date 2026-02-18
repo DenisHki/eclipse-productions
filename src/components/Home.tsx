@@ -3,34 +3,32 @@ import RightBar from "./RightBar";
 import { homepage } from "../assets";
 import hp1 from "../assets/images/hp1.jpg";
 import { Helmet } from "react-helmet-async";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const Home = () => {
+  const { t, language } = useLanguage();
+
   return (
     <>
       <Helmet>
-        <title>Professional Music Studio Helsinki | Eclipse Productions</title>
-        <meta
-          name="description"
-          content="Professional music studio in Helsinki equipped with Genelec monitors, professional microphones, and MIDI controllers. Book your recording session today."
+        <title>{t.seo.home.title}</title>
+        <meta name="description" content={t.seo.home.description} />
+        <meta property="og:title" content={t.seo.home.ogTitle} />
+        <meta property="og:description" content={t.seo.home.ogDescription} />
+        <link
+          rel="canonical"
+          href={`https://eclipseproductions.fi/${language === 'fi' ? 'fi/' : ''}`}
         />
-        <meta
-          property="og:title"
-          content="Professional Music Studio Helsinki | Eclipse Productions"
-        />
-        <meta
-          property="og:description"
-          content="Professional music studio in Helsinki equipped with Genelec monitors, professional microphones, and MIDI controllers."
-        />
-        <link rel="canonical" href="https://eclipseproductions.fi/" />
+        <html lang={language} />
       </Helmet>
       <section
         id="home"
         className="w-full pt-6 pb-12 xs:pt-8 xs:pb-16 sm:pt-10 sm:pb-20 flex flex-col gap-6 xs:gap-8 sm:gap-10 xl:gap-0 lgl:flex-row items-center border-b-[1px] font-titleFont border-b-gray-700"
       >
         <LeftBar
-          subtitle="WELCOME"
-          title="The Home of Your Music"
-          description="Discover your creativity in our premium equipped music studio. Equipped with pristine Genelec monitors and a powerful subwoofer, every nuance of your mix will come through with crystal clarity. A high performance audio interface and professional microphone setup ensure your recordings capture every detail, while our selection of MIDI controllers lets you bring your musical ideas to life."
+          subtitle={t.home.subtitle}
+          title={t.home.title}
+          description={t.home.description}
           className="w-full lgl:w-1/2 flex flex-col gap-12 xs:gap-16 sm:gap-20"
         />
         <RightBar

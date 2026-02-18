@@ -3,15 +3,24 @@ import { Link } from "react-scroll";
 import { FiMenu } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
 import { logo } from "../assets";
-import { navLinksdata } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
+import { useLanguage } from "../i18n/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const navLinksdata = [
+    { _id: 1001, title: t.nav.home, link: "home" },
+    { _id: 1002, title: t.nav.services, link: "services" },
+    { _id: 1003, title: t.nav.music, link: "music" },
+    { _id: 1004, title: t.nav.contact, link: "contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,7 +108,8 @@ const Navbar = () => {
       <div>
         <img src={logo} alt="logo" />
       </div>
-      <div>
+      <div className="flex items-center gap-6">
+        {/* Desktop Navigation */}
         <ul className="hidden mdl:inline-flex items-center gap-6 lg:gap-10">
           {navLinksdata.map(({ _id, title, link }) => (
             <li
@@ -121,18 +131,31 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
+
+        {/* Desktop Language Switcher - positioned on the right */}
+        <div className="hidden mdl:block">
+          <LanguageSwitcher />
+        </div>
+
+        {/* Mobile Menu Button */}
         <span
           onClick={handleMenuToggle}
           className="text-3xl mdl:hidden bg-black w-14 h-14 inline-flex items-center justify-center rounded-full text-designColor cursor-pointer"
         >
           <FiMenu />
         </span>
+
+        {/* Mobile Menu */}
         {showMenu && (
           <div className="w-full h-[100dvh] mdl:hidden fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50 overflow-hidden">
             <div className="flex flex-col items-center justify-center gap-8 h-full text-center relative">
               <div className="flex flex-col items-center text-center">
                 <img className="w-32" src={logo} alt="logo" />
               </div>
+
+              {/* Mobile Language Switcher */}
+              <LanguageSwitcher mobile={true} />
+
               <div className="flex flex-col gap-6 text-center max-h-[60vh] overflow-y-auto">
                 <ul className="flex flex-col gap-6 text-center">
                   {navLinksdata.map((item) => (
@@ -157,7 +180,7 @@ const Navbar = () => {
                     className="text-xl mdl:text-base font-semibold text-gray-400 tracking-wide uppercase cursor-pointer hover:text-designColor duration-300"
                     onClick={handleBookNowClick}
                   >
-                    Book Now
+                    {t.nav.bookNow}
                   </li>
                 </ul>
               </div>
