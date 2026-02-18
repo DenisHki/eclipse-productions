@@ -21,7 +21,7 @@ export const translations = {
     services: {
       title: "Services",
       subtitle: "What Do We Offer",
-      bookButton: "Book a Studio",
+      bookButton: "Book Studio",
       equipmentTitle: "Studio Equipment Showcase",
       cards: {
         trackProduction: {
@@ -39,7 +39,7 @@ export const translations = {
         recording: {
           title: "Recording",
           description:
-            ".” Change to “Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts with recording engineer.",
+            "Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts with recording engineer.",
           price: "€30 / hour (min. 3 hrs)",
         },
         mixing: {
