@@ -2,13 +2,6 @@
 
 A modern, responsive website for **Eclipse Productions Oy** — a professional music studio and production company located in Helsinki, Finland. The site features an integrated booking system, audio player, and comprehensive service showcase.
 
-🌍 Languages
-
-🇬🇧 English - Full website experience
-🇫🇮 Finnish (Suomi) - Complete Finnish translation
-
-Language Switcher: Elegant dropdown menu with persistent language preference
-
 ## 🎵 Features
 
 ### Core Functionality
@@ -53,6 +46,13 @@ Language Switcher: Elegant dropdown menu with persistent language preference
 - TypeScript ESLint
 - Autoprefixer
 - PostCSS
+
+## 🌍 Languages
+
+- 🇬🇧 **English** - Full website experience
+- 🇫🇮 **Finnish (Suomi)** - Complete Finnish translation
+
+**Language Switcher**: Elegant dropdown menu with persistent language preference
 
 ## 📈 SEO & Performance
 - Structured Data (JSON-LD)
