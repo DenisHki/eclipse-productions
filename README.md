@@ -2,6 +2,13 @@
 
 A modern, responsive website for **Eclipse Productions Oy** — a professional music studio and production company located in Helsinki, Finland. The site features an integrated booking system, audio player, and comprehensive service showcase.
 
+🌍 Languages
+
+🇬🇧 English - Full website experience
+🇫🇮 Finnish (Suomi) - Complete Finnish translation
+
+Language Switcher: Elegant dropdown menu with persistent language preference
+
 ## 🎵 Features
 
 ### Core Functionality
@@ -12,7 +19,7 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 - Google Maps Integration
 
 ### Services Offered
-- Studio Rental – €27/hour
+- Studio Rental – €30/hour
 - Music Production – €300–500/track
 - Recording Services – €30/hour (min 3 hours)
 - Mixing & Mastering – €100–250/track
