@@ -78,13 +78,12 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 
 ## 📝 License
 This project is **proprietary and confidential**. All rights reserved by Eclipse Productions Oy.
-
 **© 2024 Eclipse Productions Oy** - All Rights Reserved
-
-Unauthorized copying, modification, distribution, or use of this software, via any medium, is strictly prohibited.
 
 ## 📞 Support
 - 🌐 [eclipseproductions.fi](https://eclipseproductions.fi)
 - 📧 info@eclipseproductions.fi
 - 📸 Instagram: [@eclipse_productions_oy](https://instagram.com/eclipse_productions_oy)
 - 📍 Sörnäisten rantatie 25, 00520 Helsinki, Finland
+
+*Professional music production services in the heart of Helsinki*
