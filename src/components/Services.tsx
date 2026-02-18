@@ -12,9 +12,11 @@ import {
   FaCompactDisc,
   FaBuilding,
 } from "react-icons/fa";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const Services = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <section
@@ -22,64 +24,62 @@ const Services = () => {
       className="w-full py-20 border-b-[1px] border-b-gray-700"
     >
       <FadeIn>
-        <Title title="Services" des="What Do We Offer" />
+        <Title title={t.services.title} des={t.services.subtitle} />
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xs:gap-5 sm:gap-6 xl:gap-20">
           <Card
-            title="Track Production"
-            des="Transform your ideas into fully produced tracks with our music producer, including composing, recording, mixing, and mastering."
-            price="€500 / track"
+            title={t.services.cards.composition.title}
+            des={t.services.cards.composition.description}
+            price={t.services.cards.composition.price}
             icon={FaMusic}
           />
           <Card
-            title="Composition"
-            des="Compose instrumental tracks collaboratively with the music producer, excluding recording, mixing, and mastering."
-            price="€300 / track"
+            title={t.services.cards.trackProduction.title}
+            des={t.services.cards.trackProduction.description}
+            price={t.services.cards.trackProduction.price}
             icon={FaHeadphones}
           />
           <Card
-            title="Recording"
-            des="Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts with recording engineer."
-            price="€30 / hour (min. 3 hrs)"
+            title={t.services.cards.recording.title}
+            des={t.services.cards.recording.description}
+            price={t.services.cards.recording.price}
             icon={FaMicrophone}
           />
           <Card
-            title="Mixing"
-            des="Elevate your tracks with professional mixing services designed to bring your music to life."
-            price="€250 / track"
+            title={t.services.cards.mixing.title}
+            des={t.services.cards.mixing.description}
+            price={t.services.cards.mixing.price}
             icon={FaSlidersH}
           />
           <Card
-            title="Mastering"
-            des="Our professional mastering services ensure your music sounds polished, balanced, and ready for any platform, from streaming to radio."
-            price="€100 / track"
+            title={t.services.cards.mastering.title}
+            des={t.services.cards.mastering.description}
+            price={t.services.cards.mastering.price}
             icon={FaCompactDisc}
           />
           <Card
-            title="Studio rent"
+            title={t.services.cards.studioRent.title}
             des={
               <>
-                Modern music studio with high-quality equipment and creative
-                atmosphere. Includes separate kitchen and comfortable relaxation
-                area. For monthly studio{" "}
+                {t.services.cards.studioRent.description}{" "}
                 <span className="text-designColor font-semibold">
-                  memberships
+                  {t.services.cards.studioRent.memberships}
                 </span>{" "}
-                please contact us by email.
+                {t.services.cards.studioRent.descriptionEnd}
               </>
             }
-            price="€40 / 2h | €60 / 4h | €100 / 8h"
+            price={t.services.cards.studioRent.price}
             icon={FaBuilding}
           />
         </div>
         <div className="flex justify-center mt-28 mb-28">
           <PrimaryButton onClick={() => navigate("/booking")}>
-            Book Studio
+            {t.services.bookButton}
           </PrimaryButton>
         </div>
 
         <div className="mt-20">
           <h3 className="text-font-lg font-titleFont font-semibold text-lightText text-center mb-6">
-            Studio Equipment Showcase
+            {t.services.equipmentTitle}
           </h3>
           <div className="w-16 h-[1px] bg-lightText opacity-30 mx-auto mb-6" />
 

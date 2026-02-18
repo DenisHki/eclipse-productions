@@ -4,6 +4,7 @@ import { FadeIn } from "./FadeIn";
 import emailjs from "emailjs-com";
 import Map from "./Map";
 import PrimaryButton from "./PrimaryButton";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const Contact = () => {
   const [username, setUsername] = useState("");
@@ -11,6 +12,7 @@ const Contact = () => {
   const [message, setMessage] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const { t } = useLanguage();
 
   const emailValidation = (email: string) => {
     return String(email)
@@ -31,27 +33,25 @@ const Contact = () => {
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (username === "") {
-      setErrMsg("Username is required!");
+      setErrMsg(t.contact.form.errors.nameRequired);
     } else if (email === "") {
-      setErrMsg("Please give your Email!");
+      setErrMsg(t.contact.form.errors.emailRequired);
     } else if (!emailValidation(email)) {
-      setErrMsg("Give a valid Email!");
+      setErrMsg(t.contact.form.errors.emailInvalid);
     } else if (message === "") {
-      setErrMsg("Message is required!");
+      setErrMsg(t.contact.form.errors.messageRequired);
     } else {
       emailjs
         .send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
           import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
           { username, to_email: email, message },
-          import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
         )
         .then(
           (response) => {
             console.log("SUCCESS!", response.status, response.text);
-            setSuccessMsg(
-              `Thank you, ${username}! Your message has been sent.`
-            );
+            setSuccessMsg(t.contact.form.success.replace("{name}", username));
             setErrMsg("");
             setUsername("");
             setEmail("");
@@ -59,8 +59,8 @@ const Contact = () => {
           },
           (err) => {
             console.error("FAILED...", err);
-            setErrMsg("Failed to send the message. Please try again later.");
-          }
+            setErrMsg(t.contact.form.errors.sendFailed);
+          },
         );
     }
   };
@@ -72,7 +72,7 @@ const Contact = () => {
     >
       <FadeIn>
         <div className="flex justify-center items-center text-center">
-          <Title title="" des="Contact Us" />
+          <Title title={t.contact.title} des={t.contact.subtitle} />
         </div>
         <div className="flex justify-center items-center w-full">
           <div className="w-full max-w-2xl py-10 bg-black flex flex-col gap-8 p-4 lgl:p-8 rounded-lg">
@@ -93,13 +93,13 @@ const Contact = () => {
               <div className="w-full flex flex-col lgl:flex-row gap-10">
                 <div className="w-full flex flex-col gap-4">
                   <p className="text-sm text-gray-400 uppercase tracking-wide">
-                    Your name
+                    {t.contact.form.name}
                   </p>
                   <input
                     onChange={(e) => setUsername(e.target.value)}
                     value={username}
                     className={`${
-                      errMsg === "Username is required!" &&
+                      errMsg === t.contact.form.errors.nameRequired &&
                       "outline-designColor"
                     } contactInput`}
                     type="text"
@@ -108,13 +108,13 @@ const Contact = () => {
               </div>
               <div className="flex flex-col gap-4">
                 <p className="text-sm text-gray-400 uppercase tracking-wide">
-                  Email
+                  {t.contact.form.email}
                 </p>
                 <input
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
                   className={`${
-                    errMsg === "Please give your Email!" &&
+                    errMsg === t.contact.form.errors.emailRequired &&
                     "outline-designColor"
                   } contactInput`}
                   type="email"
@@ -122,20 +122,23 @@ const Contact = () => {
               </div>
               <div className="flex flex-col gap-4">
                 <p className="text-sm text-gray-400 uppercase tracking-wide">
-                  Message
+                  {t.contact.form.message}
                 </p>
                 <textarea
                   onChange={(e) => setMessage(e.target.value)}
                   value={message}
                   className={`${
-                    errMsg === "Message is required!" && "outline-designColor"
+                    errMsg === t.contact.form.errors.messageRequired &&
+                    "outline-designColor"
                   } contactTextArea`}
                   cols={30}
                   rows={8}
                 ></textarea>
               </div>
               <div className="w-full">
-                <PrimaryButton type="submit">Send Message</PrimaryButton>
+                <PrimaryButton type="submit">
+                  {t.contact.form.send}
+                </PrimaryButton>
               </div>
               {errMsg && (
                 <p className="py-3 bg-gradient-to-r from-[#141518] to-[#141518] shadow-shadowOne text-center text-orange-500 text-base tracking-wide animate-bounce">

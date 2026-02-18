@@ -1,7 +1,10 @@
 import { logo } from "../assets";
 import { FadeIn } from "./FadeIn";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <FadeIn className="w-full py-20 h-auto border-b-[1px] border-b-black flex flex-col items-center text-center gap-12 md:grid md:grid-cols-2 lgl:grid-cols-4 md:text-left md:items-start md:gap-8">
       {" "}
@@ -10,7 +13,7 @@ const Footer = () => {
       </div>
       <div className="w-full h-full">
         <h3 className="text-xl uppercase text-designColor tracking-wider">
-          CONTACTS
+          {t.footer.contacts}
         </h3>
         <ul className="flex flex-col gap-4 font-titleFont font-medium py-6 overflow-hidden">
           <li>
@@ -26,7 +29,7 @@ const Footer = () => {
       </div>
       <div className="w-full h-full">
         <h3 className="text-xl uppercase text-designColor tracking-wider">
-          MEDIA
+          {t.footer.media}
         </h3>
         <ul className="flex flex-col gap-4 font-titleFont font-medium py-6 overflow-hidden">
           <li>
@@ -66,12 +69,13 @@ const Footer = () => {
       </div>
       <div className="w-full h-full">
         <h3 className="text-xl uppercase text-designColor tracking-wider">
-          LOCATION
+          {t.footer.location}
         </h3>
         <ul className="flex flex-col gap-4 font-titleFont font-medium overflow-hidden py-6">
           <li>
             <span className="w-full text-lg relative">
-              Sörnäisten rantatie 25 <br /> 00520 <br /> Helsinki
+              {t.footer.address.street} <br /> {t.footer.address.postal} <br />{" "}
+              {t.footer.address.city}
               <span className="w-full h-[1px] bg-designColor inline-flex absolute left-0 -bottom-1 opacity-0 group-hover:opacity-100 translate-x-0 transition-all duration-300"></span>
             </span>
           </li>

@@ -17,6 +17,7 @@ import Header from "./Header";
 import { Helmet } from "react-helmet-async";
 import BookingInstructions from "./BookingInstructions";
 import { calculateTotalPrice, getPriceBreakdown } from "../utils/priceUtils";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -54,6 +55,7 @@ export default function BookingPage() {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [calendarKey, setCalendarKey] = useState(0);
   const topRef = useRef<HTMLDivElement | null>(null);
+  const { t, language } = useLanguage();
 
   const totalHours = useMemo(() => {
     if (!selectedRange) return 0;
@@ -195,14 +197,12 @@ export default function BookingPage() {
         setEvents(bookings);
       } catch (error) {
         console.error("Error fetching bookings:", error);
-        setMessage(
-          "❌ Error loading existing bookings. Please refresh the page.",
-        );
+        setMessage(t.booking.messages.loadError);
       }
     };
 
     fetchBooked();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (showForm) {
@@ -221,7 +221,7 @@ export default function BookingPage() {
       const now = new Date();
 
       if (slotInfo.start < now) {
-        setMessage("⚠️ You cannot book past time slots.");
+        setMessage(t.booking.messages.pastSlot);
         setSelectedRange(null);
         return;
       }
@@ -236,7 +236,7 @@ export default function BookingPage() {
       });
 
       if (overlapping) {
-        setMessage("⚠️ Selected time overlaps with an existing booking.");
+        setMessage(t.booking.messages.overlap);
         setSelectedRange(null);
         return;
       }
@@ -247,17 +247,17 @@ export default function BookingPage() {
       setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
       setShowForm(false);
     },
-    [events, currentView],
+    [events, currentView, t],
   );
 
   const handleBook = useCallback(async () => {
     if (!selectedRange) {
-      setMessage("⚠️ Please select a time range before booking.");
+      setMessage(t.booking.messages.selectRange);
       return;
     }
 
     if (!firstName || !lastName || !phone || !email) {
-      setMessage("⚠️ Please fill in all required fields.");
+      setMessage(t.booking.messages.fillRequired);
       return;
     }
 
@@ -297,7 +297,7 @@ export default function BookingPage() {
       });
 
       if (overlapping) {
-        throw new Error("Selected time overlaps with an existing booking.");
+        throw new Error(t.booking.messages.overlap);
       }
 
       await runTransaction(db, async (tx) => {
@@ -305,7 +305,7 @@ export default function BookingPage() {
         const docSnapshot = await tx.get(ref);
 
         if (docSnapshot.exists()) {
-          throw new Error("This time slot has already been taken.");
+          throw new Error(t.booking.messages.overlap);
         }
 
         tx.set(ref, {
@@ -345,7 +345,7 @@ export default function BookingPage() {
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       );
 
-      setMessage("✅ Booking confirmed! Confirmation email sent.");
+      setMessage(t.booking.messages.confirmed);
 
       const currentSelectedRange = selectedRange;
 
@@ -371,7 +371,7 @@ export default function BookingPage() {
       if (err instanceof Error) {
         setMessage(`❌ ${err.message}`);
       } else {
-        setMessage("❌ Booking failed. Please try again.");
+        setMessage(t.booking.messages.failed);
       }
     } finally {
       setSubmitting(false);
@@ -387,29 +387,24 @@ export default function BookingPage() {
     totalPrice,
     needsEngineer,
     priceBreakdown,
+    t,
   ]);
 
   return (
     <section className="w-full pb-12 bg-gray-50">
       <div ref={topRef}></div>
       <Helmet>
-        <title>Book a Music Studio in Helsinki | Eclipse Productions Oy</title>
-        <meta
-          name="description"
-          content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates, professional equipment, and modern facilities in Helsinki."
+        <title>{t.seo.booking.title}</title>
+        <meta name="description" content={t.seo.booking.description} />
+        <link
+          rel="canonical"
+          href={`https://eclipseproductions.fi/${language === "fi" ? "fi/" : ""}booking`}
         />
-        <link rel="canonical" href="https://eclipseproductions.fi/booking" />
-        <meta
-          property="og:title"
-          content="Book a Music Studio in Helsinki | Eclipse Productions Oy"
-        />
-        <meta
-          property="og:description"
-          content="Reserve your studio session online at Eclipse Productions Oy. Affordable rates, professional equipment, and modern facilities in Helsinki."
-        />
+        <meta property="og:title" content={t.seo.booking.ogTitle} />
+        <meta property="og:description" content={t.seo.booking.ogDescription} />
         <meta
           property="og:url"
-          content="https://eclipseproductions.fi/booking"
+          ref={`https://eclipseproductions.fi/${language === "fi" ? "fi/" : ""}booking`}
         />
         <meta property="og:type" content="website" />
         <meta
@@ -417,18 +412,16 @@ export default function BookingPage() {
           content="https://eclipseproductions.fi/eclipse_studio.jpeg"
         />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Book a Music Studio in Helsinki | Eclipse Productions Oy"
-        />
+        <meta name="twitter:title" content={t.seo.booking.ogTitle} />
         <meta
           name="twitter:description"
-          content="Reserve your studio session online at Eclipse Productions Oy. Affordable hourly rates and modern facilities in Helsinki."
+          content={t.seo.booking.ogDescription}
         />
         <meta
           name="twitter:image"
           content="https://eclipseproductions.fi/eclipse_studio.jpeg"
         />
+        <html lang={language} />
       </Helmet>
       <Header />
       <div className="w-full md:w-11/12 lg:w-4/5 mx-auto">
@@ -436,20 +429,24 @@ export default function BookingPage() {
           <div className="mt-6 mx-auto max-w-md lg:max-w-2xl p-6 border border-gray-200 rounded-2xl bg-white shadow-lg">
             <div className="text-center lg:text-left space-y-2 sm:space-y-2 lg:space-y-4">
               <div>
-                <p className="text-base text-gray-500">Selected Date</p>
+                <p className="text-base text-gray-500">
+                  {t.booking.selectedDate}
+                </p>
                 <p className="text-base lg:text-xl font-semibold text-gray-900">
                   {formatDate(selectedRange.start, "dd.MM.yyyy")}
                 </p>
               </div>
               <div>
-                <p className="text-base text-gray-500">Selected Time</p>
+                <p className="text-base text-gray-500">
+                  {t.booking.selectedTime}
+                </p>
                 <p className="text-base lg:text-xl font-semibold text-gray-900">
                   {formatDate(selectedRange.start, "HH:mm")} –{" "}
                   {formatDate(selectedRange.end, "HH:mm")}
                 </p>
               </div>
               <div>
-                <p className="text-base text-gray-500">Duration &amp; Price</p>
+                <p className="text-base text-gray-500">{t.booking.duration}</p>
                 <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">
                   {totalHours}h<span className="mx-1 text-gray-400">·</span>
                   <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">
@@ -463,13 +460,13 @@ export default function BookingPage() {
                 onClick={() => setShowForm(true)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
               >
-                Book This Slot
+                {t.booking.bookSlot}
               </button>
               <button
                 onClick={() => setSelectedRange(null)}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
               >
-                Cancel
+                {t.booking.cancel}
               </button>
             </div>
           </div>

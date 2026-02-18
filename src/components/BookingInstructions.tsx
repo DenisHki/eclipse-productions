@@ -1,4 +1,5 @@
 import { step1, step2, step3 } from "../assets/index.ts";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface Step {
   img?: string;
@@ -6,38 +7,36 @@ interface Step {
   description: string;
 }
 
-const steps: Step[] = [
-  {
-    img: step1,
-    title: "Pick Your Time",
-    description:
-      "Choose available time slot in the calendar by dragging over the time you want to book.",
-  },
-  {
-    img: step2,
-    title: "Preview & Book",
-    description:
-      'A pop-up window will show your selected time range — click "Book this slot" to continue.',
-  },
-  {
-    img: step3,
-    title: "Enter Details",
-    description:
-      'Fill in your name, contact info, and add notes if you have any wishes, then click "Confirm Booking".',
-  },
-  {
-    title: "Confirmation & Access",
-    description:
-      "You’ll receive a confirmation email along with your invoice. Once payment is completed, we’ll open the studio with a mobile key for you.",
-  },
-];
-
 export default function BookingInstructions() {
+  const { t } = useLanguage();
+
+  const steps: Step[] = [
+    {
+      img: step1,
+      title: t.booking.instructions.steps[0].title,
+      description: t.booking.instructions.steps[0].description,
+    },
+    {
+      img: step2,
+      title: t.booking.instructions.steps[1].title,
+      description: t.booking.instructions.steps[1].description,
+    },
+    {
+      img: step3,
+      title: t.booking.instructions.steps[2].title,
+      description: t.booking.instructions.steps[2].description,
+    },
+    {
+      title: t.booking.instructions.steps[3].title,
+      description: t.booking.instructions.steps[3].description,
+    },
+  ];
+
   return (
     <section className="mt-12 w-full py-12">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-black mb-10 tracking-tight">
-          How to Book Your Studio
+          {t.booking.instructions.title}
         </h2>
         <div className="grid grid-cols-1 sml:grid-cols-2 lg:grid-cols-4 gap-12">
           {steps.map((step, index) => (

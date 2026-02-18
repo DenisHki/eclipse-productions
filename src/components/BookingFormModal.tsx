@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { PriceBreakdown } from "../utils/priceUtils";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface BookingFormModalProps {
   selectedRange: { start: Date; end: Date };
@@ -47,38 +48,41 @@ export default function BookingFormModal({
   message,
 }: BookingFormModalProps) {
   const formatTime = (date: Date) => format(date, "HH:mm");
+  const { t } = useLanguage();
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 overflow-y-auto">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-lg sm:max-w-md mx-4 my-8 p-4 sm:p-6">
         <h3 className="text-xl font-bold mb-2 text-gray-900">
-          Booking on {format(selectedRange.start, "dd.MM.yyyy")}
+          {t.booking.form.bookingOn} {format(selectedRange.start, "dd.MM.yyyy")}
         </h3>
 
         <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
           <p className="text-gray-700 mb-2">
-            Time:{" "}
+            {t.booking.form.time}:{" "}
             <strong>
               {formatTime(selectedRange.start)} –{" "}
               {formatTime(selectedRange.end)}
             </strong>
           </p>
           <p className="text-gray-700 mb-2">
-            Duration: <strong>{totalHours}h</strong>
+            {t.booking.form.duration}: <strong>{totalHours}h</strong>
           </p>
 
           <div className="border-t border-gray-200 pt-2 mt-2">
             <p className="text-gray-700 text-sm mb-1">
-              Studio rental: <strong>{priceBreakdown.basePrice} €</strong>
+              {t.booking.form.studioRental}:{" "}
+              <strong>{priceBreakdown.basePrice} €</strong>
             </p>
             {needsEngineer && (
               <p className="text-gray-700 text-sm mb-1">
-                Recording engineer:{" "}
+                {t.booking.form.recordingEngineer}:{" "}
                 <strong>{priceBreakdown.engineerFee} €</strong>
               </p>
             )}
             <p className="text-gray-900 font-semibold text-base mt-2">
-              Total: <strong className="text-green-600">{totalPrice} €</strong>
+              {t.booking.form.total}:{" "}
+              <strong className="text-green-600">{totalPrice} €</strong>
             </p>
           </div>
         </div>
@@ -86,61 +90,66 @@ export default function BookingFormModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              First name <span className="text-red-500">*</span>
+              {t.booking.form.firstName}{" "}
+              <span className="text-red-500">{t.booking.form.required}</span>
             </label>
             <input
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              placeholder="First name"
+              placeholder={t.booking.form.firstName}
               className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Last name <span className="text-red-500">*</span>
+              {t.booking.form.lastName}{" "}
+              <span className="text-red-500">{t.booking.form.required}</span>
             </label>
             <input
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              placeholder="Last name"
+              placeholder={t.booking.form.lastName}
               className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Phone <span className="text-red-500">*</span>
+              {t.booking.form.phone}{" "}
+              <span className="text-red-500">{t.booking.form.required}</span>
             </label>
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="Phone number"
+              placeholder={t.booking.form.phone}
               className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email <span className="text-red-500">*</span>
+              {t.booking.form.email}{" "}
+              <span className="text-red-500">{t.booking.form.required}</span>
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
+              placeholder={t.booking.form.email}
               className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Notes <span className="text-gray-400">(optional)</span>
+              {t.booking.form.notes}{" "}
+              <span className="text-gray-400">{t.booking.form.optional}</span>
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Notes"
+              placeholder={t.booking.form.notes}
               className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows={3}
             />
@@ -156,10 +165,10 @@ export default function BookingFormModal({
               />
               <div className="flex-1">
                 <span className="block text-sm font-medium text-gray-900">
-                  I need a recording engineer
+                  {t.booking.form.needsEngineer}
                 </span>
                 <span className="block text-xs text-gray-500 mt-1">
-                  + 10 € per hour · Professional recording assistance
+                  {t.booking.form.engineerNote}
                 </span>
               </div>
             </label>
@@ -187,14 +196,16 @@ export default function BookingFormModal({
             onClick={onClose}
             className="px-4 py-2 bg-gray-300 font-semibold text-gray-900 rounded-full hover:bg-gray-400 transition-colors"
           >
-            Cancel
+            {t.booking.cancel}
           </button>
           <button
             onClick={onSubmit}
             disabled={submitting}
             className="px-6 py-2 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {submitting ? "Booking…" : "Confirm Booking"}
+            {submitting
+              ? t.booking.form.booking
+              : t.booking.form.confirmBooking}
           </button>
         </div>
       </div>

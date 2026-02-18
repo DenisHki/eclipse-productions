@@ -109,7 +109,6 @@ const Navbar = () => {
         <img src={logo} alt="logo" />
       </div>
       <div className="flex items-center gap-6">
-        {/* Desktop Navigation */}
         <ul className="hidden mdl:inline-flex items-center gap-6 lg:gap-10">
           {navLinksdata.map(({ _id, title, link }) => (
             <li
@@ -132,12 +131,10 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Desktop Language Switcher - positioned on the right */}
         <div className="hidden mdl:block">
           <LanguageSwitcher />
         </div>
 
-        {/* Mobile Menu Button */}
         <span
           onClick={handleMenuToggle}
           className="text-3xl mdl:hidden bg-black w-14 h-14 inline-flex items-center justify-center rounded-full text-designColor cursor-pointer"
@@ -145,7 +142,6 @@ const Navbar = () => {
           <FiMenu />
         </span>
 
-        {/* Mobile Menu */}
         {showMenu && (
           <div className="w-full h-[100dvh] mdl:hidden fixed inset-0 bg-bodyColor p-4 scrollbar-hide z-50 overflow-hidden">
             <div className="flex flex-col items-center justify-center gap-8 h-full text-center relative">
@@ -153,7 +149,6 @@ const Navbar = () => {
                 <img className="w-32" src={logo} alt="logo" />
               </div>
 
-              {/* Mobile Language Switcher */}
               <LanguageSwitcher mobile={true} />
 
               <div className="flex flex-col gap-6 text-center max-h-[60vh] overflow-y-auto">

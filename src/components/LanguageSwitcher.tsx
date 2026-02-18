@@ -16,7 +16,6 @@ export default function LanguageSwitcher({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -37,13 +36,12 @@ export default function LanguageSwitcher({
   };
 
   const languages = [
-    { code: "en" as Language, label: "English" },
-    { code: "fi" as Language, label: "Suomi" },
+    { code: "en" as Language, label: "ENGLISH" },
+    { code: "fi" as Language, label: "SUOMI" },
   ];
 
   const currentLanguage = languages.find((lang) => lang.code === language);
 
-  // Mobile version - simple buttons
   if (mobile) {
     return (
       <div className={`flex gap-3 ${className}`}>
@@ -71,7 +69,6 @@ export default function LanguageSwitcher({
     );
   }
 
-  // Desktop version - dropdown
   return (
     <div ref={dropdownRef} className={`relative ${className}`}>
       <button
@@ -89,7 +86,6 @@ export default function LanguageSwitcher({
         />
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-40 bg-black border border-gray-600 rounded-lg shadow-xl overflow-hidden z-50 animate-fadeIn">
           {languages.map((lang) => (
