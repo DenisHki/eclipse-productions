@@ -10,12 +10,15 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 - Interactive Equipment Gallery
 - Contact Form
 - Google Maps Integration
+- Bilingual Interface
 
 ### Services Offered
-- Studio Rental – €30/hour
-- Music Production – €300–500/track
-- Recording Services – €30/hour (min 3 hours)
-- Mixing & Mastering – €100–250/track
+- **Studio Rental** – €40/2h | €60/4h | €100/8h
+- **Composition** – €300/track (full production)
+- **Track Production** – €500/track (instrumental)
+- **Recording Services** – €30/hour (min 3 hours)
+- **Mixing** – €250/track
+- **Mastering** – €100/track
 
 ### Technical Features
 - Responsive Design (Tailwind CSS)
@@ -49,10 +52,10 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 
 ## 🌍 Languages
 
-- 🇬🇧 **English** - Full website experience
-- 🇫🇮 **Finnish (Suomi)** - Complete Finnish translation
+- **English** - Full website experience
+- **Finnish (Suomi)** - Complete Finnish translation
 
-**Language Switcher**: Elegant dropdown menu with persistent language preference
+**Language Switcher**: Dropdown menu with persistent language preference
 
 ## 📈 SEO & Performance
 - Structured Data (JSON-LD)
