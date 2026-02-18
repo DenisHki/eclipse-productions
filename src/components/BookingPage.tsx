@@ -1,11 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Calendar, dateFnsLocalizer, SlotInfo, View } from "react-big-calendar";
-import {
-  format as formatDate,
-  parse,
-  startOfWeek,
-  getDay,
-} from "date-fns";
+import { format as formatDate, parse, startOfWeek, getDay } from "date-fns";
 import emailjs from "emailjs-com";
 import { fi } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -73,12 +68,12 @@ export default function BookingPage() {
 
   const priceBreakdown = useMemo(
     () => getPriceBreakdown(totalHours, needsEngineer),
-    [totalHours, needsEngineer]
+    [totalHours, needsEngineer],
   );
 
   const totalPrice = useMemo(
     () => calculateTotalPrice(totalHours, needsEngineer),
-    [totalHours, needsEngineer]
+    [totalHours, needsEngineer],
   );
 
   const formats = useMemo(
@@ -87,7 +82,7 @@ export default function BookingPage() {
       eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
         `${formatDate(start, "HH:mm")} - ${formatDate(end, "HH:mm")}`,
     }),
-    []
+    [],
   );
 
   const eventPropGetter = useMemo(
@@ -99,7 +94,7 @@ export default function BookingPage() {
         border: event.isBlocked ? "1px solid #dc2626" : "1px solid #d1d5db",
       },
     }),
-    []
+    [],
   );
 
   const slotPropGetter = useCallback(
@@ -128,7 +123,7 @@ export default function BookingPage() {
         },
       };
     },
-    [selectedRange]
+    [selectedRange],
   );
 
   const resetUserForm = () => {
@@ -181,12 +176,12 @@ export default function BookingPage() {
           const start = parse(
             `${data.date} ${startStr}`,
             "yyyy-MM-dd HH:mm",
-            new Date()
+            new Date(),
           );
           const end = parse(
             `${data.date} ${endStr}`,
             "yyyy-MM-dd HH:mm",
-            new Date()
+            new Date(),
           );
 
           bookings.push({
@@ -201,7 +196,7 @@ export default function BookingPage() {
       } catch (error) {
         console.error("Error fetching bookings:", error);
         setMessage(
-          "❌ Error loading existing bookings. Please refresh the page."
+          "❌ Error loading existing bookings. Please refresh the page.",
         );
       }
     };
@@ -245,14 +240,14 @@ export default function BookingPage() {
         setSelectedRange(null);
         return;
       }
-      
+
       setNeedsEngineer(false);
 
       setMessage(null);
       setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
       setShowForm(false);
     },
-    [events, currentView]
+    [events, currentView],
   );
 
   const handleBook = useCallback(async () => {
@@ -274,7 +269,7 @@ export default function BookingPage() {
     const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd");
     const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(
       ":",
-      "-"
+      "-",
     )}`;
 
     try {
@@ -287,12 +282,12 @@ export default function BookingPage() {
         const existingStart = parse(
           `${dateStr} ${existingStartStr}`,
           "yyyy-MM-dd HH:mm",
-          new Date()
+          new Date(),
         ).getTime();
         const existingEnd = parse(
           `${dateStr} ${existingEndStr}`,
           "yyyy-MM-dd HH:mm",
-          new Date()
+          new Date(),
         ).getTime();
 
         const newStart = selectedRange.start.getTime();
@@ -347,7 +342,7 @@ export default function BookingPage() {
           notes,
           current_year: new Date().getFullYear(),
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       );
 
       setMessage("✅ Booking confirmed! Confirmation email sent.");
@@ -454,7 +449,7 @@ export default function BookingPage() {
                 </p>
               </div>
               <div>
-                <p className="text-base text-gray-500">Duration &amp; Total</p>
+                <p className="text-base text-gray-500">Duration &amp; Price</p>
                 <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">
                   {totalHours}h<span className="mx-1 text-gray-400">·</span>
                   <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">

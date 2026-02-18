@@ -25,20 +25,20 @@ const Services = () => {
         <Title title="Services" des="What Do We Offer" />
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xs:gap-5 sm:gap-6 xl:gap-20">
           <Card
-            title="Composition"
-            des="Transform your ideas into fully produced tracks with our expert music production services — including composing, recording, mixing, and mastering."
+            title="Track Production"
+            des="Transform your ideas into fully produced tracks with our music producer, including composing, recording, mixing, and mastering."
             price="€500 / track"
             icon={FaMusic}
           />
           <Card
-            title="Track Production"
-            des="Compose instrumental tracks collaboratively — excluding recording, mixing, and mastering."
+            title="Composition"
+            des="Compose instrumental tracks collaboratively with the music producer, excluding recording, mixing, and mastering."
             price="€300 / track"
             icon={FaHeadphones}
           />
           <Card
             title="Recording"
-            des="Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts."
+            des="Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts with recording engineer."
             price="€30 / hour (min. 3 hrs)"
             icon={FaMicrophone}
           />
@@ -73,7 +73,7 @@ const Services = () => {
         </div>
         <div className="flex justify-center mt-28 mb-28">
           <PrimaryButton onClick={() => navigate("/booking")}>
-            Book a Studio
+            Book Studio
           </PrimaryButton>
         </div>
 
