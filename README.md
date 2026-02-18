@@ -21,11 +21,13 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 - **Mastering** – €100/track
 
 ### Technical Features
-- Responsive Design (Tailwind CSS)
-- Real-time Booking (Firebase Firestore)
-- Email Notifications (EmailJS)
-- SEO Optimized
-- Performance Focused
+- **Multilingual Support** (i18n) - English & Finnish
+- **Responsive Design** - Mobile-first with Tailwind CSS
+- **Real-time Booking** - Firebase Firestore integration
+- **Email Notifications** - Automated booking confirmations (EmailJS)
+- **SEO Optimized** - Language-specific meta tags & sitemaps
+- **Performance Focused** - Fast loading, optimized assets
+- **Persistent Preferences** - Language choice saved locally
 
 ## 🛠 Tech Stack
 
@@ -36,13 +38,21 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 - Vite
 - Framer Motion
 
+### Internationalization (i18n)
+- **React Context API** - Language state management
+- **LocalStorage** - Persistent language preference
+- **Dynamic SEO** - Language-specific meta tags
+- **Localized URLs** - `/` (EN) and `/fi/` (FI)
+
 ### Libraries & Integrations
 - React Big Calendar
 - EmailJS
 - Firebase Firestore
 - Google Maps API
 - React Modern Audio Player
-- React Helmet
+- React Helmet Async
+- React Router DOM
+- React Icons
 
 ### Development Tools
 - ESLint
@@ -58,14 +68,20 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 **Language Switcher**: Dropdown menu with persistent language preference
 
 ## 📈 SEO & Performance
-- Structured Data (JSON-LD)
-- Meta Tags (OpenGraph & Twitter)
-- Canonical URLs
-- Sitemap
-- Schema Markup
+- **Structured Data (JSON-LD)** - Rich snippets for search engines
+- **Meta Tags** - OpenGraph & Twitter Cards
+- **Canonical URLs** - Language-specific canonical tags
+- **Sitemap** - XML sitemap for search engines
+- **Schema Markup** - LocalBusiness schema
+- **HTML Lang Attribute** - Dynamic language declaration
+- **Localized Meta** - Separate titles/descriptions per language
 
 ## 📝 License
-This project is proprietary and confidential. All rights reserved by Eclipse Productions Oy.
+This project is **proprietary and confidential**. All rights reserved by Eclipse Productions Oy.
+
+**© 2024 Eclipse Productions Oy** - All Rights Reserved
+
+Unauthorized copying, modification, distribution, or use of this software, via any medium, is strictly prohibited.
 
 ## 📞 Support
 - 🌐 [eclipseproductions.fi](https://eclipseproductions.fi)
