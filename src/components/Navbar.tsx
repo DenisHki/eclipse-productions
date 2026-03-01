@@ -129,6 +129,16 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
+
+          <li className="text-font-lg font-normal text-text-designColor tracking-wide cursor-pointer group">
+            <button
+              onClick={() => navigate("/booking")}
+              className="relative group-hover:text-designColor"
+            >
+              {t.nav.bookNow}
+              <span className="w-full h-[1px] bg-designColor absolute left-0 bottom-0 transform scale-x-0 group-hover:scale-x-100 transition-all duration-300"></span>
+            </button>
+          </li>
         </ul>
 
         <div className="hidden mdl:block">

@@ -6,7 +6,8 @@ export const translations = {
       services: "Services",
       music: "Music",
       contact: "Contact",
-      bookNow: "Book Now",
+      bookNow: "Book now",
+      backHome: "Back home",
     },
 
     // Home Section
@@ -197,7 +198,8 @@ export const translations = {
       services: "Palvelut",
       music: "Musiikki",
       contact: "Yhteystiedot",
-      bookNow: "Varaa Tästä",
+      bookNow: "Varaa tästä",
+      backHome: "Etusivulle",
     },
 
     // Home Section
