@@ -300,6 +300,26 @@ export default function BookingPage() {
         throw new Error(t.booking.messages.overlap);
       }
 
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_BOOKING_TEMPLATE_ID,
+        {
+          to_name: `${firstName} ${lastName}`,
+          to_email: email,
+          booking_date: dateStr,
+          booking_time: `${startStr} - ${endStr}`,
+          hours: totalHours,
+          price: totalPrice,
+          base_price: priceBreakdown.basePrice,
+          engineer_fee: needsEngineer ? priceBreakdown.engineerFee : 0,
+          needs_engineer: needsEngineer ? "Yes" : "No",
+          phone,
+          notes,
+          current_year: new Date().getFullYear(),
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      );
+
       await runTransaction(db, async (tx) => {
         const ref = doc(db, "bookings", bookingId);
         const docSnapshot = await tx.get(ref);
@@ -324,26 +344,6 @@ export default function BookingPage() {
           createdAt: serverTimestamp(),
         });
       });
-
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_BOOKING_TEMPLATE_ID,
-        {
-          to_name: `${firstName} ${lastName}`,
-          to_email: email,
-          booking_date: dateStr,
-          booking_time: `${startStr} - ${endStr}`,
-          hours: totalHours,
-          price: totalPrice,
-          base_price: priceBreakdown.basePrice,
-          engineer_fee: needsEngineer ? priceBreakdown.engineerFee : 0,
-          needs_engineer: needsEngineer ? "Yes" : "No",
-          phone,
-          notes,
-          current_year: new Date().getFullYear(),
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      );
 
       setMessage(t.booking.messages.confirmed);
 

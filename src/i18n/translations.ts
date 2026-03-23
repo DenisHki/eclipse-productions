@@ -133,6 +133,82 @@ export const translations = {
         confirmBooking: "Confirm Booking",
         booking: "Booking…",
       },
+      terms: {
+        checkboxLabel: "I have read and accept the",
+        linkLabel: "Terms & Conditions",
+        mustAccept: "⚠️ You must accept the Terms & Conditions before booking.",
+        modalTitle: "Terms & Conditions",
+        close: "Close",
+        sections: [
+          {
+            title: "Duration",
+            items: [
+              "The rental period shall begin and end at the specific start and end times confirmed in the booking form for the reserved date.",
+              "Any overtime usage must be approved in advance and will incur additional charges.",
+            ],
+          },
+          {
+            title: "Invoicing",
+            items: [
+              "Full payment is required before the studio use.",
+              "The payment invoice is sent to the customer by email.",
+              "Invoices must be paid within seven (7) days of issuance.",
+              "A payment reminder will be sent for an overdue invoice, and additional charges may apply.",
+              "Please include the invoice reference number when making payments to ensure proper processing.",
+            ],
+          },
+          {
+            title: "Use of Equipment",
+            items: [
+              "The renter is responsible for handling all studio equipment with care.",
+              "Any damage to the equipment caused by negligence, misuse, or abuse will be charged to the renter.",
+              "Equipment shall not be removed from the studio premises under any circumstances.",
+              "Speakers and the subwoofer must not be moved. If moved, the renter will be charged a calibration fee.",
+            ],
+          },
+          {
+            title: "Conduct and Studio Rules",
+            items: [
+              "No smoking, alcohol, or illegal substances are allowed inside the studio.",
+              "Liquids are strictly prohibited on worktable and musical instruments to prevent damage.",
+              "Food may only be consumed in the designated kitchen area.",
+              "Noise levels must be kept within reasonable limits.",
+              "The renter is responsible for maintaining cleanliness and tidiness in the studio.",
+              "The studio reserves the right to terminate the rental session without a refund if the rules are violated.",
+              "A maximum of four (4) people is permitted in the studio during the rental period.",
+            ],
+          },
+          {
+            title: "Security and Access",
+            items: [
+              "The studio will be opened at the beginning of the booked session time.",
+              "Security cameras may be in operation for safety and equipment protection.",
+            ],
+          },
+          {
+            title: "Cancellations and Refunds",
+            items: [
+              "Cancellations made at least 48 hours before the scheduled rental period may qualify for a full or partial refund.",
+              "Last-minute cancellations (less than 48 hours) may result in a forfeited payment.",
+            ],
+          },
+          {
+            title: "Insurance",
+            items: [
+              "Eclipse Productions Oy does not provide insurance coverage for renters or their guests.",
+              "Customers are responsible for covering any accidents or injuries through their personal insurance.",
+            ],
+          },
+          {
+            title: "Privacy Notice",
+            items: [
+              "We collect your personal information solely for the purpose of managing your studio booking and fulfilling our contractual obligations. Your data will be stored securely and will not be shared with third parties except when required by law. You have the right to access, correct, or request deletion of your personal data at any time by contacting us.",
+            ],
+          },
+        ],
+        footer:
+          "By confirming the booking, you agree to these terms and conditions.",
+      },
       messages: {
         pastSlot: "⚠️ You cannot book past time slots.",
         overlap: "⚠️ Selected time overlaps with an existing booking.",
@@ -325,6 +401,82 @@ export const translations = {
         engineerNote: "+ 10 € tunnilta · Ammattimainen äänittämisapu",
         confirmBooking: "Vahvista Varaus",
         booking: "Varataan…",
+      },
+      terms: {
+        checkboxLabel: "Olen lukenut ja hyväksyn",
+        linkLabel: "Varausehdot",
+        mustAccept:
+          "⚠️ Sinun on hyväksyttävä varausehdot ennen varauksen tekemistä.",
+        modalTitle: "Varausehdot",
+        close: "Sulje",
+        sections: [
+          {
+            title: "Vuokra-aika",
+            items: [
+              "Vuokra-aika alkaa ja päättyy varauslomakkeessa vahvistettujen varausaikojen mukaisesti.",
+              "Vuokra-ajan ylittävä käyttö on hyväksytettävä etukäteen, ja siitä veloitetaan lisämaksu.",
+            ],
+          },
+          {
+            title: "Laskutus",
+            items: [
+              "Vuokra on maksettava kokonaisuudessaan ennen studion käyttöä.",
+              "Lasku lähetetään asiakkaalle sähköpostitse.",
+              "Lasku on maksettava seitsemän (7) päivän kuluessa sen päiväyksestä.",
+              "Maksamattomasta laskusta lähetetään maksumuistutus, ja siitä voidaan veloittaa lisämaksuja.",
+              "Maksu on suoritettava käyttäen laskun viitenumeroa, jotta maksu voidaan käsitellä oikein.",
+            ],
+          },
+          {
+            title: "Laitteiden käyttö",
+            items: [
+              "Vuokraaja on vastuussa kaikkien studiolaitteiden huolellisesta käsittelystä.",
+              "Laitteille aiheutuneet vahingot, jotka johtuvat huolimattomuudesta, väärinkäytöstä tai tahallisesta vahingoittamisesta, peritään vuokraajalta.",
+              "Laitteita ei saa viedä pois studion tiloista missään olosuhteissa.",
+              "Kaiuttimia ja subwooferia ei saa siirtää. Mikäli niitä siirretään, vuokraajalta peritään kalibrointimaksu.",
+            ],
+          },
+          {
+            title: "Käyttäytyminen ja studion säännöt",
+            items: [
+              "Tupakointi, alkoholin käyttö ja laittomien aineiden käyttö ovat studiossa kiellettyjä.",
+              "Nesteiden tuominen työpöydälle tai soittimien läheisyyteen on ehdottomasti kielletty vahinkojen estämiseksi.",
+              "Ruokailu on sallittua vain siihen tarkoitetussa keittiötilassa.",
+              "Melutaso on pidettävä kohtuullisena.",
+              "Vuokraaja on vastuussa studion siisteydestä ja järjestyksestä.",
+              "Studio pidättää oikeuden keskeyttää vuokrauksen ilman hyvitystä, jos sääntöjä rikotaan.",
+              "Studiossa saa oleskella enintään neljä (4) henkilöä vuokra-ajan aikana.",
+            ],
+          },
+          {
+            title: "Turvallisuus ja pääsy",
+            items: [
+              "Studio avataan varatun vuoroajan alkaessa.",
+              "Studiossa voidaan käyttää turvakameroita turvallisuuden ja laitteiden suojaamiseksi.",
+            ],
+          },
+          {
+            title: "Peruutukset ja hyvitykset",
+            items: [
+              "Mikäli varaus peruutetaan vähintään 48 tuntia ennen vuokra-ajan alkamista, on asiakkaalla oikeus täyteen tai osittaiseen hyvitykseen yrityksen harkinnan mukaan.",
+              "Alle 48 tuntia ennen vuokra-ajan alkamista tehdyt peruutukset eivät oikeuta hyvitykseen, ja koko vuokrasumma voidaan veloittaa.",
+            ],
+          },
+          {
+            title: "Vakuutus",
+            items: [
+              "Eclipse Productions Oy ei tarjoa vakuutusta vuokraajille tai heidän vierailleen.",
+              "Vuokraaja on vastuussa mahdollisten onnettomuuksien tai vammojen kattamisesta omalla vakuutuksellaan.",
+            ],
+          },
+          {
+            title: "Tietosuojailmoitus",
+            items: [
+              "Keräämme henkilötietojasi yksinomaan studion varauksen hallintaa varten ja sopimusvelvoitteidemme täyttämiseksi. Tietosi säilytetään turvallisesti, eikä niitä luovuteta kolmansille osapuolille, ellei laki toisin edellytä. Sinulla on oikeus milloin tahansa pyytää tietojesi tarkastamista, korjaamista tai poistamista ottamalla meihin yhteyttä.",
+            ],
+          },
+        ],
+        footer: "Vahvistamalla varauksen hyväksyt varausehdot.",
       },
       messages: {
         pastSlot: "⚠️ Et voi varata menneitä aikavälejä.",
