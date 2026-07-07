@@ -166,7 +166,7 @@ export default function BookingPage() {
   useEffect(() => {
     const fetchBooked = async () => {
       try {
-        const q = collection(db, "bookings");
+        const q = collection(db, "bookings_public");
         const snap = await getDocs(q);
         const bookings: BookingEvent[] = [];
 
@@ -273,7 +273,7 @@ export default function BookingPage() {
     )}`;
 
     try {
-      const snap = await getDocs(collection(db, "bookings"));
+      const snap = await getDocs(collection(db, "bookings_public"));
       const overlapping = snap.docs.some((d) => {
         const data = d.data();
         if (data.date !== dateStr) return false;
@@ -321,14 +321,30 @@ export default function BookingPage() {
       );
 
       await runTransaction(db, async (tx) => {
-        const ref = doc(db, "bookings", bookingId);
-        const docSnapshot = await tx.get(ref);
+        // Check the PUBLIC collection — this is a "lock"
+        // If this document already exists, the slot is taken
+        const publicRef = doc(db, "bookings_public", bookingId);
+        const privateRef = doc(db, "bookings_private", bookingId);
+
+        const docSnapshot = await tx.get(publicRef);
 
         if (docSnapshot.exists()) {
           throw new Error(t.booking.messages.overlap);
         }
 
-        tx.set(ref, {
+        // Write SAFE data to the public collection
+        // This is what the calendar reads — no personal data here
+        tx.set(publicRef, {
+          date: dateStr,
+          time: `${startStr}-${endStr}`,
+          hours: totalHours,
+          price: totalPrice,
+          createdAt: serverTimestamp(),
+        });
+
+        // Write PERSONAL data to the private collection
+        // This will be locked down in Firebase Security Rules
+        tx.set(privateRef, {
           date: dateStr,
           time: `${startStr}-${endStr}`,
           hours: totalHours,
