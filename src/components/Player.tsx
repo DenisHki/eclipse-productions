@@ -1,9 +1,11 @@
 import AudioPlayer from "react-modern-audio-player";
 import { playList } from "../playList";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Player() {
   const [isMobile, setIsMobile] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null!);
 
   useEffect(() => {
     const checkScreen = () => setIsMobile(window.innerWidth < 640);
@@ -12,26 +14,47 @@ export default function Player() {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
+  useEffect(() => {
+    const audioEl = audioRef.current;
+    if (!audioEl) return;
+
+    const syncActiveTrack = () => {
+      const currentSrc = audioEl.getAttribute("src");
+      const idx = playList.findIndex((track) => track.src === currentSrc);
+      if (idx !== -1) setActiveIndex(idx);
+    };
+
+    syncActiveTrack();
+
+    const observer = new MutationObserver(syncActiveTrack);
+    observer.observe(audioEl, { attributes: true, attributeFilter: ["src"] });
+
+    return () => observer.disconnect();
+  }, [isMobile]);
+
+  const activeTrack = playList[activeIndex];
+
   if (isMobile) {
     return (
       <div className="player-container mobile-layout">
         <div className="mobile-track-info">
           <div className="track-artwork">
-            {playList[0]?.img && (
+            {activeTrack?.img && (
               <img
-                src={playList[0].img}
-                alt={playList[0].name}
+                src={activeTrack.img}
+                alt={activeTrack.name}
                 style={{ width: "80px", height: "80px", borderRadius: "8px" }}
               />
             )}
           </div>
           <div className="track-details">
-            <div className="track-name">{playList[0]?.name}</div>
-            <div className="track-artist">{playList[0]?.writer}</div>
+            <div className="track-name">{activeTrack?.name}</div>
+            <div className="track-artist">{activeTrack?.writer}</div>
           </div>
         </div>
 
         <AudioPlayer
+          audioRef={audioRef}
           playList={playList}
           activeUI={{
             playButton: true,

@@ -17,7 +17,7 @@ const LeftBar = ({
     <FadeIn className={className}>
       <div className="flex flex-col gap-5">
         <h4 className="text-lg font-normal text-designColor">{subtitle}</h4>
-        <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white">
+        <h1 className="whitespace-nowrap text-[clamp(1.5rem,5.2vw,3.75rem)] font-bold leading-tight text-white lgl:text-[clamp(1.5rem,3.4vw,3.75rem)]">
           {title}
         </h1>
         <p className="description-text text-xl font-bodyFont leading-relaxed tracking-wider text-gray-300">

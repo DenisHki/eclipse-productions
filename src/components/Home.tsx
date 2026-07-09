@@ -1,6 +1,4 @@
 import LeftBar from "./LeftBar";
-import RightBar from "./RightBar";
-import { homepage } from "../assets";
 import hp1 from "../assets/images/hp1.jpg";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -31,11 +29,7 @@ const Home = () => {
           description={t.home.description}
           className="w-full lgl:w-1/2 flex flex-col gap-12 xs:gap-16 sm:gap-20"
         />
-        <RightBar
-          image={homepage}
-          alt="Professional music studio in Helsinki with Genelec monitors and recording equipment"
-          imgClassName="w-full max-w-[400px] xs:max-w-[450px] sm:max-w-[500px] h-[300px] xs:h-[400px] sm:h-[520px] object-cover rounded-xl shadow-2xl"
-        />
+      
       </section>
 
       <section className="w-full flex justify-center py-6 xs:py-8 sm:py-10">

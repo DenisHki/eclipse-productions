@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-scroll";
 import { FiMenu } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
@@ -11,7 +11,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -23,24 +23,29 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateNavbar = () => {
       const currentScrollY = window.scrollY;
       const isMobile = window.innerWidth < 768;
 
-      if (isMobile) {
-        setShowNavbar(true);
-        return;
+      if (isMobile || currentScrollY < 10) {
+        setShowNavbar((prev) => (prev ? prev : true));
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setShowNavbar((prev) => (prev ? false : prev));
+      } else if (currentScrollY < lastScrollY.current) {
+        setShowNavbar((prev) => (prev ? prev : true));
       }
 
-      if (currentScrollY < 10) {
-        setShowNavbar(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setShowNavbar(false);
-      } else if (currentScrollY < lastScrollY) {
-        setShowNavbar(true);
-      }
+      lastScrollY.current = currentScrollY;
+      ticking = false;
+    };
 
-      setLastScrollY(currentScrollY);
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateNavbar);
+        ticking = true;
+      }
     };
 
     const handleResize = () => {
@@ -50,13 +55,13 @@ const Navbar = () => {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, [lastScrollY]);
+  }, []);
 
   useEffect(() => {
     if (showMenu) {
@@ -101,7 +106,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`w-full h-24 fixed top-0 z-50 backdrop-blur-2xl transition-all duration-300 bg-bodyColor/70 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4 ${
+      className={`w-full h-24 fixed top-0 z-50 backdrop-blur-lg will-change-transform transition-transform duration-300 ease-out bg-bodyColor/80 mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4 ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -119,9 +124,9 @@ const Navbar = () => {
                 activeClass="active"
                 to={link}
                 spy={true}
-                smooth={true}
+                smooth="easeInOutQuad"
                 offset={-96}
-                duration={500}
+                duration={1200}
                 className="relative group-hover:text-designColor"
               >
                 {title}
@@ -129,16 +134,6 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-
-          <li className="text-font-lg font-normal text-text-designColor tracking-wide cursor-pointer group">
-            <button
-              onClick={() => navigate("/booking")}
-              className="relative group-hover:text-designColor"
-            >
-              {t.nav.bookNow}
-              <span className="w-full h-[1px] bg-designColor absolute left-0 bottom-0 transform scale-x-0 group-hover:scale-x-100 transition-all duration-300"></span>
-            </button>
-          </li>
         </ul>
 
         <div className="hidden mdl:block">
@@ -173,9 +168,9 @@ const Navbar = () => {
                         activeClass="active"
                         to={item.link}
                         spy={true}
-                        smooth={true}
+                        smooth="easeInOutQuad"
                         offset={-70}
-                        duration={500}
+                        duration={1800}
                       >
                         {item.title}
                       </Link>
