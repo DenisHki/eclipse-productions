@@ -111,7 +111,16 @@ const Navbar = () => {
       }`}
     >
       <div>
-        <img src={logo} alt="logo" />
+        <Link
+          to="home"
+          spy={true}
+          smooth="easeInOutQuad"
+          offset={-96}
+          duration={1200}
+          className="cursor-pointer"
+        >
+          <img src={logo} alt="logo" title="Return to top" />
+        </Link>
       </div>
       <div className="flex items-center gap-6">
         <ul className="hidden mdl:inline-flex items-center gap-6 lg:gap-10">
