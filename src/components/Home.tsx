@@ -1,4 +1,5 @@
 import LeftBar from "./LeftBar";
+import hp1 from "../assets/images/hp1.jpg";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -24,6 +25,14 @@ const Home = () => {
           title={t.home.title}
           description={t.home.description}
           className="w-full lgl:w-1/2 flex flex-col gap-12 xs:gap-16 sm:gap-20"
+        />
+      </section>
+
+      <section className="w-full flex justify-center py-6 xs:py-8 sm:py-10">
+        <img
+          src={hp1}
+          alt="Eclipse Productions music studio interior in Helsinki showing professional recording equipment"
+          className="w-full max-w-7xl h-48 xs:h-64 sm:h-80 object-cover rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(225,189,143,0.5)]"
         />
       </section>
     </>
