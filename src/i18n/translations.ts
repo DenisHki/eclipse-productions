@@ -14,7 +14,7 @@ export const translations = {
     home: {
       subtitle: "WELCOME",
       title: "The Home of Your Music",
-      heroTagline: "Professional Recording Studio · Helsinki",
+      heroTagline: "Music Production Studio · Helsinki",
       description:
         "Discover your creativity in our premium equipped music studio. Equipped with pristine Genelec monitors and a powerful subwoofer, every nuance of your mix will come through with crystal clarity. A high performance audio interface and professional microphone setup ensure your recordings capture every detail, while our selection of MIDI controllers lets you bring your musical ideas to life.",
     },
@@ -283,7 +283,7 @@ export const translations = {
     home: {
       subtitle: "TERVETULOA",
       title: "Paikka musiikillesi",
-      heroTagline: "Ammattimainen äänitysstudio · Helsinki",
+      heroTagline: "Musiikkituotantostudio · Helsinki",
       description:
         "Studiomme on varustettu Genelec-monitorilla ja subwooferilla, jotka tarjoavat poikkeuksellisen tarkan äänikuvan miksauksellesi. Tehokas audioliitäntä ja ammattimaiset mikrofoniasetukset takaavat, että äänityksesi vangitsevat jokaisen yksityiskohdan. MIDI-ohjainten valikoiman ansiosta voit toteuttaa musiikilliset ideasi helposti.",
     },
