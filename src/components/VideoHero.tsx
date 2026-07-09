@@ -4,9 +4,8 @@ import hp1 from "../assets/images/hp1.jpg";
 import { homepage } from "../assets";
 import { useLanguage } from "../i18n/LanguageContext";
 
-
-
-const VIDEO_SRC = "https://denishki.github.io/eclipse-audio-host/studio_video.mp4";
+const VIDEO_SRC =
+  "https://denishki.github.io/eclipse-audio-host/studio_video.mp4";
 
 export default function VideoHero() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -25,6 +24,7 @@ export default function VideoHero() {
 
   return (
     <section
+      id="home"
       className="relative w-full h-[100vh] max-h-[900px] min-h-[500px] overflow-hidden bg-black"
       aria-label="Eclipse Productions studio"
     >
