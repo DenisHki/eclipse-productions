@@ -44,11 +44,7 @@ const Home = () => {
           {highlightCards.map(({ icon: Icon, data }, i) => (
             <div
               key={i}
-              className={`flex-1 flex flex-col items-center text-center gap-2.5 xs:gap-3 py-5 xs:py-6 mdl:py-0 px-4 mdl:px-6 ${
-                i > 0
-                  ? "border-t mdl:border-t-0 mdl:border-l border-[#e1bd8f]/15"
-                  : ""
-              }`}
+              className="flex-1 flex flex-col items-center text-center gap-2.5 xs:gap-3 py-5 xs:py-6 mdl:py-0 px-4 mdl:px-6"
             >
               <Icon className="text-[#e1bd8f] text-2xl xs:text-3xl" />
               <h3 className="text-base xs:text-lg font-semibold text-gray-100">
