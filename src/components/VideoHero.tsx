@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import hp1 from "../assets/images/hp1.jpg";
 import { homepage } from "../assets";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -33,20 +32,11 @@ export default function VideoHero() {
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
           src={VIDEO_SRC}
-          poster={hp1}
           autoPlay
           muted
           loop
           playsInline
           preload="metadata"
-        />
-      )}
-
-      {reduceMotion && (
-        <img
-          src={hp1}
-          alt="Eclipse Productions music studio interior in Helsinki"
-          className="absolute inset-0 w-full h-full object-cover"
         />
       )}
 
