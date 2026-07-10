@@ -50,7 +50,7 @@ const Home = () => {
               <h3 className="text-base xs:text-lg font-semibold text-gray-100">
                 {data.title}
               </h3>
-              <p className="text-sm text-gray-400 leading-relaxed max-w-[15rem] mdl:max-w-none">
+              <p className="text-lg text-gray-400 leading-relaxed max-w-[15rem] mdl:max-w-none">
                 {data.description}
               </p>
             </div>
