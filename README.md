@@ -1,4 +1,4 @@
-# 🎧 Eclipse Productions — Studio Booking Website
+# Eclipse Productions — Studio Booking Website
 
 A responsive booking and showcase website built for **Eclipse Productions Oy**, a music production studio in Helsinki, Finland. The site includes an online booking system, an audio player, a bilingual (EN/FI) interface, and SEO-optimized architecture.
 
