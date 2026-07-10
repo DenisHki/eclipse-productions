@@ -56,7 +56,7 @@ npm run dev
 
 ## Thesis documentation
 
-The full design and development process — requirements gathering, architecture decisions, and implementation — is documented in my Bachelor's thesis (Haaga-Helia, Business IT). [https://www.theseus.fi/handle/10024/919283]
+The full design and development process — requirements gathering, architecture decisions, and implementation — is documented in my Bachelor's thesis (Haaga-Helia, Business IT). https://www.theseus.fi/handle/10024/919283
 
 ## License & credits
 
