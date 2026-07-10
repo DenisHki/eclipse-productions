@@ -60,7 +60,7 @@ The full design and development process — requirements gathering, architecture
 
 ## License & credits
 
-Built by **Denis Chuvakov** as a freelance developer for Eclipse Productions Oy. Code shared publicly for portfolio purposes with the client's permission. Please don't reuse the branding, copy, or design assets — they belong to Eclipse Productions Oy.
+Built by **Denis Chuvakov** for Eclipse Productions Oy. Code shared publicly for portfolio purposes with the client's permission. Please don't reuse the branding, copy, or design assets — they belong to Eclipse Productions Oy.
 
 ## Contact
 
