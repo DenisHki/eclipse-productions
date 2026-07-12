@@ -1,89 +1,69 @@
-# 🎧 Eclipse Productions Oy Website
+# Eclipse Productions — Studio Booking Website
 
-A modern, responsive website for **Eclipse Productions Oy** — a professional music studio and production company located in Helsinki, Finland. The site features an integrated booking system, audio player, and comprehensive service showcase.
+A responsive booking and showcase website built for **Eclipse Productions Oy**, a music production studio in Helsinki, Finland. The site includes an online booking system, an audio player, a bilingual (EN/FI) interface, and SEO-optimized architecture.
 
-## 🎵 Features
+🔗 **Live site:** [eclipseproductions.fi](https://eclipseproductions.fi)
 
-### Core Functionality
-- Online Studio Booking System
-- Integrated Audio Player
-- Interactive Equipment Gallery
-- Contact Form
-- Google Maps Integration
-- Bilingual Interface
+![Eclipse Productions screenshot](./docs/screenshot-home.png)
 
-### Services Offered
-- **Studio Rental** – €40/2h | €60/4h | €100/8h
-- **Composition** – €300/track (full production)
-- **Track Production** – €500/track (instrumental)
-- **Recording Services** – €30/hour (min 3 hours)
-- **Mixing** – €250/track
-- **Mastering** – €100/track
+## About this project
 
-### Technical Features
-- **Multilingual Support** (i18n) - English & Finnish
-- **Responsive Design** - Mobile-first with Tailwind CSS
-- **Real-time Booking** - Firebase Firestore integration
-- **Email Notifications** - Automated booking confirmations (EmailJS)
-- **SEO Optimized** - Language-specific meta tags & sitemaps
-- **Performance Focused** - Fast loading, optimized assets
-- **Persistent Preferences** - Language choice saved locally
+This was a **freelance client project** — I designed, built, and deployed the site end-to-end for Eclipse Productions Oy. It also formed the basis of my **Bachelor's thesis project at Haaga-Helia University of Applied Sciences** (Business IT), where I documented the design and development process in detail.
 
-## 🛠 Tech Stack
+Shared publicly with the client's permission as a portfolio case study.
 
-### Frontend
-- React 18.2
-- TypeScript
-- Tailwind CSS
-- Vite
-- Framer Motion
+## Features
 
-### Internationalization (i18n)
-- **React Context API** - Language state management
-- **LocalStorage** - Persistent language preference
-- **Dynamic SEO** - Language-specific meta tags
-- **Localized URLs** - `/` (EN) and `/fi/` (FI)
+**Core functionality**
+- Online studio booking system with real-time availability (React Big Calendar + Firebase Firestore)
+- Integrated audio player and equipment gallery
+- Contact form with automated email confirmations (EmailJS)
+- Google Maps integration for studio location
+- Bilingual interface (English / Finnish) with persistent language preference
 
-### Libraries & Integrations
-- React Big Calendar
-- EmailJS
-- Firebase Firestore
-- Google Maps API
-- React Modern Audio Player
-- React Helmet Async
-- React Router DOM
-- React Icons
+**Services showcased on the site**
+- Studio rental, composition, track production, recording, mixing, and mastering — each with clear pricing tiers
 
-### Development Tools
-- ESLint
-- TypeScript ESLint
-- Autoprefixer
-- PostCSS
+## Tech stack
 
-## 🌍 Languages
+| Layer | Technologies |
+|---|---|
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS, Framer Motion |
+| Data / backend services | Firebase Firestore, EmailJS |
+| Routing & i18n | React Router DOM, React Context API, localized routes (`/` EN, `/fi/` FI) |
+| Maps & media | Google Maps API, React Modern Audio Player |
+| SEO | React Helmet Async, JSON-LD structured data (LocalBusiness schema), per-language meta tags, XML sitemap |
+| Tooling | ESLint, TypeScript ESLint, PostCSS, Autoprefixer |
 
-- **English** - Full website experience
-- **Finnish (Suomi)** - Complete Finnish translation
+## SEO & performance
 
-**Language Switcher**: Dropdown menu with persistent language preference
+- Structured data (JSON-LD) for rich search snippets
+- OpenGraph and Twitter Card meta tags
+- Language-specific canonical URLs and `html lang` attribute
+- XML sitemap for search engine indexing
 
-## 📈 SEO & Performance
-- **Structured Data (JSON-LD)** - Rich snippets for search engines
-- **Meta Tags** - OpenGraph & Twitter Cards
-- **Canonical URLs** - Language-specific canonical tags
-- **Sitemap** - XML sitemap for search engines
-- **Schema Markup** - LocalBusiness schema
-- **HTML Lang Attribute** - Dynamic language declaration
-- **Localized Meta** - Separate titles/descriptions per language
+## Running locally
 
-## 📝 License
-This project is **proprietary and confidential**. All rights reserved by Eclipse Productions Oy.
-**© 2024 Eclipse Productions Oy** - All Rights Reserved
+This project was built and deployed for a specific client environment, so a full local setup requires API keys that are not included in this repository (Firebase config, EmailJS keys, Google Maps API key).
 
-## 📞 Support
+```bash
+git clone https://github.com/DenisHki/eclipse-productions.git
+cd eclipse-productions
+npm install
+# add your own .env with Firebase / EmailJS / Google Maps keys
+npm run dev
+```
+
+## Thesis documentation
+
+The full design and development process — requirements gathering, architecture decisions, and implementation — is documented in my Bachelor's thesis (Haaga-Helia UAS, Business Information Technology). https://www.theseus.fi/handle/10024/919283
+
+## License & credits
+
+Built by **Denis Chuvakov** for Eclipse Productions Oy. Code shared publicly for portfolio purposes with the client's permission. Please don't reuse the branding, copy, or design assets — they belong to Eclipse Productions Oy.
+
+## Contact
+
 - 🌐 [eclipseproductions.fi](https://eclipseproductions.fi)
 - 📧 info@eclipseproductions.fi
 - 📸 Instagram: [@eclipse_productions_oy](https://instagram.com/eclipse_productions_oy)
-- 📍 Sörnäisten rantatie 25, 00520 Helsinki, Finland
-
-*Professional music production services in the heart of Helsinki*
