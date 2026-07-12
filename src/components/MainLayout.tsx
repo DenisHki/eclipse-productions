@@ -4,6 +4,7 @@ import Services from "./Services";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Music from "./Music";
+import VideoHero from "./VideoHero";
 import { Helmet } from "react-helmet-async";
 
 function MainLayout() {
@@ -60,7 +61,8 @@ function MainLayout() {
         </script>
       </Helmet>
       <Navbar />
-      <div className="px-4 pt-24">
+      <VideoHero />
+      <div className="px-4 pt-8">
         <div className="max-w-screen-xl mx-auto">
           <Home />
           <Services />

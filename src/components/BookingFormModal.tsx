@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { PriceBreakdown } from "../utils/priceUtils";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -125,6 +125,20 @@ export default function BookingFormModal({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsError, setShowTermsError] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
+
+  // This modal is only ever mounted while it's open (see BookingPage.tsx:
+  // `{selectedRange && showForm && <BookingFormModal .../>}`), so a plain
+  // mount/unmount effect is enough to lock the background page while it's
+  // visible and restore it the instant the modal closes for any reason
+  // (Cancel, submit, or unmount).
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
   const handleSubmit = () => {
     if (!termsAccepted) {

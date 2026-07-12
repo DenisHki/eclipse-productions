@@ -12,10 +12,33 @@ export const translations = {
 
     // Home Section
     home: {
-      subtitle: "WELCOME",
+      subtitle: "WHY ECLIPSE",
       title: "The Home of Your Music",
+      heroTagline: "Music Production Studio · Helsinki",
       description:
         "Discover your creativity in our premium equipped music studio. Equipped with pristine Genelec monitors and a powerful subwoofer, every nuance of your mix will come through with crystal clarity. A high performance audio interface and professional microphone setup ensure your recordings capture every detail, while our selection of MIDI controllers lets you bring your musical ideas to life.",
+      highlights: {
+        room: {
+          title: "Acoustically Treated Room",
+          description:
+            "A dedicated space tuned for accurate monitoring, so what you hear is what you get.",
+        },
+        guidance: {
+          title: "Hands-On Guidance",
+          description:
+            "Work directly with an experienced engineer throughout your session, start to finish.",
+        },
+        scheduling: {
+          title: "Flexible Scheduling",
+          description:
+            "Book the hours you need, whenever you need them, through our online booking system.",
+        },
+        allInOne: {
+          title: "All-in-One Production",
+          description:
+            "From composition to final master, every stage of your track handled under one roof.",
+        },
+      },
     },
 
     // Services Section
@@ -280,10 +303,33 @@ export const translations = {
 
     // Home Section
     home: {
-      subtitle: "TERVETULOA",
+      subtitle: "MIKSI ECLIPSE",
       title: "Paikka musiikillesi",
+      heroTagline: "Musiikkituotantostudio · Helsinki",
       description:
         "Studiomme on varustettu Genelec-monitorilla ja subwooferilla, jotka tarjoavat poikkeuksellisen tarkan äänikuvan miksauksellesi. Tehokas audioliitäntä ja ammattimaiset mikrofoniasetukset takaavat, että äänityksesi vangitsevat jokaisen yksityiskohdan. MIDI-ohjainten valikoiman ansiosta voit toteuttaa musiikilliset ideasi helposti.",
+      highlights: {
+        room: {
+          title: "Akustisesti Käsitelty Tila",
+          description:
+            "Tarkkaan viritetty tila luotettavaa monitorointia varten, jotta kuulet mixisi juuri sellaisena kuin se on.",
+        },
+        guidance: {
+          title: "Henkilökohtainen Ohjaus",
+          description:
+            "Työskentele suoraan kokeneen äänittäjän kanssa koko sessiosi ajan, alusta loppuun.",
+        },
+        scheduling: {
+          title: "Joustava Ajanvaraus",
+          description:
+            "Varaa juuri ne tunnit, jotka tarvitset, milloin tahansa, verkkovarausjärjestelmämme kautta.",
+        },
+        allInOne: {
+          title: "Kaikki Yhdessä Paikassa",
+          description:
+            "Sävellyksestä valmiiseen masterointiin, jokainen kappaleesi vaihe hoidetaan saman katon alla.",
+        },
+      },
     },
 
     // Services Section
