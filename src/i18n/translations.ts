@@ -21,22 +21,22 @@ export const translations = {
         room: {
           title: "Acoustically Treated Room",
           description:
-            "A dedicated space tuned for accurate monitoring, so what you hear is what you get.",
+            "Professionally treated space with calibrated monitoring, helping your mixes translate beyond the studio",
         },
         guidance: {
-          title: "Hands-On Guidance",
+          title: "Personal Guidance",
           description:
-            "Work directly with an experienced engineer throughout your session, start to finish.",
+            "Direct collaboration with an experienced producer from the first take to the final mix",
         },
         scheduling: {
           title: "Flexible Scheduling",
           description:
-            "Book the hours you need, whenever you need them, through our online booking system.",
+            "Reserve studio time that fits your schedule with our online booking system",
         },
         allInOne: {
           title: "All-in-One Production",
           description:
-            "From composition to final master, every stage of your track handled under one roof.",
+            "Complete music production, from songwriting and recording to mixing and mastering",
         },
       },
     },
@@ -312,22 +312,22 @@ export const translations = {
         room: {
           title: "Akustisesti Käsitelty Tila",
           description:
-            "Tarkkaan viritetty tila luotettavaa monitorointia varten, jotta kuulet mixisi juuri sellaisena kuin se on.",
+            "Ammattimaisesti akustoitu tila ja kalibroitu kuunteluympäristö auttavat varmistamaan, että miksauksesi toimivat myös studion ulkopuolella",
         },
         guidance: {
-          title: "Henkilökohtainen Ohjaus",
+          title: "Henkilökohtaista Ohjausta",
           description:
-            "Työskentele suoraan kokeneen äänittäjän kanssa koko sessiosi ajan, alusta loppuun.",
+            "Työskentele suoraan kokeneen tuottajan kanssa ensimmäisestä otosta valmiiseen miksaukseen",
         },
         scheduling: {
           title: "Joustava Ajanvaraus",
           description:
-            "Varaa juuri ne tunnit, jotka tarvitset, milloin tahansa, verkkovarausjärjestelmämme kautta.",
+            "Varaa studiolle sopiva aika helposti verkkovarausjärjestelmämme kautta",
         },
         allInOne: {
-          title: "Kaikki Yhdessä Paikassa",
+          title: "Kokonaisvaltainen Musiikkituotanto",
           description:
-            "Sävellyksestä valmiiseen masterointiin, jokainen kappaleesi vaihe hoidetaan saman katon alla.",
+            "Kokonaisvaltaista musiikkituotantoa laulunkirjoituksesta ja äänityksestä miksaukseen ja masterointiin",
         },
       },
     },
