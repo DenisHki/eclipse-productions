@@ -1,16 +1,23 @@
 export const playList = [
   {
+    name: "Vaikeet",
+    writer: "Luukku",
+    img: "https://denishki.github.io/eclipse-audio-host/vaikeet_original.png",
+    src: "https://denishki.github.io/eclipse-audio-host/vaikeet.wav",
+    id: 1,
+  },
+  {
     name: "FallingDeeper",
     writer: "Charkki X Reino Ray",
     img: "https://denishki.github.io/eclipse-audio-host/falling_deeper_original.png",
     src: "https://denishki.github.io/eclipse-audio-host/falling_deeper.wav",
-    id: 1,
+    id: 2,
   },
   {
     name: "Groundbreaker",
     writer: "Reino Ray",
     img: "https://denishki.github.io/eclipse-audio-host/groundbreaker_original.png",
     src: "https://denishki.github.io/eclipse-audio-host/groundbreaker_release.wav",
-    id: 2,
+    id: 3,
   },
 ];
