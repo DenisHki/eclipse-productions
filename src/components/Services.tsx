@@ -27,16 +27,18 @@ const Services = () => {
         <Title title={t.services.title} des={t.services.subtitle} />
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xs:gap-5 sm:gap-6 xl:gap-20">
           <Card
-            title={t.services.cards.composition.title}
-            des={t.services.cards.composition.description}
-            price={t.services.cards.composition.price}
-            icon={FaMusic}
-          />
-          <Card
-            title={t.services.cards.trackProduction.title}
-            des={t.services.cards.trackProduction.description}
-            price={t.services.cards.trackProduction.price}
-            icon={FaHeadphones}
+            title={t.services.cards.studioRent.title}
+            des={
+              <>
+                {t.services.cards.studioRent.description}{" "}
+                <span className="text-designColor font-semibold">
+                  {t.services.cards.studioRent.memberships}
+                </span>{" "}
+                {t.services.cards.studioRent.descriptionEnd}
+              </>
+            }
+            price={t.services.cards.studioRent.price}
+            icon={FaBuilding}
           />
           <Card
             title={t.services.cards.recording.title}
@@ -57,19 +59,20 @@ const Services = () => {
             icon={FaCompactDisc}
           />
           <Card
-            title={t.services.cards.studioRent.title}
-            des={
-              <>
-                {t.services.cards.studioRent.description}{" "}
-                <span className="text-designColor font-semibold">
-                  {t.services.cards.studioRent.memberships}
-                </span>{" "}
-                {t.services.cards.studioRent.descriptionEnd}
-              </>
-            }
-            price={t.services.cards.studioRent.price}
-            icon={FaBuilding}
+            title={t.services.cards.composition.title}
+            des={t.services.cards.composition.description}
+            price={t.services.cards.composition.price}
+            icon={FaMusic}
           />
+          <Card
+            title={t.services.cards.trackProduction.title}
+            des={t.services.cards.trackProduction.description}
+            price={t.services.cards.trackProduction.price}
+            icon={FaHeadphones}
+          />
+          
+          
+          
         </div>
         <div className="flex justify-center mt-28 mb-28">
           <PrimaryButton onClick={() => navigate("/booking")}>
