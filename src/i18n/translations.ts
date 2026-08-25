@@ -55,9 +55,9 @@ export const translations = {
           price: "€500 / track",
         },
         composition: {
-          title: "Composition",
+          title: "Recording Mixing & Mastering",
           description:
-            "Compose instrumental tracks collaboratively with the music producer — excluding recording, mixing, and mastering.",
+            "A complete package to take your music from recording to a finished, release-ready track. We handle the recording, mixing, and mastering.",
           price: "€300 / track",
         },
         recording: {
@@ -346,9 +346,9 @@ export const translations = {
           price: "€500 / kappale",
         },
         composition: {
-          title: "Sävellys",
+          title: "Äänittäminen Miksaus & Masterointi",
           description:
-            "Instrumentaaliraitojen sävellys yhdessä studion tuottajan kanssa — ilman äänitystä, miksausta ja masterointia.",
+            "Kattava paketti, joka vie musiikkisi äänityksestä valmiiksi julkaisua varten. Hoidamme äänityksen, miksauksen ja masteroinnin.",
           price: "€300 / kappale",
         },
         recording: {
