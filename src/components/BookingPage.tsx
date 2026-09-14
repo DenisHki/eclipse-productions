@@ -18,6 +18,7 @@ import { Helmet } from "react-helmet-async";
 import BookingInstructions from "./BookingInstructions";
 import { calculateTotalPrice, getPriceBreakdown } from "../utils/priceUtils";
 import { useLanguage } from "../i18n/LanguageContext";
+import StatusMessage from "./shared/StatusMessage";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -521,22 +522,7 @@ export default function BookingPage() {
           />
         )}
 
-        {message && (
-          <div
-            className={`mt-6 mx-auto max-w-md lg:max-w-none p-6 rounded-2xl border shadow-md text-center lg:text-left text-base lg:text-xl font-semibold ${
-              message.includes("⚠️") ||
-              message.toLowerCase().includes("overlap")
-                ? "bg-yellow-100 border-yellow-300 text-yellow-900"
-                : message.toLowerCase().includes("failed") ||
-                    message.toLowerCase().includes("error") ||
-                    message.includes("❌")
-                  ? "bg-red-100 border-red-300 text-red-900"
-                  : "bg-green-100 border-green-300 text-green-900"
-            }`}
-          >
-            {message}
-          </div>
-        )}
+        {message && <StatusMessage message={message} size="lg" />}
 
         <Calendar
           key={calendarKey}

@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { PriceBreakdown } from "../utils/priceUtils";
 import { useLanguage } from "../i18n/LanguageContext";
 import { MdClose } from "react-icons/md";
+import StatusMessage from "./shared/StatusMessage";
 
 interface BookingFormModalProps {
   selectedRange: { start: Date; end: Date };
@@ -26,7 +27,6 @@ interface BookingFormModalProps {
   setNeedsEngineer: (val: boolean) => void;
   message: string | null;
 }
-
 
 function TermsModal({ onClose }: { onClose: () => void }) {
   const { t } = useLanguage();
@@ -118,7 +118,6 @@ export default function BookingFormModal({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsError, setShowTermsError] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
-
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -325,21 +324,7 @@ export default function BookingFormModal({
               </div>
             </div>
 
-            {message && (
-              <div
-                className={`mt-4 p-3 rounded-lg border shadow-sm text-sm ${
-                  message.includes("⚠️") ||
-                  message.toLowerCase().includes("overlap")
-                    ? "bg-yellow-50 border-yellow-200 text-yellow-800"
-                    : message.toLowerCase().includes("failed") ||
-                        message.toLowerCase().includes("error")
-                      ? "bg-red-50 border-red-200 text-red-800"
-                      : "bg-green-50 border-green-200 text-green-800"
-                }`}
-              >
-                {message}
-              </div>
-            )}
+            {message && <StatusMessage message={message} />}
 
             <div className="flex justify-end gap-2 mt-6">
               <button
