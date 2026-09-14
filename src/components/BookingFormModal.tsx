@@ -10,7 +10,7 @@ interface BookingFormModalProps {
   totalPrice: number;
   priceBreakdown: PriceBreakdown;
   submitting: boolean;
-  onSubmit: () => void;
+  onSubmit: (termsAccepted: boolean) => void;
   onClose: () => void;
   firstName: string;
   lastName: string;
@@ -27,7 +27,6 @@ interface BookingFormModalProps {
   message: string | null;
 }
 
-// ─── Terms Modal ─────────────────────────────────────────────────────────────
 
 function TermsModal({ onClose }: { onClose: () => void }) {
   const { t } = useLanguage();
@@ -39,7 +38,6 @@ function TermsModal({ onClose }: { onClose: () => void }) {
         className="relative w-full max-w-2xl max-h-[85vh] rounded-2xl border border-[#e1bd8f]/30 bg-[#111] shadow-2xl flex flex-col"
         style={{ boxShadow: "0 0 40px rgba(225,189,143,0.15)" }}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#e1bd8f]/20 shrink-0">
           <h2 className="text-lg sm:text-xl font-bold text-[#e1bd8f] uppercase tracking-wider font-titleFont">
             {terms.modalTitle}
@@ -53,7 +51,6 @@ function TermsModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        {/* Scrollable content */}
         <div className="overflow-y-auto px-6 py-5 flex flex-col gap-6 scrollbar-hide">
           {terms.sections.map((section, i) => (
             <div key={i}>
@@ -74,13 +71,11 @@ function TermsModal({ onClose }: { onClose: () => void }) {
             </div>
           ))}
 
-          {/* Footer note */}
           <p className="text-[#e1bd8f]/80 text-sm italic border-t border-[#e1bd8f]/20 pt-4">
             {terms.footer}
           </p>
         </div>
 
-        {/* Close button */}
         <div className="px-6 py-4 border-t border-[#e1bd8f]/20 shrink-0">
           <button
             onClick={onClose}
@@ -93,8 +88,6 @@ function TermsModal({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
-
-// ─── Main Modal ───────────────────────────────────────────────────────────────
 
 export default function BookingFormModal({
   selectedRange,
@@ -126,11 +119,7 @@ export default function BookingFormModal({
   const [showTermsError, setShowTermsError] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
 
-  // This modal is only ever mounted while it's open (see BookingPage.tsx:
-  // `{selectedRange && showForm && <BookingFormModal .../>}`), so a plain
-  // mount/unmount effect is enough to lock the background page while it's
-  // visible and restore it the instant the modal closes for any reason
-  // (Cancel, submit, or unmount).
+
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -146,7 +135,7 @@ export default function BookingFormModal({
       return;
     }
     setShowTermsError(false);
-    onSubmit();
+    onSubmit(termsAccepted);
   };
 
   const handleTermsChange = (checked: boolean) => {
@@ -156,7 +145,6 @@ export default function BookingFormModal({
 
   return (
     <>
-      {/* Terms modal rendered above the booking modal */}
       {showTermsModal && (
         <TermsModal onClose={() => setShowTermsModal(false)} />
       )}
@@ -169,7 +157,6 @@ export default function BookingFormModal({
               {format(selectedRange.start, "dd.MM.yyyy")}
             </h3>
 
-            {/* Price summary */}
             <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
               <p className="text-gray-700 mb-2">
                 {t.booking.form.time}:{" "}
@@ -199,7 +186,6 @@ export default function BookingFormModal({
               </div>
             </div>
 
-            {/* Form fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="col-span-1">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -278,7 +264,6 @@ export default function BookingFormModal({
                 />
               </div>
 
-              {/* Recording engineer */}
               <div className="col-span-2">
                 <label className="flex items-start gap-3 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-colors">
                   <input
@@ -298,7 +283,6 @@ export default function BookingFormModal({
                 </label>
               </div>
 
-              {/* ── Terms & Conditions checkbox ── */}
               <div className="col-span-2">
                 <label
                   className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${
@@ -333,7 +317,6 @@ export default function BookingFormModal({
                   </div>
                 </label>
 
-                {/* Inline error under checkbox */}
                 {showTermsError && (
                   <p className="mt-1.5 text-xs text-red-600 font-medium pl-1">
                     {terms.mustAccept}
@@ -342,7 +325,6 @@ export default function BookingFormModal({
               </div>
             </div>
 
-            {/* Server message (booking success / overlap errors etc.) */}
             {message && (
               <div
                 className={`mt-4 p-3 rounded-lg border shadow-sm text-sm ${
@@ -359,7 +341,6 @@ export default function BookingFormModal({
               </div>
             )}
 
-            {/* Action buttons */}
             <div className="flex justify-end gap-2 mt-6">
               <button
                 onClick={onClose}

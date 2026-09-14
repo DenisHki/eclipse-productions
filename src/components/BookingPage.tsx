@@ -250,161 +250,165 @@ export default function BookingPage() {
     [events, currentView, t],
   );
 
-  const handleBook = useCallback(async () => {
-    if (!selectedRange) {
-      setMessage(t.booking.messages.selectRange);
-      return;
-    }
-
-    if (!firstName || !lastName || !phone || !email) {
-      setMessage(t.booking.messages.fillRequired);
-      return;
-    }
-
-    setSubmitting(true);
-    setMessage(null);
-
-    const startStr = formatDate(selectedRange.start, "HH:mm");
-    const endStr = formatDate(selectedRange.end, "HH:mm");
-    const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd");
-    const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(
-      ":",
-      "-",
-    )}`;
-
-    try {
-      const snap = await getDocs(collection(db, "bookings_public"));
-      const overlapping = snap.docs.some((d) => {
-        const data = d.data();
-        if (data.date !== dateStr) return false;
-
-        const [existingStartStr, existingEndStr] = data.time.split("-");
-        const existingStart = parse(
-          `${dateStr} ${existingStartStr}`,
-          "yyyy-MM-dd HH:mm",
-          new Date(),
-        ).getTime();
-        const existingEnd = parse(
-          `${dateStr} ${existingEndStr}`,
-          "yyyy-MM-dd HH:mm",
-          new Date(),
-        ).getTime();
-
-        const newStart = selectedRange.start.getTime();
-        const newEnd = selectedRange.end.getTime();
-
-        return newStart < existingEnd && newEnd > existingStart;
-      });
-
-      if (overlapping) {
-        throw new Error(t.booking.messages.overlap);
+  const handleBook = useCallback(
+    async (termsAccepted: boolean) => {
+      if (!selectedRange) {
+        setMessage(t.booking.messages.selectRange);
+        return;
       }
 
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_BOOKING_TEMPLATE_ID,
-        {
-          to_name: `${firstName} ${lastName}`,
-          to_email: email,
-          booking_date: dateStr,
-          booking_time: `${startStr} - ${endStr}`,
-          hours: totalHours,
-          price: totalPrice,
-          base_price: priceBreakdown.basePrice,
-          engineer_fee: needsEngineer ? priceBreakdown.engineerFee : 0,
-          needs_engineer: needsEngineer ? "Yes" : "No",
-          phone,
-          notes,
-          current_year: new Date().getFullYear(),
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      );
+      if (!firstName || !lastName || !phone || !email) {
+        setMessage(t.booking.messages.fillRequired);
+        return;
+      }
 
-      await runTransaction(db, async (tx) => {
-        // Check the PUBLIC collection — this is a "lock"
-        // If this document already exists, the slot is taken
-        const publicRef = doc(db, "bookings_public", bookingId);
-        const privateRef = doc(db, "bookings_private", bookingId);
+      if (!termsAccepted) {
+        setMessage(t.booking.messages.fillRequired);
+        return;
+      }
 
-        const docSnapshot = await tx.get(publicRef);
+      setSubmitting(true);
+      setMessage(null);
 
-        if (docSnapshot.exists()) {
+      const startStr = formatDate(selectedRange.start, "HH:mm");
+      const endStr = formatDate(selectedRange.end, "HH:mm");
+      const dateStr = formatDate(selectedRange.start, "yyyy-MM-dd");
+      const bookingId = `${dateStr}_${startStr.replace(":", "-")}_${endStr.replace(
+        ":",
+        "-",
+      )}`;
+
+      try {
+        const snap = await getDocs(collection(db, "bookings_public"));
+        const overlapping = snap.docs.some((d) => {
+          const data = d.data();
+          if (data.date !== dateStr) return false;
+
+          const [existingStartStr, existingEndStr] = data.time.split("-");
+          const existingStart = parse(
+            `${dateStr} ${existingStartStr}`,
+            "yyyy-MM-dd HH:mm",
+            new Date(),
+          ).getTime();
+          const existingEnd = parse(
+            `${dateStr} ${existingEndStr}`,
+            "yyyy-MM-dd HH:mm",
+            new Date(),
+          ).getTime();
+
+          const newStart = selectedRange.start.getTime();
+          const newEnd = selectedRange.end.getTime();
+
+          return newStart < existingEnd && newEnd > existingStart;
+        });
+
+        if (overlapping) {
           throw new Error(t.booking.messages.overlap);
         }
 
-        // Write SAFE data to the public collection
-        // This is what the calendar reads — no personal data here
-        tx.set(publicRef, {
-          date: dateStr,
-          time: `${startStr}-${endStr}`,
-          hours: totalHours,
-          price: totalPrice,
-          createdAt: serverTimestamp(),
+        await emailjs.send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_BOOKING_TEMPLATE_ID,
+          {
+            to_name: `${firstName} ${lastName}`,
+            to_email: email,
+            booking_date: dateStr,
+            booking_time: `${startStr} - ${endStr}`,
+            hours: totalHours,
+            price: totalPrice,
+            base_price: priceBreakdown.basePrice,
+            engineer_fee: needsEngineer ? priceBreakdown.engineerFee : 0,
+            needs_engineer: needsEngineer ? "Yes" : "No",
+            phone,
+            notes,
+            current_year: new Date().getFullYear(),
+          },
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+        );
+
+        await runTransaction(db, async (tx) => {
+          const publicRef = doc(db, "bookings_public", bookingId);
+          const privateRef = doc(db, "bookings_private", bookingId);
+
+          const docSnapshot = await tx.get(publicRef);
+
+          if (docSnapshot.exists()) {
+            throw new Error(t.booking.messages.overlap);
+          }
+
+          tx.set(publicRef, {
+            date: dateStr,
+            time: `${startStr}-${endStr}`,
+            hours: totalHours,
+            price: totalPrice,
+            createdAt: serverTimestamp(),
+          });
+
+          tx.set(privateRef, {
+            date: dateStr,
+            time: `${startStr}-${endStr}`,
+            hours: totalHours,
+            price: totalPrice,
+            needsEngineer,
+            engineerFee: needsEngineer ? priceBreakdown.engineerFee : 0,
+            basePrice: priceBreakdown.basePrice,
+            firstName,
+            lastName,
+            phone,
+            email,
+            notes,
+            termsAccepted: true,
+            termsAcceptedAt: serverTimestamp(),
+            createdAt: serverTimestamp(),
+          });
         });
 
-        // Write PERSONAL data to the private collection
-        // This will be locked down in Firebase Security Rules
-        tx.set(privateRef, {
-          date: dateStr,
-          time: `${startStr}-${endStr}`,
-          hours: totalHours,
-          price: totalPrice,
-          needsEngineer,
-          engineerFee: needsEngineer ? priceBreakdown.engineerFee : 0,
-          basePrice: priceBreakdown.basePrice,
-          firstName,
-          lastName,
-          phone,
-          email,
-          notes,
-          createdAt: serverTimestamp(),
-        });
-      });
+        setMessage(t.booking.messages.confirmed);
 
-      setMessage(t.booking.messages.confirmed);
+        const currentSelectedRange = selectedRange;
 
-      const currentSelectedRange = selectedRange;
+        setSelectedRange(null);
+        setFirstName("");
+        setLastName("");
+        setPhone("");
+        setEmail("");
+        setNotes("");
+        setNeedsEngineer(false);
+        setShowForm(false);
 
-      setSelectedRange(null);
-      setFirstName("");
-      setLastName("");
-      setPhone("");
-      setEmail("");
-      setNotes("");
-      setNeedsEngineer(false);
-      setShowForm(false);
+        const newEvent: BookingEvent = {
+          id: bookingId,
+          title: "Booked",
+          start: currentSelectedRange.start,
+          end: currentSelectedRange.end,
+        };
+        setEvents((prev) => [...prev, newEvent]);
+      } catch (err: unknown) {
+        console.error("Booking error:", err);
 
-      const newEvent: BookingEvent = {
-        id: bookingId,
-        title: "Booked",
-        start: currentSelectedRange.start,
-        end: currentSelectedRange.end,
-      };
-      setEvents((prev) => [...prev, newEvent]);
-    } catch (err: unknown) {
-      console.error("Booking error:", err);
-
-      if (err instanceof Error) {
-        setMessage(`❌ ${err.message}`);
-      } else {
-        setMessage(t.booking.messages.failed);
+        if (err instanceof Error) {
+          setMessage(`❌ ${err.message}`);
+        } else {
+          setMessage(t.booking.messages.failed);
+        }
+      } finally {
+        setSubmitting(false);
       }
-    } finally {
-      setSubmitting(false);
-    }
-  }, [
-    selectedRange,
-    firstName,
-    lastName,
-    phone,
-    email,
-    notes,
-    totalHours,
-    totalPrice,
-    needsEngineer,
-    priceBreakdown,
-    t,
-  ]);
+    },
+    [
+      selectedRange,
+      firstName,
+      lastName,
+      phone,
+      email,
+      notes,
+      totalHours,
+      totalPrice,
+      needsEngineer,
+      priceBreakdown,
+      t,
+    ],
+  );
 
   return (
     <section className="w-full pb-12 bg-gray-50">
