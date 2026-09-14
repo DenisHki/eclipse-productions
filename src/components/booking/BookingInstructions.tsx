@@ -1,5 +1,5 @@
-import { step1, step2, step3 } from "../assets/index.ts";
-import { useLanguage } from "../i18n/LanguageContext";
+import { step1, step2, step3 } from "../../assets/index.ts";
+import { useLanguage } from "../../i18n/LanguageContext.tsx";
 
 interface Step {
   img?: string;

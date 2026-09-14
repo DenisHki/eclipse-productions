@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { PriceBreakdown } from "../utils/priceUtils";
-import { useLanguage } from "../i18n/LanguageContext";
-import { BookingFormData } from "../types/booking";
-import StatusMessage from "./shared/StatusMessage";
-import TermsModal from "./booking/TermsModal";
+import { PriceBreakdown } from "../../utils/priceUtils";
+import { useLanguage } from "../../i18n/LanguageContext";
+import { BookingFormData } from "../../types/booking";
+import StatusMessage from "../shared/StatusMessage";
+import TermsModal from "./TermsModal";
 
 interface BookingFormModalProps {
   selectedRange: { start: Date; end: Date };
