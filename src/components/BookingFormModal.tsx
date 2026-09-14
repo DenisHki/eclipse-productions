@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { PriceBreakdown } from "../utils/priceUtils";
 import { useLanguage } from "../i18n/LanguageContext";
+import { BookingFormData } from "../types/booking";
 import StatusMessage from "./shared/StatusMessage";
 import TermsModal from "./booking/TermsModal";
 
@@ -11,20 +12,10 @@ interface BookingFormModalProps {
   totalPrice: number;
   priceBreakdown: PriceBreakdown;
   submitting: boolean;
+  formData: BookingFormData;
+  setFormData: (data: BookingFormData) => void;
   onSubmit: (termsAccepted: boolean) => void;
   onClose: () => void;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  notes: string;
-  needsEngineer: boolean;
-  setFirstName: (val: string) => void;
-  setLastName: (val: string) => void;
-  setPhone: (val: string) => void;
-  setEmail: (val: string) => void;
-  setNotes: (val: string) => void;
-  setNeedsEngineer: (val: boolean) => void;
   message: string | null;
 }
 
@@ -34,20 +25,10 @@ export default function BookingFormModal({
   totalPrice,
   priceBreakdown,
   submitting,
+  formData,
+  setFormData,
   onSubmit,
   onClose,
-  firstName,
-  lastName,
-  phone,
-  email,
-  notes,
-  needsEngineer,
-  setFirstName,
-  setLastName,
-  setPhone,
-  setEmail,
-  setNotes,
-  setNeedsEngineer,
   message,
 }: BookingFormModalProps) {
   const formatTime = (date: Date) => format(date, "HH:mm");
@@ -57,6 +38,11 @@ export default function BookingFormModal({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsError, setShowTermsError] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
+
+  const updateField = <K extends keyof BookingFormData>(
+    key: K,
+    value: BookingFormData[K],
+  ) => setFormData({ ...formData, [key]: value });
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -111,7 +97,7 @@ export default function BookingFormModal({
                   {t.booking.form.studioRental}:{" "}
                   <strong>{priceBreakdown.basePrice} €</strong>
                 </p>
-                {needsEngineer && (
+                {formData.needsEngineer && (
                   <p className="text-gray-700 text-sm mb-1">
                     {t.booking.form.recordingEngineer}:{" "}
                     <strong>{priceBreakdown.engineerFee} €</strong>
@@ -133,8 +119,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <input
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={formData.firstName}
+                  onChange={(e) => updateField("firstName", e.target.value)}
                   placeholder={t.booking.form.firstName}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -148,8 +134,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <input
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  value={formData.lastName}
+                  onChange={(e) => updateField("lastName", e.target.value)}
                   placeholder={t.booking.form.lastName}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -163,8 +149,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={formData.phone}
+                  onChange={(e) => updateField("phone", e.target.value)}
                   placeholder={t.booking.form.phone}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -179,8 +165,8 @@ export default function BookingFormModal({
                 </label>
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => updateField("email", e.target.value)}
                   placeholder={t.booking.form.email}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -194,8 +180,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
+                  value={formData.notes}
+                  onChange={(e) => updateField("notes", e.target.value)}
                   placeholder={t.booking.form.notes}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={3}
@@ -206,8 +192,10 @@ export default function BookingFormModal({
                 <label className="flex items-start gap-3 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-colors">
                   <input
                     type="checkbox"
-                    checked={needsEngineer}
-                    onChange={(e) => setNeedsEngineer(e.target.checked)}
+                    checked={formData.needsEngineer}
+                    onChange={(e) =>
+                      updateField("needsEngineer", e.target.checked)
+                    }
                     className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                   />
                   <div className="flex-1">

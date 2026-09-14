@@ -30,18 +30,8 @@ export default function BookingPage() {
     setSelectedRange,
     showForm,
     setShowForm,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    phone,
-    setPhone,
-    email,
-    setEmail,
-    notes,
-    setNotes,
-    needsEngineer,
-    setNeedsEngineer,
+    formData,
+    setFormData,
     submitting,
     message,
     totalHours,
@@ -51,9 +41,6 @@ export default function BookingPage() {
     handleBook,
   } = useBookings();
 
-  // Calendar display state — this is purely about how the <Calendar> widget
-  // looks and navigates, not about booking data, so it stays in this
-  // component rather than the hook.
   const [currentView, setCurrentView] = useState<View>("day");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [calendarKey, setCalendarKey] = useState(0);
@@ -223,24 +210,13 @@ export default function BookingPage() {
             totalPrice={totalPrice}
             priceBreakdown={priceBreakdown}
             submitting={submitting}
+            formData={formData}
+            setFormData={setFormData}
             onSubmit={handleBook}
             onClose={() => {
               setShowForm(false);
               setSelectedRange(null);
-              setNeedsEngineer(false);
             }}
-            firstName={firstName}
-            lastName={lastName}
-            phone={phone}
-            email={email}
-            notes={notes}
-            needsEngineer={needsEngineer}
-            setFirstName={setFirstName}
-            setLastName={setLastName}
-            setPhone={setPhone}
-            setEmail={setEmail}
-            setNotes={setNotes}
-            setNeedsEngineer={setNeedsEngineer}
             message={message}
           />
         )}

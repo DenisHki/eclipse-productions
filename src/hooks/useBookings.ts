@@ -12,13 +12,12 @@ import {
 } from "firebase/firestore";
 import { useLanguage } from "../i18n/LanguageContext";
 import { calculateTotalPrice, getPriceBreakdown } from "../utils/priceUtils";
-import { BookingEvent } from "../types/booking";
+import {
+  BookingEvent,
+  BookingFormData,
+  emptyBookingFormData,
+} from "../types/booking";
 
-/**
- * Owns everything related to the booking *domain*: reading/writing bookings
- * in Firestore, slot selection + overlap checks, and the submission flow.
- * BookingPage stays responsible only for rendering the calendar UI around it.
- */
 export function useBookings() {
   const { t } = useLanguage();
 
@@ -28,12 +27,8 @@ export function useBookings() {
     end: Date;
   } | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [needsEngineer, setNeedsEngineer] = useState(false);
+  const [formData, setFormData] =
+    useState<BookingFormData>(emptyBookingFormData);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -49,23 +44,14 @@ export function useBookings() {
   }, [selectedRange]);
 
   const priceBreakdown = useMemo(
-    () => getPriceBreakdown(totalHours, needsEngineer),
-    [totalHours, needsEngineer],
+    () => getPriceBreakdown(totalHours, formData.needsEngineer),
+    [totalHours, formData.needsEngineer],
   );
 
   const totalPrice = useMemo(
-    () => calculateTotalPrice(totalHours, needsEngineer),
-    [totalHours, needsEngineer],
+    () => calculateTotalPrice(totalHours, formData.needsEngineer),
+    [totalHours, formData.needsEngineer],
   );
-
-  const resetUserForm = () => {
-    setFirstName("");
-    setLastName("");
-    setPhone("");
-    setEmail("");
-    setNotes("");
-    setNeedsEngineer(false);
-  };
 
   useEffect(() => {
     if (message) {
@@ -76,7 +62,7 @@ export function useBookings() {
 
   useEffect(() => {
     if (showForm) {
-      resetUserForm();
+      setFormData(emptyBookingFormData);
     }
   }, [showForm]);
 
@@ -155,7 +141,7 @@ export function useBookings() {
         return;
       }
 
-      setNeedsEngineer(false);
+      setFormData((prev) => ({ ...prev, needsEngineer: false }));
       setMessage(null);
       setSelectedRange({ start: slotInfo.start, end: slotInfo.end });
       setShowForm(false);
@@ -170,16 +156,15 @@ export function useBookings() {
         return;
       }
 
+      const { firstName, lastName, phone, email, notes, needsEngineer } =
+        formData;
+
       if (!firstName || !lastName || !phone || !email) {
         setMessage(t.booking.messages.fillRequired);
         return;
       }
 
       if (!termsAccepted) {
-        // NOTE: kept exactly as it was in BookingPage.tsx — this reuses the
-        // "fill required fields" message rather than terms.mustAccept.
-        // Flagging this as a likely copy-paste slip; not changing it here
-        // since this step is a pure move, not a behavior fix.
         setMessage(t.booking.messages.fillRequired);
         return;
       }
@@ -285,12 +270,7 @@ export function useBookings() {
         const currentSelectedRange = selectedRange;
 
         setSelectedRange(null);
-        setFirstName("");
-        setLastName("");
-        setPhone("");
-        setEmail("");
-        setNotes("");
-        setNeedsEngineer(false);
+        setFormData(emptyBookingFormData);
         setShowForm(false);
 
         const newEvent: BookingEvent = {
@@ -312,19 +292,7 @@ export function useBookings() {
         setSubmitting(false);
       }
     },
-    [
-      selectedRange,
-      firstName,
-      lastName,
-      phone,
-      email,
-      notes,
-      totalHours,
-      totalPrice,
-      needsEngineer,
-      priceBreakdown,
-      t,
-    ],
+    [selectedRange, formData, totalHours, totalPrice, priceBreakdown, t],
   );
 
   return {
@@ -333,18 +301,8 @@ export function useBookings() {
     setSelectedRange,
     showForm,
     setShowForm,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    phone,
-    setPhone,
-    email,
-    setEmail,
-    notes,
-    setNotes,
-    needsEngineer,
-    setNeedsEngineer,
+    formData,
+    setFormData,
     submitting,
     message,
     totalHours,
