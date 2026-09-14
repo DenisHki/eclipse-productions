@@ -625,3 +625,6 @@ export const translations = {
 
 export type Language = "en" | "fi";
 export type TranslationKeys = typeof translations.en;
+
+const _fiMatchesEnShape: TranslationKeys = translations.fi;
+void _fiMatchesEnShape;

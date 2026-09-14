@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { PriceBreakdown } from "../utils/priceUtils";
-import { useLanguage } from "../i18n/LanguageContext";
-import { MdClose } from "react-icons/md";
+import { PriceBreakdown } from "../../utils/priceUtils";
+import { useLanguage } from "../../i18n/LanguageContext";
+import { BookingFormData } from "../../types/booking";
+import StatusMessage from "../shared/StatusMessage";
+import TermsModal from "./TermsModal";
 
 interface BookingFormModalProps {
   selectedRange: { start: Date; end: Date };
@@ -10,83 +12,11 @@ interface BookingFormModalProps {
   totalPrice: number;
   priceBreakdown: PriceBreakdown;
   submitting: boolean;
+  formData: BookingFormData;
+  setFormData: (data: BookingFormData) => void;
   onSubmit: (termsAccepted: boolean) => void;
   onClose: () => void;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  notes: string;
-  needsEngineer: boolean;
-  setFirstName: (val: string) => void;
-  setLastName: (val: string) => void;
-  setPhone: (val: string) => void;
-  setEmail: (val: string) => void;
-  setNotes: (val: string) => void;
-  setNeedsEngineer: (val: boolean) => void;
   message: string | null;
-}
-
-
-function TermsModal({ onClose }: { onClose: () => void }) {
-  const { t } = useLanguage();
-  const terms = t.booking.terms;
-
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 px-4">
-      <div
-        className="relative w-full max-w-2xl max-h-[85vh] rounded-2xl border border-[#e1bd8f]/30 bg-[#111] shadow-2xl flex flex-col"
-        style={{ boxShadow: "0 0 40px rgba(225,189,143,0.15)" }}
-      >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#e1bd8f]/20 shrink-0">
-          <h2 className="text-lg sm:text-xl font-bold text-[#e1bd8f] uppercase tracking-wider font-titleFont">
-            {terms.modalTitle}
-          </h2>
-          <button
-            onClick={onClose}
-            aria-label="Close terms"
-            className="text-gray-400 hover:text-[#e1bd8f] transition-colors duration-200 text-2xl"
-          >
-            <MdClose />
-          </button>
-        </div>
-
-        <div className="overflow-y-auto px-6 py-5 flex flex-col gap-6 scrollbar-hide">
-          {terms.sections.map((section, i) => (
-            <div key={i}>
-              <h3 className="text-[#e1bd8f] font-semibold text-base uppercase tracking-wide mb-2 font-titleFont">
-                {section.title}
-              </h3>
-              <ul className="flex flex-col gap-1.5">
-                {section.items.map((item, j) => (
-                  <li
-                    key={j}
-                    className="flex items-start gap-2 text-gray-300 text-sm leading-relaxed"
-                  >
-                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#e1bd8f]/60 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          <p className="text-[#e1bd8f]/80 text-sm italic border-t border-[#e1bd8f]/20 pt-4">
-            {terms.footer}
-          </p>
-        </div>
-
-        <div className="px-6 py-4 border-t border-[#e1bd8f]/20 shrink-0">
-          <button
-            onClick={onClose}
-            className="w-full py-2.5 rounded-full bg-[#e1bd8f] text-black font-bold text-sm uppercase tracking-wider hover:bg-[#d4aa7a] transition-colors duration-200"
-          >
-            {terms.close}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export default function BookingFormModal({
@@ -95,20 +25,10 @@ export default function BookingFormModal({
   totalPrice,
   priceBreakdown,
   submitting,
+  formData,
+  setFormData,
   onSubmit,
   onClose,
-  firstName,
-  lastName,
-  phone,
-  email,
-  notes,
-  needsEngineer,
-  setFirstName,
-  setLastName,
-  setPhone,
-  setEmail,
-  setNotes,
-  setNeedsEngineer,
   message,
 }: BookingFormModalProps) {
   const formatTime = (date: Date) => format(date, "HH:mm");
@@ -119,6 +39,10 @@ export default function BookingFormModal({
   const [showTermsError, setShowTermsError] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
 
+  const updateField = <K extends keyof BookingFormData>(
+    key: K,
+    value: BookingFormData[K],
+  ) => setFormData({ ...formData, [key]: value });
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -173,7 +97,7 @@ export default function BookingFormModal({
                   {t.booking.form.studioRental}:{" "}
                   <strong>{priceBreakdown.basePrice} €</strong>
                 </p>
-                {needsEngineer && (
+                {formData.needsEngineer && (
                   <p className="text-gray-700 text-sm mb-1">
                     {t.booking.form.recordingEngineer}:{" "}
                     <strong>{priceBreakdown.engineerFee} €</strong>
@@ -195,8 +119,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <input
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={formData.firstName}
+                  onChange={(e) => updateField("firstName", e.target.value)}
                   placeholder={t.booking.form.firstName}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -210,8 +134,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <input
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  value={formData.lastName}
+                  onChange={(e) => updateField("lastName", e.target.value)}
                   placeholder={t.booking.form.lastName}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -225,8 +149,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={formData.phone}
+                  onChange={(e) => updateField("phone", e.target.value)}
                   placeholder={t.booking.form.phone}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -241,8 +165,8 @@ export default function BookingFormModal({
                 </label>
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => updateField("email", e.target.value)}
                   placeholder={t.booking.form.email}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -256,8 +180,8 @@ export default function BookingFormModal({
                   </span>
                 </label>
                 <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
+                  value={formData.notes}
+                  onChange={(e) => updateField("notes", e.target.value)}
                   placeholder={t.booking.form.notes}
                   className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={3}
@@ -268,8 +192,10 @@ export default function BookingFormModal({
                 <label className="flex items-start gap-3 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-colors">
                   <input
                     type="checkbox"
-                    checked={needsEngineer}
-                    onChange={(e) => setNeedsEngineer(e.target.checked)}
+                    checked={formData.needsEngineer}
+                    onChange={(e) =>
+                      updateField("needsEngineer", e.target.checked)
+                    }
                     className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                   />
                   <div className="flex-1">
@@ -325,21 +251,7 @@ export default function BookingFormModal({
               </div>
             </div>
 
-            {message && (
-              <div
-                className={`mt-4 p-3 rounded-lg border shadow-sm text-sm ${
-                  message.includes("⚠️") ||
-                  message.toLowerCase().includes("overlap")
-                    ? "bg-yellow-50 border-yellow-200 text-yellow-800"
-                    : message.toLowerCase().includes("failed") ||
-                        message.toLowerCase().includes("error")
-                      ? "bg-red-50 border-red-200 text-red-800"
-                      : "bg-green-50 border-green-200 text-green-800"
-                }`}
-              >
-                {message}
-              </div>
-            )}
+            {message && <StatusMessage message={message} />}
 
             <div className="flex justify-end gap-2 mt-6">
               <button
