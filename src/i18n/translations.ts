@@ -64,7 +64,7 @@ export const translations = {
           title: "Recording",
           description:
             "Capture your sound with high-quality recording services in a professional studio environment. Recording of the vocals and podcasts with recording engineer.",
-          price: "€30 / hour (min. 3 hrs)",
+          price: "€30 / hour (min. 2 hrs)",
         },
         mixing: {
           title: "Mixing",
@@ -86,6 +86,26 @@ export const translations = {
           descriptionEnd: "please contact us by email.",
           price: "1h - 30€/h | 3h - 25€/h | 6h - 20€/h",
         },
+      },
+      membership: {
+        subtitle: "MEMBERSHIP",
+        title: "Studio Membership",
+        plans: {
+          twoDays: {
+            label: "2 Days / Week",
+            price: "€300",
+            period: "+ VAT/month",
+          },
+          threeDays: {
+            label: "3 Days / Week",
+            price: "€400",
+            period: "+ VAT/month",
+          },
+        },
+        features: [
+          "Private access to a fully equipped recording studio up to 8 hours/day",
+          "Perfect for artists, producers and engineers looking for a consistent studio",
+        ],
       },
     },
 
@@ -355,7 +375,7 @@ export const translations = {
           title: "Äänittäminen",
           description:
             "Äänittäminen korkealaatuisessa studioympäristössä ammattitaitoisen äänittäjän kanssa — laulujen ja podcastien äänitys.",
-          price: "€30 / tunti (min. 3 tuntia)",
+          price: "€30 / tunti (min. 2 tuntia)",
         },
         mixing: {
           title: "Miksaus",
@@ -377,6 +397,26 @@ export const translations = {
           descriptionEnd: "ota yhteyttä sähköpostitse.",
           price: "1h - 30€/h | 3h - 25€/h | 6h - 20€/h",
         },
+      },
+      membership: {
+        subtitle: "JÄSENYYS",
+        title: "Studion Jäsenyys",
+        plans: {
+          twoDays: {
+            label: "2 Päivää / Viikko",
+            price: "300 €",
+            period: "+ ALV/kk",
+          },
+          threeDays: {
+            label: "3 Päivää / Viikko",
+            price: "400 €",
+            period: "+ ALV/kk",
+          },
+        },
+        features: [
+          "Yksityinen pääsy täysin varusteltuun äänitysstudioon jopa 8 tunniksi päivässä",
+          "Täydellinen artisteille, tuottajille ja äänittäjille, jotka etsivät säännöllistä studiopaikkaa",
+        ],
       },
     },
 

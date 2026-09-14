@@ -13,6 +13,7 @@ import {
   FaBuilding,
 } from "react-icons/fa";
 import { useLanguage } from "../i18n/LanguageContext";
+import StudioMembership from "./StudioMembership";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -70,10 +71,9 @@ const Services = () => {
             price={t.services.cards.trackProduction.price}
             icon={FaHeadphones}
           />
-          
-          
-          
         </div>
+
+        <StudioMembership />
         <div className="flex justify-center mt-28 mb-28">
           <PrimaryButton onClick={() => navigate("/booking")}>
             {t.services.bookButton}
