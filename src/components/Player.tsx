@@ -1,6 +1,83 @@
-import AudioPlayer from "react-modern-audio-player";
+import AudioPlayer, {
+  audioPlayerStateContext,
+  audioPlayerDispatchContext,
+} from "react-modern-audio-player";
 import { playList } from "../playList";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useLanguage } from "../i18n/LanguageContext";
+import { MdPlayArrow, MdPause } from "react-icons/md";
+
+function TrackList() {
+  const [isOpen, setIsOpen] = useState(true); 
+  const audioPlayerState = useContext(audioPlayerStateContext);
+  const dispatch = useContext(audioPlayerDispatchContext);
+  const { t } = useLanguage();
+
+  if (!audioPlayerState || !dispatch) return null;
+
+const { playList: currentPlayList, curIdx, curAudioState } =
+    audioPlayerState;
+
+  const playTrack = (index: number, id: number) => {
+ 
+    if (index === curIdx) {
+      dispatch({
+        type: "CHANGE_PLAYING_STATE",
+        state: !curAudioState.isPlaying,
+      });
+      return;
+    }
+
+    dispatch({
+      type: "SET_CURRENT_AUDIO",
+      currentIndex: index,
+      currentAudioId: id,
+    });
+    
+    setTimeout(() => {
+      dispatch({
+        type: "CHANGE_PLAYING_STATE",
+        state: true,
+      });
+    }, 0);
+  };
+
+  return (
+    <div className="track-list-wrapper">
+      <button
+        type="button"
+        className="track-list-toggle"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+      >
+        {isOpen ? t.music.hideTracklist : t.music.showTracklist}
+      </button>
+
+      {isOpen && (
+        <ul className="track-list-items">
+          {currentPlayList.map((track, index) => (
+            <li
+              key={track.id}
+              className={`track-list-item${index === curIdx ? " active" : ""}`}
+              onClick={() => playTrack(index, track.id)}
+            >
+              <span className="track-list-item-icon">
+                {index === curIdx && curAudioState.isPlaying ? (
+                  <MdPause />
+                ) : (
+                  <MdPlayArrow />
+                )}
+              </span>
+              <span className="track-list-item-text">
+                {track.writer} - {track.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export default function Player() {
   const [isMobile, setIsMobile] = useState(false);
@@ -63,7 +140,7 @@ export default function Player() {
             trackTime: true,
             prevNnext: true,
             trackInfo: false,
-            playList: isMobile ? "sortable" : "unSortable",
+            playList: false,
           }}
           placement={{
             player: "static",
@@ -73,7 +150,11 @@ export default function Player() {
             colorScheme: "dark",
             width: "100%",
           }}
-        />
+        >
+          <AudioPlayer.CustomComponent id="track-list">
+            <TrackList />
+          </AudioPlayer.CustomComponent>
+        </AudioPlayer>
       </div>
     );
   }
@@ -85,6 +166,7 @@ export default function Player() {
         activeUI={{
           all: true,
           progress: "waveform" as const,
+          playList: false,
         }}
         placement={{
           player: "static",
@@ -94,7 +176,11 @@ export default function Player() {
           colorScheme: "dark",
           width: "100%",
         }}
-      />
+      >
+        <AudioPlayer.CustomComponent id="track-list">
+          <TrackList />
+        </AudioPlayer.CustomComponent>
+      </AudioPlayer>
     </div>
   );
 }
