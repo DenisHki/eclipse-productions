@@ -113,6 +113,8 @@ export const translations = {
     music: {
       title: "Music",
       subtitle: "Our Projects",
+      showTracklist: "Show tracklist ▼",
+      hideTracklist: "Hide tracklist ▲",
     },
 
     // Contact Section
@@ -424,6 +426,8 @@ export const translations = {
     music: {
       title: "Musiikki",
       subtitle: "Projektimme",
+      showTracklist: "Näytä kappalelista ▼",
+      hideTracklist: "Piilota kappalelista ▲",
     },
 
     // Contact Section

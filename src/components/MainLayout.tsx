@@ -23,7 +23,6 @@ function MainLayout() {
         />
         <meta name="robots" content="index, follow" />
 
-        {/* Open Graph for social sharing */}
         <meta
           property="og:title"
           content="Eclipse Productions Oy | Music Studio in Helsinki"
