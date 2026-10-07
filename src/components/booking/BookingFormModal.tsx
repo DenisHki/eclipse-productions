@@ -158,22 +158,6 @@ export default function BookingFormModal({
 
               <div className="col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t.booking.form.email}{" "}
-                  <span className="text-red-500">
-                    {t.booking.form.required}
-                  </span>
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => updateField("email", e.target.value)}
-                  placeholder={t.booking.form.email}
-                  className="p-2 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
                   {t.booking.form.notes}{" "}
                   <span className="text-gray-400">
                     {t.booking.form.optional}

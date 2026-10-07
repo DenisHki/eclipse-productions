@@ -6,12 +6,14 @@ import "slick-carousel/slick/slick.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { HelmetProvider } from "react-helmet-async";
 import { LanguageProvider } from "./i18n/LanguageContext";
-
+import { AuthProvider } from "./context/AuthContext";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HelmetProvider>
       <LanguageProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </LanguageProvider>
     </HelmetProvider>
   </React.StrictMode>,

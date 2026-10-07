@@ -11,6 +11,8 @@ import { useLanguage } from "../i18n/LanguageContext";
 import StatusMessage from "./shared/StatusMessage";
 import { useBookings } from "../hooks/useBookings";
 import { BookingEvent } from "../types/booking";
+import { useAuth } from "../context/AuthContext";
+import { AuthModal } from "./auth/AuthModal";
 
 const locales = { "fi-FI": fi };
 const localizer = dateFnsLocalizer({
@@ -40,6 +42,17 @@ export default function BookingPage() {
     handleSelectSlot,
     handleBook,
   } = useBookings();
+
+  const { user } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleBookSlot = () => {
+    if (!user) {
+      setShowAuthModal(true);
+    } else {
+      setShowForm(true);
+    }
+  };
 
   const [currentView, setCurrentView] = useState<View>("day");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -188,7 +201,7 @@ export default function BookingPage() {
             </div>
             <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <button
-                onClick={() => setShowForm(true)}
+                onClick={handleBookSlot}
                 className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
               >
                 {t.booking.bookSlot}
@@ -244,6 +257,16 @@ export default function BookingPage() {
         />
       </div>
       <BookingInstructions />
+      {showAuthModal && (
+        <AuthModal
+          initialMode="login"
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => {
+            setShowAuthModal(false);
+            setShowForm(true);
+          }}
+        />
+      )}
     </section>
   );
 }
