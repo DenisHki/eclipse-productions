@@ -4,8 +4,6 @@ import * as admin from "firebase-admin";
 import { Resend } from "resend";
 
 // Initialize Firebase Admin SDK
-// Gives the function full access to Firestore
-// Bypasses security rules — safe because this runs on Google's server only
 admin.initializeApp();
 
 // Limit to 10 simultaneous instances to control costs
@@ -30,7 +28,7 @@ interface BookingData {
   termsAccepted: boolean;
 }
 
-export const createBooking = onCall(async (request) => {
+export const createBooking = onCall({ cors: true }, async (request) => {
   const data = request.data as BookingData;
 
   // Validate all required fields are present
