@@ -14,8 +14,14 @@ export default function Header() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
-  const openLogin = () => { setAuthMode("login"); setShowAuthModal(true); };
-  const openRegister = () => { setAuthMode("register"); setShowAuthModal(true); };
+  const openLogin = () => {
+    setAuthMode("login");
+    setShowAuthModal(true);
+  };
+  const openRegister = () => {
+    setAuthMode("register");
+    setShowAuthModal(true);
+  };
 
   return (
     <>
@@ -34,7 +40,8 @@ export default function Header() {
             {user ? (
               <>
                 <span className="text-gray-400 text-sm">
-                  {role === "admin" ? "👑 " : ""}{user.email}
+                  {role === "admin" ? "👑 " : ""}
+                  {user.email}
                 </span>
                 <button
                   onClick={() => logout()}
@@ -45,12 +52,18 @@ export default function Header() {
               </>
             ) : (
               <>
-                <button onClick={openLogin} className="text-xs sm:text-sm mdl:text-base text-gray-300 hover:text-white border border-white/20 hover:border-white/40 px-2 sm:px-3 mdl:px-4 py-1 mdl:py-2 rounded-lg transition">
-  Log In
-</button>
-<button onClick={openRegister} className="text-xs sm:text-sm mdl:text-base text-black bg-white hover:bg-gray-200 px-2 sm:px-3 mdl:px-4 py-1 mdl:py-2 rounded-lg transition font-medium">
-  Register
-</button>
+                <button
+                  onClick={openLogin}
+                  className="text-xs sm:text-sm mdl:text-base text-gray-300 hover:text-white border border-white/20 hover:border-white/40 px-2 sm:px-3 mdl:px-4 py-1 mdl:py-2 rounded-lg transition"
+                >
+                  Log In
+                </button>
+                <button
+                  onClick={openRegister}
+                  className="text-xs sm:text-sm mdl:text-base text-black bg-white hover:bg-gray-200 px-2 sm:px-3 mdl:px-4 py-1 mdl:py-2 rounded-lg transition font-medium"
+                >
+                  Register
+                </button>
               </>
             )}
           </div>
