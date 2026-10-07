@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { SlotInfo } from "react-big-calendar";
 import { format as formatDate, parse } from "date-fns";
+import { useAuth } from "../context/AuthContext";
 import emailjs from "emailjs-com";
 import { db } from "../firebaseConfig";
 import {
@@ -20,6 +21,7 @@ import {
 
 export function useBookings() {
   const { t } = useLanguage();
+  const { user } = useAuth();
 
   const [events, setEvents] = useState<BookingEvent[]>([]);
   const [selectedRange, setSelectedRange] = useState<{
@@ -156,8 +158,9 @@ export function useBookings() {
         return;
       }
 
-      const { firstName, lastName, phone, email, notes, needsEngineer } =
-        formData;
+      const { firstName, lastName, phone, notes, needsEngineer } = formData;
+
+      const email = user?.email ?? "";
 
       if (!firstName || !lastName || !phone || !email) {
         setMessage(t.booking.messages.fillRequired);
