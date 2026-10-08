@@ -37,15 +37,14 @@ export default function Header() {
 
           {/* Auth buttons after logo */}
           <div className="flex items-center gap-2">
-            {user ? (
+                        {user ? (
               <>
-                <span className="text-gray-400 text-sm">
-                  {role === "admin" ? "👑 " : ""}
+                <span className="hidden md:block text-sm mdl:text-base text-gray-400 truncate max-w-[150px] mdl:max-w-xs">                  {role === "admin" ? "👑 " : ""}
                   {user.email}
                 </span>
                 <button
                   onClick={() => logout()}
-                  className="text-sm text-gray-400 hover:text-white border border-white/20 hover:border-white/40 px-3 py-1 rounded-lg transition"
+                  className="text-sm text-gray-300 hover:text-white border border-gray-600 hover:border-white/40 px-4 py-2 rounded-lg transition whitespace-nowrap"
                 >
                   Log Out
                 </button>
