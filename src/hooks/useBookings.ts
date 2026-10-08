@@ -295,7 +295,7 @@ export function useBookings() {
         setSubmitting(false);
       }
     },
-    [selectedRange, formData, totalHours, totalPrice, priceBreakdown, t],
+    [selectedRange, formData, totalHours, totalPrice, priceBreakdown, t, user],
   );
 
   return {

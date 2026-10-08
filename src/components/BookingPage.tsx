@@ -170,30 +170,31 @@ export default function BookingPage() {
       <Header />
       <div className="w-full md:w-11/12 lg:w-4/5 mx-auto">
         {selectedRange && !showForm && (
-          <div className="mt-6 mx-auto max-w-md lg:max-w-2xl p-6 border border-gray-200 rounded-2xl bg-white shadow-lg">
+          <div className="mt-6 mx-auto max-w-md lg:max-w-2xl p-6 border border-white/10 rounded-2xl bg-[#1a1a1a] shadow-lg">
             <div className="text-center lg:text-left space-y-2 sm:space-y-2 lg:space-y-4">
               <div>
-                <p className="text-base text-gray-500">
+                <p className="text-base text-gray-400">
                   {t.booking.selectedDate}
                 </p>
-                <p className="text-base lg:text-xl font-semibold text-gray-900">
+                <p className="text-base lg:text-xl font-semibold text-white">
                   {formatDate(selectedRange.start, "dd.MM.yyyy")}
                 </p>
               </div>
               <div>
-                <p className="text-base text-gray-500">
+                <p className="text-base text-gray-400">
                   {t.booking.selectedTime}
                 </p>
-                <p className="text-base lg:text-xl font-semibold text-gray-900">
+                <p className="text-base lg:text-xl font-semibold text-white">
                   {formatDate(selectedRange.start, "HH:mm")} –{" "}
                   {formatDate(selectedRange.end, "HH:mm")}
                 </p>
               </div>
               <div>
-                <p className="text-base text-gray-500">{t.booking.duration}</p>
-                <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">
-                  {totalHours}h<span className="mx-1 text-gray-400">·</span>
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-bold">
+                <p className="text-base text-gray-400">{t.booking.duration}</p>
+                <p className="text-base sm:text-lg lg:text-xl font-semibold text-white">
+                  {totalHours}h<span className="mx-1 text-gray-500">·</span>
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-[#e1bd8f]/20 text-[#e1bd8f] font-bold">
+                    {" "}
                     {totalPrice} €
                   </span>
                 </p>
@@ -202,13 +203,13 @@ export default function BookingPage() {
             <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <button
                 onClick={handleBookSlot}
-                className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                className="px-4 py-2 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-200 transition"
               >
                 {t.booking.bookSlot}
               </button>
               <button
                 onClick={() => setSelectedRange(null)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition-colors text-base font-semibold shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+                className="px-4 py-2 border border-white/20 text-gray-300 text-sm font-semibold rounded-lg hover:bg-white/10 transition"
               >
                 {t.booking.cancel}
               </button>

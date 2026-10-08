@@ -32,37 +32,31 @@ const Contact = () => {
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "") {
-      setErrMsg(t.contact.form.errors.nameRequired);
-    } else if (email === "") {
-      setErrMsg(t.contact.form.errors.emailRequired);
-    } else if (!emailValidation(email)) {
+    if (!emailValidation(email)) {
       setErrMsg(t.contact.form.errors.emailInvalid);
-    } else if (message === "") {
-      setErrMsg(t.contact.form.errors.messageRequired);
-    } else {
-      emailjs
-        .send(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID,
-          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-          { username, to_email: email, message },
-          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-        )
-        .then(
-          (response) => {
-            console.log("SUCCESS!", response.status, response.text);
-            setSuccessMsg(t.contact.form.success.replace("{name}", username));
-            setErrMsg("");
-            setUsername("");
-            setEmail("");
-            setMessage("");
-          },
-          (err) => {
-            console.error("FAILED...", err);
-            setErrMsg(t.contact.form.errors.sendFailed);
-          },
-        );
+      return;
     }
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        { username, to_email: email, message },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      )
+      .then(
+        (response) => {
+          console.log("SUCCESS!", response.status, response.text);
+          setSuccessMsg(t.contact.form.success.replace("{name}", username));
+          setErrMsg("");
+          setUsername("");
+          setEmail("");
+          setMessage("");
+        },
+        (err) => {
+          console.error("FAILED...", err);
+          setErrMsg(t.contact.form.errors.sendFailed);
+        },
+      );
   };
 
   return (
@@ -86,7 +80,8 @@ const Contact = () => {
                 </p>
               )}
               {successMsg && (
-                <p className="py-3 bg-gradient-to-r from-[#1e2024] to-[#23272b] shadow-shadowOne text-center text-green-500 text-base tracking-wide animate-bounce">
+                <p className="py-3 bg-gradient-to-r from-[#1e2024] to-[#23272b] shadow-shadowOne text-center text-[#e1bd8f] text-base tracking-wide animate-bounce">
+                  {" "}
                   {successMsg}
                 </p>
               )}
@@ -98,11 +93,9 @@ const Contact = () => {
                   <input
                     onChange={(e) => setUsername(e.target.value)}
                     value={username}
-                    className={`${
-                      errMsg === t.contact.form.errors.nameRequired &&
-                      "outline-designColor"
-                    } contactInput`}
+                    className="contactInput"
                     type="text"
+                    required
                   />
                 </div>
               </div>
@@ -113,11 +106,9 @@ const Contact = () => {
                 <input
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
-                  className={`${
-                    errMsg === t.contact.form.errors.emailRequired &&
-                    "outline-designColor"
-                  } contactInput`}
+                  className="contactInput"
                   type="email"
+                  required
                 />
               </div>
               <div className="flex flex-col gap-4">
@@ -127,12 +118,10 @@ const Contact = () => {
                 <textarea
                   onChange={(e) => setMessage(e.target.value)}
                   value={message}
-                  className={`${
-                    errMsg === t.contact.form.errors.messageRequired &&
-                    "outline-designColor"
-                  } contactTextArea`}
+                  className="contactTextArea"
                   cols={30}
                   rows={8}
+                  required
                 ></textarea>
               </div>
               <div className="w-full">
@@ -146,7 +135,8 @@ const Contact = () => {
                 </p>
               )}
               {successMsg && (
-                <p className="py-3 bg-gradient-to-r from-[#141518] to-[#141518] shadow-shadowOne text-center text-green-500 text-base tracking-wide animate-bounce">
+                <p className="py-3 bg-gradient-to-r from-[#141518] to-[#141518] shadow-shadowOne text-center text-[#e1bd8f] text-base tracking-wide animate-bounce">
+                  {" "}
                   {successMsg}
                 </p>
               )}
