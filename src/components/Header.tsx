@@ -10,7 +10,7 @@ import { AuthModal } from "./auth/AuthModal";
 export default function Header() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { user, role, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -37,9 +37,9 @@ export default function Header() {
 
           {/* Auth buttons after logo */}
           <div className="flex items-center gap-2">
-                        {user ? (
+            {user ? (
               <>
-                <span className="hidden md:block text-sm mdl:text-base text-gray-400 truncate max-w-[150px] mdl:max-w-xs">                  {role === "admin" ? "👑 " : ""}
+                <span className="hidden md:block text-sm mdl:text-base text-gray-400 truncate max-w-[150px] mdl:max-w-xs">
                   {user.email}
                 </span>
                 <button

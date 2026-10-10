@@ -57,7 +57,8 @@ export default function BookingPage() {
   };
 
   const handleSelectEvent = (event: BookingEvent) => {
-    if (user && event.uid === user.uid) {
+    const isOwn = user && event.uid === user.uid;
+    if (isOwn || role === "admin") {
       setCancelEvent(event);
     }
   };
@@ -310,8 +311,8 @@ export default function BookingPage() {
                 {formatDate(cancelEvent.start, "HH:mm")} –{" "}
                 {formatDate(cancelEvent.end, "HH:mm")}
               </p>
-              {cancelEvent.start.getTime() - Date.now() <
-              48 * 60 * 60 * 1000 ? (
+              {role !== "admin" &&
+              cancelEvent.start.getTime() - Date.now() < 48 * 60 * 60 * 1000 ? (
                 <p className="text-red-400 text-sm mb-6">
                   ⚠️ This booking is less than 48 hours away and cannot be
                   cancelled.
@@ -329,10 +330,7 @@ export default function BookingPage() {
                   Keep Booking
                 </button>
                 <button
-                  disabled={
-                    cancelEvent.start.getTime() - Date.now() <
-                    48 * 60 * 60 * 1000
-                  }
+                                    disabled={role !== "admin" && (cancelEvent.start.getTime() - Date.now()) < 48 * 60 * 60 * 1000}
                   onClick={async () => {
                     await handleCancelBooking(cancelEvent.id);
                     setCancelEvent(null);
