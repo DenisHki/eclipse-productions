@@ -41,16 +41,24 @@ export default function BookingPage() {
     totalPrice,
     handleSelectSlot,
     handleBook,
+    handleCancelBooking,
   } = useBookings();
 
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [cancelEvent, setCancelEvent] = useState<BookingEvent | null>(null);
 
   const handleBookSlot = () => {
     if (!user) {
       setShowAuthModal(true);
     } else {
       setShowForm(true);
+    }
+  };
+
+  const handleSelectEvent = (event: BookingEvent) => {
+    if (user && event.uid === user.uid) {
+      setCancelEvent(event);
     }
   };
 
@@ -69,15 +77,26 @@ export default function BookingPage() {
   );
 
   const eventPropGetter = useMemo(
-    () => (event: BookingEvent) => ({
-      style: {
-        backgroundColor: event.isBlocked ? "#ef4444" : "#f3f4f6",
-        color: event.isBlocked ? "#ffffff" : "#111827",
-        borderRadius: "0.375rem",
-        border: event.isBlocked ? "1px solid #dc2626" : "1px solid #d1d5db",
-      },
-    }),
-    [],
+    () => (event: BookingEvent) => {
+      const isOwn = user && event.uid === user.uid;
+      return {
+        style: {
+          backgroundColor: event.isBlocked
+            ? "#ef4444"
+            : isOwn
+              ? "#b8975e"
+              : "#f3f4f6",
+          color: event.isBlocked ? "#ffffff" : isOwn ? "#000000" : "#111827",
+          borderRadius: "0.375rem",
+          border: event.isBlocked
+            ? "1px solid #dc2626"
+            : isOwn
+              ? "1px solid #e1bd8f"
+              : "1px solid #d1d5db",
+        },
+      };
+    },
+    [user],
   );
 
   const slotPropGetter = useCallback(
@@ -255,9 +274,79 @@ export default function BookingPage() {
           formats={formats}
           eventPropGetter={eventPropGetter}
           slotPropGetter={slotPropGetter}
+          onSelectEvent={handleSelectEvent}
+          titleAccessor={(event: BookingEvent) => {
+            const isOwn = user && event.uid === user.uid;
+            if (role === "admin")
+              return (
+                `👤 ${event.firstName ?? ""} ${event.lastName ?? ""}`.trim() ||
+                "Booked"
+              );
+            if (isOwn) return "⭐ My Booking";
+            return "Booked";
+          }}
         />
       </div>
       <BookingInstructions />
+      {cancelEvent && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 overflow-y-auto"
+          onClick={() => setCancelEvent(null)}
+        >
+          <div
+            className="min-h-full flex items-start sm:items-center justify-center p-4 py-8 sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-full max-w-md bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 shadow-2xl">
+              <h2 className="text-xl font-bold text-white mb-4">
+                Cancel Booking
+              </h2>
+              <p className="text-gray-400 mb-2">
+                <span className="text-white font-semibold">
+                  {formatDate(cancelEvent.start, "dd.MM.yyyy")}
+                </span>
+              </p>
+              <p className="text-gray-400 mb-4">
+                {formatDate(cancelEvent.start, "HH:mm")} –{" "}
+                {formatDate(cancelEvent.end, "HH:mm")}
+              </p>
+              {cancelEvent.start.getTime() - Date.now() <
+              48 * 60 * 60 * 1000 ? (
+                <p className="text-red-400 text-sm mb-6">
+                  ⚠️ This booking is less than 48 hours away and cannot be
+                  cancelled.
+                </p>
+              ) : (
+                <p className="text-gray-400 text-sm mb-6">
+                  Are you sure you want to cancel this booking?
+                </p>
+              )}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setCancelEvent(null)}
+                  className="flex-1 px-4 py-2 border border-white/20 text-gray-300 rounded-lg hover:bg-white/10 transition"
+                >
+                  Keep Booking
+                </button>
+                <button
+                  disabled={
+                    cancelEvent.start.getTime() - Date.now() <
+                    48 * 60 * 60 * 1000
+                  }
+                  onClick={async () => {
+                    await handleCancelBooking(cancelEvent.id);
+                    setCancelEvent(null);
+                  }}
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition"
+                >
+                  Cancel Booking
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showAuthModal && (
         <AuthModal
           initialMode="login"
