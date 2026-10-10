@@ -14,6 +14,10 @@ export const translations = {
       loading: "Please wait...",
       noAccount: "Don't have an account?",
       hasAccount: "Already have an account?",
+      forgotPassword: "Forgot password?",
+      resetPassword: "Reset Password",
+      resetEmailSent: "Password reset email sent. Check your inbox.",
+      backToLogin: "Back to Log In",
       errors: {
         passwordsMismatch: "Passwords do not match",
         passwordTooShort: "Password must be at least 8 characters",
@@ -350,7 +354,7 @@ export const translations = {
   fi: {
     // Auth
     auth: {
-            logIn: "Kirjaudu sisään",
+      logIn: "Kirjaudu sisään",
       logInShort: "Kirjaudu",
       register: "Rekisteröidy",
       registerShort: "Rekist.",
@@ -362,6 +366,10 @@ export const translations = {
       loading: "Odota hetki...",
       noAccount: "Ei tiliä?",
       hasAccount: "Onko sinulla jo tili?",
+      forgotPassword: "Unohditko salasanan?",
+      resetPassword: "Palauta salasana",
+      resetEmailSent: "Salasanan palautuslinkki lähetetty. Tarkista sähköpostisi.",
+      backToLogin: "Takaisin kirjautumiseen",
       errors: {
         passwordsMismatch: "Salasanat eivät täsmää",
         passwordTooShort: "Salasanan on oltava vähintään 8 merkkiä",
