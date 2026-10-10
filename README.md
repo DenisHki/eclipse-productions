@@ -1,22 +1,32 @@
 # 🎧 Eclipse Productions Oy Website
 
-A modern, responsive website for **Eclipse Productions Oy** — a professional music studio and production company located in Helsinki, Finland. The site features an integrated booking system, audio player, and comprehensive service showcase.
+A modern, responsive website for **Eclipse Productions Oy** — a professional music studio and production company located in Helsinki, Finland. The site features an integrated booking system, user authentication, audio player, and comprehensive service showcase.
 
 ## 🎵 Features
 
 ### Core Functionality
-- Online Studio Booking System
+- Online Studio Booking System with real-time availability
+- User Authentication (register, log in, password reset)
+- Role-based Access (user / admin)
 - Integrated Audio Player
 - Interactive Equipment Gallery
 - Contact Form
 - Google Maps Integration
-- Bilingual Interface
+- Bilingual Interface (English & Finnish)
+
+### Booking System
+- Calendar view with real-time booked slots
+- Authenticated users can create and cancel own bookings
+- 48-hour cancellation policy enforced in UI
+- Admins can view and delete any booking
+- Own bookings highlighted in gold on the calendar
+- Automated booking confirmation emails (EmailJS)
 
 ### Services Offered
-- **Studio Rental** – €40/2h | €60/4h | €100/8h
-- **Composition** – €300/track (full production)
-- **Track Production** – €500/track (instrumental)
-- **Recording Services** – €30/hour (min 3 hours)
+- **Studio Rental** – 1h €30/h | 3h €25/h | 6h €20/h
+- **Track Production** – €500/track (full production)
+- **Recording Mixing & Mastering** – €300/track
+- **Recording** – €30/hour (min. 2 hours)
 - **Mixing** – €250/track
 - **Mastering** – €100/track
 
@@ -24,6 +34,8 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 - **Multilingual Support** (i18n) - English & Finnish
 - **Responsive Design** - Mobile-first with Tailwind CSS
 - **Real-time Booking** - Firebase Firestore integration
+- **User Authentication** - Firebase Auth with email/password
+- **Role Management** - User roles stored in Firestore (`user` / `admin`)
 - **Email Notifications** - Automated booking confirmations (EmailJS)
 - **SEO Optimized** - Language-specific meta tags & sitemaps
 - **Performance Focused** - Fast loading, optimized assets
@@ -32,11 +44,18 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 ## 🛠 Tech Stack
 
 ### Frontend
-- React 18.2
+- React 18
 - TypeScript
 - Tailwind CSS
 - Vite
 - Framer Motion
+
+### Authentication & Database
+- **Firebase Auth** - Email/password authentication, password reset
+- **Firebase Firestore** - Real-time booking data
+  - `bookings_public` - Calendar availability (readable by all)
+  - `bookings_private` - Full booking details (owner/admin only)
+  - `users` - User profiles and roles
 
 ### Internationalization (i18n)
 - **React Context API** - Language state management
@@ -47,7 +66,7 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 ### Libraries & Integrations
 - React Big Calendar
 - EmailJS
-- Firebase Firestore
+- Firebase (Auth + Firestore)
 - Google Maps API
 - React Modern Audio Player
 - React Helmet Async
@@ -63,9 +82,17 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 ## 🌍 Languages
 
 - **English** - Full website experience
-- **Finnish (Suomi)** - Complete Finnish translation
+- **Finnish (Suomi)** - Complete Finnish translation including auth and booking UI
 
-**Language Switcher**: Dropdown menu with persistent language preference
+## 👤 User Roles
+
+| Feature | Guest | User | Admin |
+|---|---|---|---|
+| View calendar | ✅ | ✅ | ✅ |
+| Create booking | ❌ | ✅ | ✅ |
+| Cancel own booking (48h+) | ❌ | ✅ | ✅ |
+| Cancel any booking | ❌ | ❌ | ✅ |
+| Bypass 48h rule | ❌ | ❌ | ✅ |
 
 ## 📈 SEO & Performance
 - **Structured Data (JSON-LD)** - Rich snippets for search engines
@@ -78,7 +105,7 @@ A modern, responsive website for **Eclipse Productions Oy** — a professional m
 
 ## 📝 License
 This project is **proprietary and confidential**. All rights reserved by Eclipse Productions Oy.
-**© 2024 Eclipse Productions Oy** - All Rights Reserved
+**© 2025 Eclipse Productions Oy** - All Rights Reserved
 
 ## 📞 Support
 - 🌐 [eclipseproductions.fi](https://eclipseproductions.fi)
