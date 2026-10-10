@@ -303,17 +303,20 @@ export function useBookings() {
     [selectedRange, formData, totalHours, totalPrice, priceBreakdown, t, user],
   );
 
-  const handleCancelBooking = useCallback(async (eventId: string) => {
-    try {
-      await deleteDoc(doc(db, "bookings_public", eventId));
-      await deleteDoc(doc(db, "bookings_private", eventId));
-      setEvents((prev) => prev.filter((e) => e.id !== eventId));
-      setMessage("✅ Booking cancelled.");
-    } catch (err) {
-      console.error("Cancel error:", err);
-      setMessage("❌ Failed to cancel booking.");
-    }
-  }, []);
+  const handleCancelBooking = useCallback(
+    async (eventId: string) => {
+      try {
+        await deleteDoc(doc(db, "bookings_public", eventId));
+        await deleteDoc(doc(db, "bookings_private", eventId));
+        setEvents((prev) => prev.filter((e) => e.id !== eventId));
+        setMessage(t.booking.cancelModal.cancelled);
+      } catch (err) {
+        console.error("Cancel error:", err);
+        setMessage(t.booking.cancelModal.failed);
+      }
+    },
+    [t],
+  );
 
   return {
     events,

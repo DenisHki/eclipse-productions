@@ -300,7 +300,7 @@ export default function BookingPage() {
           >
             <div className="w-full max-w-md bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 shadow-2xl">
               <h2 className="text-xl font-bold text-white mb-4">
-                Cancel Booking
+                {t.booking.cancelModal.title}
               </h2>
               <p className="text-gray-400 mb-2">
                 <span className="text-white font-semibold">
@@ -314,12 +314,11 @@ export default function BookingPage() {
               {role !== "admin" &&
               cancelEvent.start.getTime() - Date.now() < 48 * 60 * 60 * 1000 ? (
                 <p className="text-red-400 text-sm mb-6">
-                  ⚠️ This booking is less than 48 hours away and cannot be
-                  cancelled.
+                  {t.booking.cancelModal.tooLate}
                 </p>
               ) : (
                 <p className="text-gray-400 text-sm mb-6">
-                  Are you sure you want to cancel this booking?
+                  {t.booking.cancelModal.confirm}
                 </p>
               )}
               <div className="flex gap-3">
@@ -327,17 +326,21 @@ export default function BookingPage() {
                   onClick={() => setCancelEvent(null)}
                   className="flex-1 px-4 py-2 border border-white/20 text-gray-300 rounded-lg hover:bg-white/10 transition"
                 >
-                  Keep Booking
+                  {t.booking.cancelModal.keep}
                 </button>
                 <button
-                                    disabled={role !== "admin" && (cancelEvent.start.getTime() - Date.now()) < 48 * 60 * 60 * 1000}
+                  disabled={
+                    role !== "admin" &&
+                    cancelEvent.start.getTime() - Date.now() <
+                      48 * 60 * 60 * 1000
+                  }
                   onClick={async () => {
                     await handleCancelBooking(cancelEvent.id);
                     setCancelEvent(null);
                   }}
                   className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition"
                 >
-                  Cancel Booking
+                  {t.booking.cancelModal.cancel}
                 </button>
               </div>
             </div>

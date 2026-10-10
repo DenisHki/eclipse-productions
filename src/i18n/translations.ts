@@ -1,5 +1,30 @@
 export const translations = {
   en: {
+    // Auth
+    auth: {
+      logIn: "Log In",
+      logInShort: "Log In",
+      register: "Register",
+      registerShort: "Register",
+      logOut: "Log Out",
+      createAccount: "Create Account",
+      email: "Email",
+      password: "Password",
+      confirmPassword: "Confirm Password",
+      loading: "Please wait...",
+      noAccount: "Don't have an account?",
+      hasAccount: "Already have an account?",
+      errors: {
+        passwordsMismatch: "Passwords do not match",
+        passwordTooShort: "Password must be at least 8 characters",
+        passwordNoLetter: "Password must contain at least one letter",
+        passwordNoSymbol:
+          "Password must contain at least one special character (e.g. !@#$%)",
+        invalidCredential: "Invalid email or password",
+        emailInUse: "An account with this email already exists",
+        invalidEmail: "Please enter a valid email address",
+      },
+    },
     // Navigation
     nav: {
       home: "Home",
@@ -254,6 +279,16 @@ export const translations = {
         footer:
           "By confirming the booking, you agree to these terms and conditions.",
       },
+      cancelModal: {
+        title: "Cancel Booking",
+        tooLate:
+          "⚠️ This booking is less than 48 hours away and cannot be cancelled.",
+        confirm: "Are you sure you want to cancel this booking?",
+        keep: "Keep Booking",
+        cancel: "Cancel Booking",
+        cancelled: "✅ Booking cancelled.",
+        failed: "❌ Failed to cancel booking.",
+      },
       messages: {
         pastSlot: "⚠️ You cannot book past time slots.",
         overlap: "⚠️ Selected time overlaps with an existing booking.",
@@ -313,6 +348,31 @@ export const translations = {
   },
 
   fi: {
+    // Auth
+    auth: {
+            logIn: "Kirjaudu sisään",
+      logInShort: "Kirjaudu",
+      register: "Rekisteröidy",
+      registerShort: "Rekist.",
+      logOut: "Kirjaudu ulos",
+      createAccount: "Luo tili",
+      email: "Sähköposti",
+      password: "Salasana",
+      confirmPassword: "Vahvista salasana",
+      loading: "Odota hetki...",
+      noAccount: "Ei tiliä?",
+      hasAccount: "Onko sinulla jo tili?",
+      errors: {
+        passwordsMismatch: "Salasanat eivät täsmää",
+        passwordTooShort: "Salasanan on oltava vähintään 8 merkkiä",
+        passwordNoLetter: "Salasanassa on oltava vähintään yksi kirjain",
+        passwordNoSymbol:
+          "Salasanassa on oltava vähintään yksi erikoismerkki (esim. !@#$%)",
+        invalidCredential: "Virheellinen sähköposti tai salasana",
+        emailInUse: "Tili tällä sähköpostilla on jo olemassa",
+        invalidEmail: "Anna kelvollinen sähköpostiosoite",
+      },
+    },
     // Navigation
     nav: {
       home: "Etusivu",
@@ -567,6 +627,15 @@ export const translations = {
           },
         ],
         footer: "Vahvistamalla varauksen hyväksyt varausehdot.",
+      },
+      cancelModal: {
+        title: "Peruuta Varaus",
+        tooLate: "⚠️ Varaus on alle 48 tunnin päässä eikä sitä voi peruuttaa.",
+        confirm: "Haluatko varmasti peruuttaa tämän varauksen?",
+        keep: "Pidä Varaus",
+        cancel: "Peruuta Varaus",
+        cancelled: "✅ Varaus peruutettu.",
+        failed: "❌ Varauksen peruuttaminen epäonnistui.",
       },
       messages: {
         pastSlot: "⚠️ Et voi varata menneitä aikavälejä.",
