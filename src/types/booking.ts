@@ -4,6 +4,9 @@ export interface BookingEvent {
   end: Date;
   id: string;
   isBlocked?: boolean;
+  uid?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface BookingFormData {

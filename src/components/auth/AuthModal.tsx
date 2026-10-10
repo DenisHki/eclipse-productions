@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 interface AuthModalProps {
   onClose: () => void;
@@ -7,51 +8,74 @@ interface AuthModalProps {
   initialMode?: "login" | "register";
 }
 
-export function AuthModal({ onClose, onSuccess, initialMode = "login" }: AuthModalProps) {
-  const { login, register } = useAuth();
-  const [mode, setMode] = useState<"login" | "register">(initialMode);
+export function AuthModal({
+  onClose,
+  onSuccess,
+  initialMode = "login",
+}: AuthModalProps) {
+  const { login, register, resetPassword } = useAuth();
+  const [mode, setMode] = useState<"login" | "register" | "reset">(initialMode);
+  const [resetSent, setResetSent] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const { t } = useLanguage();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (mode === "register" && password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t.auth.errors.passwordsMismatch);
       return;
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
+    if (mode === "register") {
+      if (password.length < 8) {
+        setError(t.auth.errors.passwordTooShort);
+        return;
+      }
+      if (!/[a-zA-Z]/.test(password)) {
+        setError(t.auth.errors.passwordNoLetter);
+        return;
+      }
+      if (!/[^a-zA-Z0-9]/.test(password)) {
+        setError(t.auth.errors.passwordNoSymbol);
+        return;
+      }
     }
 
     setLoading(true);
     try {
       if (mode === "login") {
         await login(email, password);
-      } else {
+        onSuccess?.();
+        onClose();
+      } else if (mode === "register") {
         await register(email, password);
+        onSuccess?.();
+        onClose();
+      } else {
+        await resetPassword(email);
+        setResetSent(true);
+        setLoading(false);
+        return;
       }
-      onSuccess?.();
-      onClose();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        // Make Firebase error messages human-readable
         if (
           err.message.includes("user-not-found") ||
           err.message.includes("wrong-password") ||
           err.message.includes("invalid-credential")
         ) {
-          setError("Invalid email or password");
+          setError(t.auth.errors.invalidCredential);
         } else if (err.message.includes("email-already-in-use")) {
-          setError("An account with this email already exists");
+          setError(t.auth.errors.emailInUse);
         } else if (err.message.includes("invalid-email")) {
-          setError("Please enter a valid email address");
+          setError(t.auth.errors.invalidEmail);
         } else {
           setError(err.message);
         }
@@ -82,83 +106,132 @@ export function AuthModal({ onClose, onSuccess, initialMode = "login" }: AuthMod
 
         {/* Title */}
         <h2 className="text-2xl font-bold text-white mb-6">
-          {mode === "login" ? "Log In" : "Create Account"}
+          {mode === "login" ? t.auth.logIn : t.auth.createAccount}
         </h2>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/30"
-              placeholder="you@example.com"
-            />
+        {mode === "reset" && resetSent ? (
+          <div className="space-y-4">
+            <p className="text-[#e1bd8f] text-sm">{t.auth.resetEmailSent}</p>
+            <button
+              onClick={() => {
+                setMode("login");
+                setResetSent(false);
+              }}
+              className="w-full bg-white text-black font-semibold py-3 rounded-lg hover:bg-gray-200 transition"
+            >
+              {t.auth.backToLogin}
+            </button>
           </div>
+        ) : (
+          <>
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">
+                  {t.auth.email}
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/30"
+                  placeholder="you@example.com"
+                />
+              </div>
 
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/30"
-              placeholder="••••••••"
-            />
-          </div>
+              {mode !== "reset" && (
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t.auth.password}
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/30"
+                    placeholder="••••••••"
+                  />
+                </div>
+              )}
 
-          {mode === "register" && (
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/30"
-                placeholder="••••••••"
-              />
-            </div>
-          )}
+              {mode === "register" && (
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t.auth.confirmPassword}
+                  </label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/30"
+                    placeholder="••••••••"
+                  />
+                </div>
+              )}
 
-          {/* Error message */}
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+              {error && <p className="text-red-400 text-sm">{error}</p>}
 
-          {/* Submit button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-white text-black font-semibold py-3 rounded-lg hover:bg-gray-200 transition disabled:opacity-50"
-          >
-            {loading
-              ? "Please wait..."
-              : mode === "login"
-                ? "Log In"
-                : "Create Account"}
-          </button>
-        </form>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-white text-black font-semibold py-3 rounded-lg hover:bg-gray-200 transition disabled:opacity-50"
+              >
+                {loading
+                  ? t.auth.loading
+                  : mode === "login"
+                    ? t.auth.logIn
+                    : mode === "register"
+                      ? t.auth.createAccount
+                      : t.auth.resetPassword}
+              </button>
+            </form>
 
-        {/* Switch mode */}
-        <p className="text-center text-gray-400 text-sm mt-6">
-          {mode === "login"
-            ? "Don't have an account?"
-            : "Already have an account?"}{" "}
-          <button
-            onClick={() => {
-              setMode(mode === "login" ? "register" : "login");
-              setError(null);
-            }}
-            className="text-white underline hover:no-underline"
-          >
-            {mode === "login" ? "Register" : "Log In"}
-          </button>
-        </p>
+            {/* Switch mode */}
+            <p className="text-center text-gray-400 text-sm mt-6">
+              {mode === "login" ? t.auth.noAccount : t.auth.hasAccount}{" "}
+              <button
+                onClick={() => {
+                  setMode(mode === "login" ? "register" : "login");
+                  setError(null);
+                }}
+                className="text-white underline hover:no-underline"
+              >
+                {mode === "login" ? t.auth.register : t.auth.logIn}
+              </button>
+            </p>
+
+            {mode === "login" && (
+              <p className="text-center text-gray-400 text-sm mt-2">
+                <button
+                  onClick={() => {
+                    setMode("reset");
+                    setError(null);
+                  }}
+                  className="text-gray-400 hover:text-white underline hover:no-underline"
+                >
+                  {t.auth.forgotPassword}
+                </button>
+              </p>
+            )}
+
+            {mode === "reset" && (
+              <p className="text-center text-gray-400 text-sm mt-6">
+                <button
+                  onClick={() => {
+                    setMode("login");
+                    setError(null);
+                  }}
+                  className="text-white underline hover:no-underline"
+                >
+                  {t.auth.backToLogin}
+                </button>
+              </p>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

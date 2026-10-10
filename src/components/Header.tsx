@@ -2,7 +2,7 @@ import { logo } from "../assets";
 import { useNavigate } from "react-router-dom";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLanguage } from "../i18n/LanguageContext";
-import { HiArrowLeft } from "react-icons/hi";
+import { HiArrowLeft} from "react-icons/hi";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { AuthModal } from "./auth/AuthModal";
@@ -10,7 +10,7 @@ import { AuthModal } from "./auth/AuthModal";
 export default function Header() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { user, role, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -37,16 +37,16 @@ export default function Header() {
 
           {/* Auth buttons after logo */}
           <div className="flex items-center gap-2">
-                        {user ? (
+            {user ? (
               <>
-                <span className="hidden md:block text-sm mdl:text-base text-gray-400 truncate max-w-[150px] mdl:max-w-xs">                  {role === "admin" ? "👑 " : ""}
+                <span className="hidden md:block text-sm mdl:text-base text-gray-400 truncate max-w-[150px] mdl:max-w-xs">
                   {user.email}
                 </span>
                 <button
                   onClick={() => logout()}
                   className="text-sm text-gray-300 hover:text-white border border-gray-600 hover:border-white/40 px-4 py-2 rounded-lg transition whitespace-nowrap"
                 >
-                  Log Out
+                  {t.auth.logOut}
                 </button>
               </>
             ) : (
@@ -55,13 +55,15 @@ export default function Header() {
                   onClick={openLogin}
                   className="text-xs sm:text-sm mdl:text-base text-gray-300 hover:text-white border border-white/20 hover:border-white/40 px-2 sm:px-3 mdl:px-4 py-1 mdl:py-2 rounded-lg transition"
                 >
-                  Log In
+                  <span className="hidden md:inline">{t.auth.logIn}</span>
+                  <span className="md:hidden">{t.auth.logInShort}</span>
                 </button>
                 <button
                   onClick={openRegister}
                   className="text-xs sm:text-sm mdl:text-base text-black bg-white hover:bg-gray-200 px-2 sm:px-3 mdl:px-4 py-1 mdl:py-2 rounded-lg transition font-medium"
                 >
-                  Register
+                  <span className="hidden md:inline">{t.auth.register}</span>
+                  <span className="md:hidden">{t.auth.registerShort}</span>
                 </button>
               </>
             )}

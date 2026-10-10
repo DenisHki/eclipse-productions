@@ -10,6 +10,7 @@ import {
   doc,
   runTransaction,
   serverTimestamp,
+  deleteDoc,
 } from "firebase/firestore";
 import { useLanguage } from "../i18n/LanguageContext";
 import { calculateTotalPrice, getPriceBreakdown } from "../utils/priceUtils";
@@ -96,6 +97,7 @@ export function useBookings() {
             title: "Booked",
             start,
             end,
+            uid: data.uid ?? "",
           });
         });
 
@@ -246,6 +248,7 @@ export function useBookings() {
             time: `${startStr}-${endStr}`,
             hours: totalHours,
             price: totalPrice,
+            uid: user?.uid ?? "",
             createdAt: serverTimestamp(),
           });
 
@@ -254,6 +257,7 @@ export function useBookings() {
             time: `${startStr}-${endStr}`,
             hours: totalHours,
             price: totalPrice,
+            uid: user?.uid ?? "",
             needsEngineer,
             engineerFee: needsEngineer ? priceBreakdown.engineerFee : 0,
             basePrice: priceBreakdown.basePrice,
@@ -281,6 +285,7 @@ export function useBookings() {
           title: "Booked",
           start: currentSelectedRange.start,
           end: currentSelectedRange.end,
+          uid: user?.uid ?? "",
         };
         setEvents((prev) => [...prev, newEvent]);
       } catch (err: unknown) {
@@ -298,6 +303,21 @@ export function useBookings() {
     [selectedRange, formData, totalHours, totalPrice, priceBreakdown, t, user],
   );
 
+  const handleCancelBooking = useCallback(
+    async (eventId: string) => {
+      try {
+        await deleteDoc(doc(db, "bookings_public", eventId));
+        await deleteDoc(doc(db, "bookings_private", eventId));
+        setEvents((prev) => prev.filter((e) => e.id !== eventId));
+        setMessage(t.booking.cancelModal.cancelled);
+      } catch (err) {
+        console.error("Cancel error:", err);
+        setMessage(t.booking.cancelModal.failed);
+      }
+    },
+    [t],
+  );
+
   return {
     events,
     selectedRange,
@@ -313,5 +333,6 @@ export function useBookings() {
     totalPrice,
     handleSelectSlot,
     handleBook,
+    handleCancelBooking,
   };
 }
